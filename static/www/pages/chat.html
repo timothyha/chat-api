@@ -1,0 +1,85 @@
+<script type="text/javascript">
+    var page = {
+        init: function () { 
+            var toggleGroup = newToggleGroup()
+            .addButton({
+                text: "Общий"
+            }).addButton({
+                text: "Приват"
+            });
+            
+            toggleGroup.setSticker({ index: 1, text: "3" });
+            
+            newToolbar('toolbar')
+            .addButton({                
+                position: "left",
+                type: "icon",
+                icon: "menu",
+                click: function () {
+                    sidePanel.show();
+                }
+            })
+        /*    .addButton({
+                position: "right",
+                type: "icon",
+                "icon": "user",
+                click: function() {
+                    
+                }
+            })*/
+            .addButton({
+                position: "right",
+                type: "icon",
+                "icon": "exit",
+                click: function() {
+                    // TODO: confirm dialog, logout
+                    
+                    pageManager.clear();
+                    pageManager.loadPage('login');
+                }
+            })
+            .setTitle({
+                type: "control",
+                control: toggleGroup
+            });
+
+            newChatlist('chat-list');
+            newSendPanel('send-panel');
+
+            var sidePanel = newSidePanel()
+                            .setUsers([ { nick: "Ata", photo: "./img/photo2.jpg" }, { nick: "Grabli66", photo: "./img/photo.jpg" }, { nick: "FreeBird", photo: "./img/photo3.jpg" }, { nick: "Добродетельная", photo: "./img/photo4.jpg" } ])
+                            .setUserInfo({});
+            
+            this.resize();
+            this.startDataTimer();
+        },
+        resize: function () {
+            var height = $(window).height() - 128;
+            var cont = $(".content");
+            cont.css("height", height + "px");
+            cont.css("top", "64px");
+        },
+        startDataTimer: function () {
+            setInterval(function () {
+
+            }, 5000);
+        }
+    }
+</script>
+
+<div class="header">
+    <div id="toolbar" class="mtoolbar">
+    </div>
+</div>
+
+<div class="content">
+    <div id="chat-list">
+    </div>
+</div>
+
+<div class="footer">
+    <div id="send-panel" class="msendpanel">
+    </div>
+    <div id="room-tabs">
+    </div>
+</div>

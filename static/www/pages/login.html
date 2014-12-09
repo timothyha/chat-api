@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    var page = {
+        init: function () {
+            this.resize();
+            
+            $('#enter').bind('click', function () {
+                var login = $('#login').val();
+                var password = $('#password').val();
+
+                chatService.login(login, password, function() {
+                    pageManager.loadPage('chat');
+                });
+            });
+        },
+        resize: function () {
+            var form = $('.login-form');
+            var height = form.height();            
+            form.css('top', (document.body.clientHeight / 2) - (height / 2));
+            form.css('left', (document.body.clientWidth / 2) - form.width() / 2);
+        }
+    };
+</script>
+
+<div class="login-page">
+    <div class="login-form">
+        <h1>Jesus Christ.ru</h1>
+        <div class="item">
+            <input id="login" placeholder="Логин" />
+        </div>
+        <div class="item">
+            <input id="password" type="password" placeholder="Пароль" />
+        </div>
+        <div class="buttons">
+            <div id="enter" class="mbutton">Войти</div>
+        </div>
+        <div class="links">
+            <div><a href="#">Регистрация</a>
+            </div>
+            <div><a href="#">Напомнить пароль</a>
+            </div>
+        </div>
+    </div>
+</div>
