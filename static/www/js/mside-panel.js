@@ -78,6 +78,7 @@ function newSidePanel() {
                                     {1}\
                                 </td>\
                                 <td class="command">\
+                                    <div class="mbutton-icon icon-search"></div>\
                                 </td>\
                             </tr>\
                          </table>'.format(usr.photo, usr.nick));
