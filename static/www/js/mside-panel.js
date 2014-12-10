@@ -4,7 +4,7 @@ function newSidePanel() {
     self.workplace = $('<div></div>');
     self.workplace.addClass("msidepanel");
 
-    self.workplace.append($('\
+/*    self.workplace.append($('\
                             <div class="panel">\
                                 <div class="info">\
                                         <table cellpadding="0" cellspacing="0">\
@@ -24,8 +24,26 @@ function newSidePanel() {
                                 <div class="list"></div>\
                             </div>\
                             <div class="overlay"></div>\
-                            '));
+                            '));*/
 
+    self.workplace.append($('\
+                            <div class="panel">\
+                                <div class="info">\
+                                    <img class="circle64" src="./img/photo.jpg"></img>\
+                                    <div class="buttons">\
+                                        <div class="mbutton-icon icon-edit"></div>\
+                                    </div>\
+                                    <ul class="data">\
+                                        <li class="nick">Grabli66</li>\
+                                        <li class="email">grabli66@gmail.com</li>\
+                                    </ul>\
+                                    <div class="mbutton-icon icon-drop-down more"></div>\
+                                </div>\
+                                <div class="list"></div>\
+                            </div>\
+                            <div class="overlay"></div>\
+                            '));
+    
     $(document.body).append(self.workplace);
 
     var overlay = self.workplace.find(".overlay");
