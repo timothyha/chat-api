@@ -91,7 +91,7 @@ input {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     height: 64px;
-    background-color: #5C6BC0;
+    background-color: #283593;
     color: #fff;
     box-shadow: 0 2px 3px 0px #C2C2C2;
 }
@@ -195,7 +195,7 @@ input {
     border-radius: 2px 0px 0px 2px;
     color: #333;
     font-size: 0.9em;
-    border-bottom: 2px solid #1565C0;
+    border-bottom: 2px solid #303F9F;
     background-color: transparent;
 }
 /* mChatList */
@@ -276,7 +276,8 @@ input {
     padding-right: 32px;
 }
 .msidepanel .panel .info .nick {
-    font-size: 1.2em;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 .msidepanel .panel .info .data {
     position: absolute;
