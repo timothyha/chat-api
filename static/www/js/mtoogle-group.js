@@ -1,5 +1,6 @@
 function newToggleGroup(id) {
     var self = {};
+    self.selectedIndex = 0;
     
     if (id != undefined) {
         self.workplace = $('#'+id);
@@ -36,6 +37,13 @@ function newToggleGroup(id) {
         
         return this;
     };
+    
+    self.select = function(index) {
+        var buttons = self.workplace.find('.buttons');
+        self.selectedIndex = index;
+        buttons.find('.mgbutton').removeClass('active');        
+        $(buttons.children()[index]).addClass("active");
+    }
     
     self.setSticker = function(item) {
         var buttons = self.workplace.find('.buttons');

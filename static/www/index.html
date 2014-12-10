@@ -10,13 +10,14 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
     <!--<script type="text/javascript" src="cordova.js"></script> -->
     <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/hammer.js"></script>
     <script type="text/javascript" src="js/mpage-manager.js"></script>
     <script type="text/javascript" src="js/mtoolbar.js"></script>
     <script type="text/javascript" src="js/mchat-list.js"></script>
     <script type="text/javascript" src="js/msend-panel.js"></script>
     <script type="text/javascript" src="js/mside-panel.js"></script>
     <script type="text/javascript" src="js/mtoogle-group.js"></script>
-    <script type="text/javascript" src="js/mchat-service.js"></script>
+    <script type="text/javascript" src="js/mchat-service.js"></script>    
     <link rel="stylesheet" type="text/css" href="css/material.css" />
     <link rel="stylesheet" type="text/css" href="css/chat.css" />
     <link rel="stylesheet" type="text/css" href="css/login.css" />    
@@ -34,7 +35,7 @@
         }
 
         $(document).ready(function () {            
-            pageManager.loadPage('login');
+            pageManager.loadPage('chat');
             
             chatService.onError = function() {
                 // TODO: show dialog or logout

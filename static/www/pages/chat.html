@@ -1,63 +1,84 @@
 <script type="text/javascript">
     var page = {
-        init: function () { 
-            var toggleGroup = newToggleGroup()
-            .addButton({
-                text: "Общий"
-            }).addButton({
-                text: "Приват"
+        init: function () {
+            page.toggleGroup = newToggleGroup()
+                .addButton({
+                    text: "Общий"
+                }).addButton({
+                    text: "Приват"
+                });
+
+            page.toggleGroup.setSticker({
+                index: 1,
+                text: "3"
             });
-            
-            toggleGroup.setSticker({ index: 1, text: "3" });
-            
+
             newToolbar('toolbar')
-            .addButton({                
-                position: "left",
-                type: "icon",
-                icon: "menu",
-                click: function () {
-                    sidePanel.show();
-                }
-            })
-        /*    .addButton({
-                position: "right",
-                type: "icon",
-                "icon": "user",
-                click: function() {
-                    
-                }
-            })*/
-            .addButton({
-                position: "right",
-                type: "icon",
-                "icon": "exit",
-                click: function() {
-                    // TODO: confirm dialog, logout
-                    
-                    pageManager.clear();
-                    pageManager.loadPage('login');
-                }
-            })
-            .setTitle({
-                type: "control",
-                control: toggleGroup
-            });
+                .addButton({
+                    position: "left",
+                    type: "icon",
+                    icon: "menu",
+                    click: function () {
+                        page.sidePanel.show();
+                    }
+                })
+                .addButton({
+                    position: "right",
+                    type: "icon",
+                    "icon": "exit",
+                    click: function () {
+                        // TODO: confirm dialog, logout
 
-            newChatlist('chat-list');
-            newSendPanel('send-panel');
+                        pageManager.clear();
+                        pageManager.loadPage('login');
+                    }
+                })
+                .setTitle({
+                    type: "control",
+                    control: page.toggleGroup
+                });
 
-            var sidePanel = newSidePanel()
-                            .setUsers([ { nick: "Ata", photo: "./img/photo2.jpg" }, { nick: "Grabli66", photo: "./img/photo.jpg" }, { nick: "FreeBird", photo: "./img/photo3.jpg" }, { nick: "Добродетельная", photo: "./img/photo4.jpg" } ])
-                            .setUserInfo({});
-            
+            page.chatList = newChatlist('chat-list');
+            page.sendPanel = newSendPanel('send-panel');
+
+            page.sidePanel = newSidePanel()
+                .setUsers([{
+                    nick: "Ata",
+                    photo: "./img/photo2.jpg"
+                }, {
+                    nick: "Grabli66",
+                    photo: "./img/photo.jpg"
+                }, {
+                    nick: "FreeBird",
+                    photo: "./img/photo3.jpg"
+                }, {
+                    nick: "Добродетельная",
+                    photo: "./img/photo4.jpg"
+                }])
+                .setUserInfo({});
+
+            page.chatList.onSlide = function (e) {                
+                if (e.direction == 2) {
+                    if (page.toggleGroup.selectedIndex != 1) {
+                        page.toggleGroup.select(1);                        
+                    }
+                } else if (e.direction == 4) {
+                    if (page.toggleGroup.selectedIndex != 0) {
+                        page.toggleGroup.select(0);                        
+                    }
+                }
+            };
+
             this.resize();
             this.startDataTimer();
         },
         resize: function () {
+            // TODO: remove magic
             var height = $(window).height() - 128;
             var cont = $(".content");
             cont.css("height", height + "px");
             cont.css("top", "64px");
+            page.sidePanel.resize();
         },
         startDataTimer: function () {
             setInterval(function () {

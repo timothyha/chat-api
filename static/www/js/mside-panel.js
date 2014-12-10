@@ -5,38 +5,30 @@ function newSidePanel() {
     self.workplace.addClass("msidepanel");
 
     self.workplace.append($('\
-                            <table class="table" cellpadding="0" cellspacing="0">\
-                                <tr>\
-                                    <td class="panel">\
-                                        <div class="info">\
-                                            <table cellpadding="0" cellspacing="0">\
-                                                <tr>\
-                                                    <td class="photo">\
-                                                        <img class="circle64" src="./img/photo.jpg"></img>\
-                                                    </td>\
-                                                    <td>\
-                                                        <div class="nick">Grabli66</div>\
-                                                    </td>\
-                                                </tr>\
-                                            </table>\
-                                            <ul class="data">\
-                                                <li class="email">grabli66@gmail.com</li>\
-                                            </ul>\
-                                        </div>\
-                                        <div class="list"></div>\
-                                    </td>\
-                                    <td class="overlay">\
-                                    </td>\
-                                </tr>\
-                            </table>\
+                            <div class="panel">\
+                                <div class="info">\
+                                        <table cellpadding="0" cellspacing="0">\
+                                            <tr>\
+                                                <td class="photo">\
+                                                    <img class="circle64" src="./img/photo.jpg"></img>\
+                                                </td>\
+                                                <td>\
+                                                    <div class="nick">Grabli66</div>\
+                                                </td>\
+                                            </tr>\
+                                        </table>\
+                                        <ul class="data">\
+                                            <li class="email">grabli66@gmail.com</li>\
+                                        </ul>\
+                                </div>\
+                                <div class="list"></div>\
+                            </div>\
+                            <div class="overlay"></div>\
                             '));
 
     $(document.body).append(self.workplace);
-    
-    var panel = self.workplace.find(".panel");
-    var overlay = self.workplace.find(".overlay");
-    var userList = self.workplace.find(".list");
 
+    var overlay = self.workplace.find(".overlay");
     overlay.bind("click", function () {
         self.workplace.hide();
         return this;
@@ -53,10 +45,11 @@ function newSidePanel() {
     };
 
     self.setUsers = function (users) {
+        var userList = self.workplace.find(".list");
         userList.empty();
 
         for (var i = 0; i < users.length; i++) {
-            var usr = users[i];            
+            var usr = users[i];
             var userInfo = $('\
                          <table class="user" cellpadding="0" cellspacing="0">\
                             <tr>\
@@ -69,16 +62,23 @@ function newSidePanel() {
                                 <td class="command">\
                                 </td>\
                             </tr>\
-                         </table>'.format(usr.photo, usr.nick));            
+                         </table>'.format(usr.photo, usr.nick));
             userList.append(userInfo);
         }
         return this;
     };
 
-    self.show = function () {        
+    self.show = function () {
         self.workplace.show();
+        self.resize();
         return this;
-    };    
+    };
+
+    self.resize = function () {
+        var list = self.workplace.find('.list');
+        var info = self.workplace.find('.info');
+        list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
+    }
 
     return self;
 }
