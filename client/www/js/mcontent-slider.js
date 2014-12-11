@@ -1,6 +1,6 @@
 function newContentSlider(id) {
     var self = {};
-    self.onChanged = null;
+    self.onChange = null;
             
     self.controls = [];
 
@@ -20,7 +20,7 @@ function newContentSlider(id) {
 
     self.contentWidth = self.workplace.width();
     self.currentIndex = 0;
-    var speed = 500;
+    self.speed = 500;
 
     var swipeOptions = {
         triggerOnTouchEnd: true,
@@ -51,18 +51,18 @@ function newContentSlider(id) {
                 nextContent();
             }
         }
-    }
+    }   
 
     function previousContent() {
         self.currentIndex = Math.max(self.currentIndex - 1, 0);
-        scrollContent(self.contentWidth * self.currentIndex, speed);
-        if (self.onChanged !== null) self.onChanged(self.currentIndex);
+        scrollContent(self.contentWidth * self.currentIndex, self.speed);
+        if (self.onChange !== null) self.onChange(self.currentIndex);
     }
 
     function nextContent() {
         self.currentIndex = Math.min(self.currentIndex + 1, self.controls.length - 1);
-        scrollContent(self.contentWidth * self.currentIndex, speed);
-        if (self.onChanged !== null) self.onChanged(self.currentIndex);
+        scrollContent(self.contentWidth * self.currentIndex, self.speed);
+        if (self.onChange !== null) self.onChange(self.currentIndex);
     }
 
     function scrollContent(distance, duration) {
@@ -79,6 +79,11 @@ function newContentSlider(id) {
         self.inner.append(td);
     };
     
+    self.selectContent = function(ind) {
+        self.currentIndex = ind;
+        scrollContent(self.contentWidth * self.currentIndex, self.speed);
+    };
+    
     self.resize = function() {
         self.contentWidth = self.workplace.width();
         for (var i = 0; i < self.controls.length; i++) {
@@ -87,6 +92,9 @@ function newContentSlider(id) {
             var width = control.workplace.width() - (control.workplace.outerWidth() - control.workplace.width());
             control.workplace.css("width", width);
         }
+        self.speed = 0;
+        self.selectContent(self.currentIndex);
+        self.speed = 500;
     };
 
     return self;

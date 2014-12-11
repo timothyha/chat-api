@@ -3,9 +3,15 @@
         init: function () {
             page.toggleGroup = newToggleGroup()
                 .addButton({
-                    text: "Общий"
+                    text: "Общий",
+                    onClick: function() {
+                        page.contentSlider.selectContent(0);
+                    }
                 }).addButton({
-                    text: "Приват"
+                    text: "Приват",
+                    onClick: function() {
+                        page.contentSlider.selectContent(1);
+                    }
                 });
 
             page.toggleGroup.setSticker({
@@ -43,6 +49,9 @@
             page.privateChatList = newChatlist();
             page.contentSlider.addControl(page.publicChatList);
             page.contentSlider.addControl(page.privateChatList);
+            page.contentSlider.onChange = function(ind) {
+                page.toggleGroup.select(ind);
+            };            
             
             page.sendPanel = newSendPanel('send-panel');
 

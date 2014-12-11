@@ -2,7 +2,7 @@ function newToggleGroup(id) {
     var self = {};
     self.selectedIndex = 0;
     
-    if (id != undefined) {
+    if (id !== undefined) {
         self.workplace = $('#'+id);
     } else {
         self.workplace = $('<div></div>');
@@ -25,7 +25,7 @@ function newToggleGroup(id) {
         button.bind('click', function() {            
             buttons.find('.mgbutton').removeClass('active');
             button.addClass('active');
-            if (item.click != null) item.click();
+            if (item.onClick !== undefined) item.onClick();
         });        
         
         var childs = buttons.children();
@@ -43,7 +43,7 @@ function newToggleGroup(id) {
         self.selectedIndex = index;
         buttons.find('.mgbutton').removeClass('active');        
         $(buttons.children()[index]).addClass("active");
-    }
+    };
     
     self.setSticker = function(item) {
         var buttons = self.workplace.find('.buttons');
