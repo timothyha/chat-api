@@ -43,7 +43,7 @@ try {
 
         // if session id is not there or not fresh, we will create a new sid
         if($sid < time()-86400)
-            $sid = "$id.".(time() - rand(5000));
+            $sid = "$id"."000".(time() - rand(5000));
 
         $login = output_conv($login);
 
