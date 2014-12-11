@@ -34,3 +34,6 @@ function output_conv($s) {
     global $DBCHARSET;
     return ($DBCHARSET==="utf-8") ? $s : iconv($DBCHARSET, "utf-8", $s);
 }
+
+function is_admin($level) { return ($level >= 2); }
+function is_superadmin($level) { return ($level >= 9); }
