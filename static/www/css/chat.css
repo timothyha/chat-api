@@ -1,0 +1,23 @@
+.header {
+    position: fixed;
+    height: 64px;
+    width: 100%;
+    top: 0;
+}
+.footer {
+    position: fixed;
+    height: 64px;
+    line-height: 64px;
+    width: 100%;
+    background: #FAFAFA;
+    border-top: 1px solid #DDDDDD;
+    bottom: 0;
+}
+.content {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    background: transparent;
+    overflow-y: auto;
+    z-index: 9998;
+}
