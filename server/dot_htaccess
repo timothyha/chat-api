@@ -1,0 +1,10 @@
+RewriteEngine on
+RewriteRule ^login[/]{0,1}$ login.php [L]
+RewriteRule ^logout[/]{0,1}$ logout.php [L]
+RewriteRule ^private[/]{0,1}$ private.php [L]
+RewriteRule ^public[/]{0,1}$ public.php [L]
+RewriteRule ^send[/]{0,1}$ send.php [L]
+RewriteRule ^users[/]{0,1}$ users.php [L]
+
+# default catch-all
+ErrorDocument 404 unknown.html
