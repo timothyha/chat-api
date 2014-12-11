@@ -34,22 +34,21 @@ try {
         $level = $rows[0]['level'];
         $sid   = $rows[0]['sid'];
 
-        if(is_superadmin($level))
-            $textlevel = "SUPERADMIN";
-        else if(is_admin($level))
-            $textlevel = "ADMIN";
-        else
-            $textlevel = "";
-
         // if session id is not there or not fresh, we will create a new sid
-        if($sid < time()-86400)
+        if($sid < time()-86400) {
             $sid = "$id"."000".(time() - rand(5000));
+
+            $q = $db->prepare("update chatusers set sid = ? where cnick = ?");
+            $q->bindValue(1, $sid, PDO::PARAM_INT);
+            $q->bindValue(2, $login, PDO::PARAM_STR);
+            $q->execute();
+        }
 
         $login = output_conv($login);
 
         echo json_encode(array(
             "login"=>$login, 
-            "level"=>$textlevel, 
+            "level"=>textlevel($level), 
             "session"=>$sid,
             "err"=>""
             ));
