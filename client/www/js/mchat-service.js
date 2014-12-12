@@ -1,4 +1,5 @@
 var chatService = {
+    ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     onError: null,
     callService: function (funcName, params, onData) {
         $.ajax({
@@ -9,13 +10,13 @@ var chatService = {
             success: function (d) {
                 try {
                     var res = JSON.parse(d);
-                    if (res.err == "") {
+                    if (res.err === "") {
                         onData(res);
                     } else {
-                        if (onError != null) onError(res.err);
+                        if (chatService.onError !== null) chatService.onError(res.err);
                     }
                 } catch (e) {
-                    if (onError != null) onError(res.err);
+                    if (chatService.onError !== null) chatService.onError(res.err);
                 }
             }
         });

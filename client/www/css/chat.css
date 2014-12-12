@@ -16,8 +16,6 @@
 .content {
     position: absolute;
     width: 100%;
-    height: 0;
     background: transparent;
-    overflow-y: auto;
     z-index: 9998;
 }

@@ -1,8 +1,6 @@
 function newChatlist(id) {
     var self = {};
-    self.onSlide = null;    
-    
-    if (id != undefined) {
+    if (id !== undefined) {
         self.workplace = $('#' + id);
     } else {
         self.workplace = $('<div></div>');
@@ -12,14 +10,9 @@ function newChatlist(id) {
 
     self.title = $('<div class="title">07 декабря 2014</div>');
     self.workplace.append(self.title);
-            
-    var hammertime = new Hammer(self.workplace[0], {});
-    hammertime.on('pan', function (e) {       
-       if (self.onSlide != null) self.onSlide(e);        
-    });
 
     self.addItem = function (item) {
-        var nick = item.recepient == undefined ? item.nick : item.nick + " к " + item.recepient;
+        var nick = item.recepient === undefined ? item.nick : item.nick + " к " + item.recepient;
 
         self.workplace.append('<div class="item">\
                               <table cellpadding="0" cellspacing="0">\
@@ -82,6 +75,10 @@ function newChatlist(id) {
         message: "А я хочу свинные отбивные с чесночным соусом, и макароны.",
         photo: "photo4"
     });
+    
+    self.hide = function() {
+        self.workplace.hide();
+    };
 
     return self;
 }
