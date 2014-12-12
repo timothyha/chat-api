@@ -54,8 +54,7 @@ try {
         echo json_encode(array(
             "photo"=>$photopath, 
             "level"=>textlevel($level), 
-            "session"=>$sid,
-            "err"=>""
+            "session"=>$sid
             ));
     }
     else
