@@ -1,0 +1,126 @@
+<script type="text/javascript">
+    var page = {
+        isStoped : false,
+        init: function () {
+            page.toggleGroup = newToggleGroup()
+                    .addButton({
+                        text: "Общий",
+                        onTap : function () {
+                            page.contentSlider.selectContent(0);
+                        }
+                    }).addButton({
+                text: "Приват",
+                onTap : function () {
+                    page.contentSlider.selectContent(1);
+                }
+            });
+
+            page.toggleGroup.setSticker({
+                index: 1,
+                text: "3"
+            });
+
+            newToolbar('toolbar')
+                    .addButton({
+                        position: "left",
+                        type: "icon",
+                        icon: "menu",
+                        click: function () {
+                            page.sidePanel.show();
+                        }
+                    })
+                    .addButton({
+                        position: "right",
+                        type: "icon",
+                        "icon": "exit",
+                        click: function () {
+                            // TODO: confirm dialog, logout
+
+                            pageManager.clear();
+                            pageManager.loadPage('login');
+                        }
+                    })
+                    .setTitle({
+                        type: "control",
+                        control: page.toggleGroup
+                    });
+
+            page.contentSlider = newContentSlider('content-slider');
+            page.publicChatList = newChatlist();
+            page.privateChatList = newChatlist();
+            page.contentSlider.addControl(page.publicChatList);
+            page.contentSlider.addControl(page.privateChatList);
+            page.contentSlider.onChange = function (ind) {
+                page.toggleGroup.select(ind);
+            };
+
+            page.sendPanel = newSendPanel('send-panel');
+
+            page.sidePanel = newSidePanel('overlay').setUserInfo({});
+            page.sidePanel.onUserInfoClicked = function(item) {
+                pageManager.loadPage('user-info', item);
+            };
+                        
+            chatService.onError = function (err) {
+                if (!page.isStoped) {
+                    
+                }
+            };
+
+            this.resize();
+            this.startDataTimer();
+        },
+        resize: function () {
+            // TODO: remove magic
+            var height = $(window).height() - 128;
+            var cont = $(".content");
+            cont.css("height", height + "px");
+            cont.css("top", "64px");
+            page.sidePanel.resize();
+            page.contentSlider.resize();
+        },
+        timerWork: function () {
+            chatService.getUserList(function (res) {
+                page.sidePanel.setUsers(res);
+            });
+        },
+        startDataTimer: function () {
+            page.timerWork();
+            page.timer = setInterval(function () {
+                if (!page.isStoped) {
+                    page.timerWork();
+                }
+            }, 5000);
+        },
+        saveState : function () {
+            
+        },
+        loadState : function () {
+            
+        },
+        stop : function() {
+            page.isStoped = true;
+            clearInterval(page.timer);
+        }
+    }
+</script>
+
+<div class="header">
+    <div id="toolbar" class="mtoolbar">
+    </div>
+</div>
+
+<div id="content-slider" class="content">
+    <!--    <div id="chat-list">
+        </div> -->
+</div>
+
+<div class="footer">
+    <div id="send-panel" class="msendpanel">
+    </div>
+    <div id="room-tabs">
+    </div>
+</div>
+
+<div id="overlay">    
+</div>

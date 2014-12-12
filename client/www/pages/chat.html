@@ -1,15 +1,16 @@
 <script type="text/javascript">
     var page = {
+        isStoped : false,
         init: function () {
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
-                        onClick: function () {
+                        onTap : function () {
                             page.contentSlider.selectContent(0);
                         }
                     }).addButton({
                 text: "Приват",
-                onClick: function () {
+                onTap : function () {
                     page.contentSlider.selectContent(1);
                 }
             });
@@ -24,7 +25,7 @@
                         position: "left",
                         type: "icon",
                         icon: "menu",
-                        click: function () {
+                        onTap : function () {
                             page.sidePanel.show();
                         }
                     })
@@ -32,7 +33,7 @@
                         position: "right",
                         type: "icon",
                         "icon": "exit",
-                        click: function () {
+                        onTap : function () {
                             // TODO: confirm dialog, logout
 
                             pageManager.clear();
@@ -55,9 +56,15 @@
 
             page.sendPanel = newSendPanel('send-panel');
 
-            page.sidePanel = newSidePanel().setUserInfo({});
-            page.sidePanel.onUserInfoClicked = function(item) {
-                console.log(item);
+            page.sidePanel = newSidePanel('overlay').setUserInfo({});
+            page.sidePanel.onUserInfoTap = function(item) {
+                pageManager.loadPage('user-info', item);
+            };
+                        
+            chatService.onError = function (err) {
+                if (!page.isStoped) {
+                    
+                }
             };
 
             this.resize();
@@ -79,9 +86,21 @@
         },
         startDataTimer: function () {
             page.timerWork();
-            setInterval(function () {
-                page.timerWork();
+            page.timer = setInterval(function () {
+                if (!page.isStoped) {
+                    page.timerWork();
+                }
             }, 5000);
+        },
+        saveState : function () {
+            
+        },
+        loadState : function () {
+            
+        },
+        stop : function() {
+            page.isStoped = true;
+            clearInterval(page.timer);
         }
     }
 </script>
@@ -101,4 +120,7 @@
     </div>
     <div id="room-tabs">
     </div>
+</div>
+
+<div id="overlay">    
 </div>

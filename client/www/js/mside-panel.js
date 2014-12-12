@@ -1,8 +1,14 @@
-function newSidePanel() {
-    var self = {};
-    self.onUserInfoClicked = undefined;
-
-    self.workplace = $('<div></div>');
+function newSidePanel(id) {
+    var self = {};        
+    self.onUserInfoTap = undefined;   
+    
+    if (id !== undefined) {
+        self.workplace = $('#'+id);
+    } else {
+        self.workplace = $('<div></div>');
+        $(document.body).append(self.workplace);
+    }    
+    
     self.workplace.addClass("msidepanel");
 
     self.workplace.append($('\
@@ -23,13 +29,11 @@ function newSidePanel() {
                             <div class="overlay"></div>\
                             '));
 
-    $(document.body).append(self.workplace);
-
     var overlay = self.workplace.find(".overlay");
-    overlay.bind("click", function () {
+    binder.tap(overlay, function () {
         self.hide();
         return this;
-    });
+    });    
 
     self.setUserInfo = function (item) {
         /*var photo = self.workplace.find(".info .photo img");
@@ -62,11 +66,18 @@ function newSidePanel() {
                                     {1}\
                                 </td>\
                                 <td class="command">\
-                                    <div class="mbutton-icon icon-search"></div>\
+                                    <div class="mbutton-icon icon-search" data-id="{2}"></div>\
                                 </td>\
                             </tr>\
-                         </table>'.format(photo, usr.login));
+                         </table>'.format(photo, usr.login, usr.id));
             userList.append(userInfo);
+            
+            binder.tap(userInfo.find('.command .mbutton-icon'), function() {
+                if (self.onUserInfoTap !== undefined) {
+                    var id = $(this).attr('data-id');
+                    self.onUserInfoTap(id);
+                }
+            });           
         }
         return this;
     };

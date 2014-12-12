@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    var page = {
+        init : function(id) {
+            newToolbar('toolbar')
+                    .addButton({
+                        position: "left",
+                        type: "icon",
+                        icon: "menu",
+                        click: function () {
+                            pageManager.back();
+                        }
+                    })
+                    .addButton({
+                        position: "right",
+                        type: "icon",
+                        "icon": "exit",
+                        click: function () {
+                            // TODO: confirm dialog, logout
+
+                            pageManager.clear();
+                            pageManager.loadPage('login');
+                        }
+                    })
+                    .setTitle({
+                        type: "text",
+                        text: "Информация"
+                    });
+        }
+    };
+</script>
+
+<div class="header">
+    <div id="toolbar" class="mtoolbar">
+    </div>
+</div>
