@@ -38,12 +38,18 @@ try {
         foreach ($rows as $row) {
             if($row['birth_month']==0) $row['birth_month'] = 1;
             if($row['birth_day']==0) $row['birth_day'] = 1;
+
+            // TODO: information about photo existence should be in DB!!!  Rewrite gallery upload stuff
+            if(file_exists($_SERVER['DOCUMENT_ROOT']."/chat/gallery/ok/".intval($row['id']).".jpg")) {
+                $photopath = "/chat/gallery/ok/".intval($row['id']).".jpg";
+            } else $photopath = "";
             
             $users[] = array(
                     "id"    => $row['id'],
                     "login" => output_conv($row['login']),
                     "level" => textlevel($row['level']),
                     "sex" => $row['sex'],
+                    "photo" => $photopath,
                     "lastseen" => date("Y-m-d H:i", $row['lastseen']),
                     "birthday" => date("Y-m-d", mktime(1,1,1, $row['birth_month'], $row['birth_day'], date("Y")))
                 );

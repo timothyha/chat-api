@@ -2,7 +2,7 @@
 
 // open DB, prepare something common to all API commands
 
-header("Content-type: text/html, charset=UTF-8");
+header("Content-type: application/json, charset=UTF-8");
 
 if($_SERVER['HTTPS']!=="on") {
     echo json_encode(array("err"=>"ERR_SSL_REQUIRED"));

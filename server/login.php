@@ -38,16 +38,21 @@ try {
         if($sid < time()-86400) {
             $sid = "$id"."000".(time() - rand(5000));
 
-            $q = $db->prepare("update chatusers set sid = ? where cnick = ?");
+            $q = $db->prepare("update chatusers set sid = ?, cpresence = ? where cnick = ?");
             $q->bindValue(1, $sid, PDO::PARAM_INT);
-            $q->bindValue(2, $login, PDO::PARAM_STR);
+            $q->bindValue(2, time(), PDO::PARAM_INT);
+            $q->bindValue(3, $login, PDO::PARAM_STR);
             $q->execute();
         }
 
         $login = output_conv($login);
 
+        if(file_exists($_SERVER['DOCUMENT_ROOT']."/chat/gallery/ok/".intval($id).".jpg")) {
+            $photopath = "/chat/gallery/ok/".intval($id).".jpg";
+        } else $photopath = "";
+
         echo json_encode(array(
-            "login"=>$login, 
+            "photo"=>$photopath, 
             "level"=>textlevel($level), 
             "session"=>$sid,
             "err"=>""
