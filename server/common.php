@@ -36,10 +36,12 @@ function output_conv($s) {
 }
 
 # is user logged in?
-# if not, then die, if logged in, do nothing
+# if not, then die, if logged in, return user login
 function check_user_session($sid) {
+    global $db;
+
     try {
-        $q = $db->prepare("select sid from chatusers where sid = ?");
+        $q = $db->prepare("select cnick as login from chatusers where sid = ?");
         $q->bindValue(1, $sid, PDO::PARAM_INT);
         $q->execute();
 
@@ -48,6 +50,8 @@ function check_user_session($sid) {
             echo json_encode(array("err"=>"ERR_USER_NOT_CONNECTED"));
             die();
         }
+        return $rows[0]['login'];
+        
     } catch(PDOException $e) {
         echo json_encode(array("err"=>"ERR_MYSQL_ERROR"));
         die();
