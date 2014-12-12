@@ -5,24 +5,7 @@
 include "common.php";
 
 $sid = intval($_POST['session']);
-
-# is user logged in?
-try {
-
-    $q = $db->prepare("select sid from chatusers where sid = ?");
-    $q->bindValue(1, $sid, PDO::PARAM_INT);
-    $q->execute();
-
-    $rows = $q->fetchAll(PDO::FETCH_ASSOC);
-    if(!count($rows)) {
-        echo json_encode(array("err"=>"ERR_USER_NOT_CONNECTED"));
-        die();
-    }
-} catch(PDOException $e) {
-
-    echo json_encode(array("err"=>"ERR_MYSQL_ERROR"));
-    die();
-}
+check_user_session($sid);
 
 # get current users list
 try {

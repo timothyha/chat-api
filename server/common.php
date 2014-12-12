@@ -35,6 +35,25 @@ function output_conv($s) {
     return ($DBCHARSET==="utf-8") ? $s : iconv($DBCHARSET, "utf-8", $s);
 }
 
+# is user logged in?
+# if not, then die, if logged in, do nothing
+function check_user_session($sid) {
+    try {
+        $q = $db->prepare("select sid from chatusers where sid = ?");
+        $q->bindValue(1, $sid, PDO::PARAM_INT);
+        $q->execute();
+
+        $rows = $q->fetchAll(PDO::FETCH_ASSOC);
+        if(!count($rows)) {
+            echo json_encode(array("err"=>"ERR_USER_NOT_CONNECTED"));
+            die();
+        }
+    } catch(PDOException $e) {
+        echo json_encode(array("err"=>"ERR_MYSQL_ERROR"));
+        die();
+    }
+}
+
 function is_admin($level) { return ($level >= 2); }
 function is_superadmin($level) { return ($level >= 9); }
 function textlevel($level) {
