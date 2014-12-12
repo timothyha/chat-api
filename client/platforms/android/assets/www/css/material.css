@@ -1,0 +1,392 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+div,
+span,
+input {
+    font-family: 'Roboto', sans-serif;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.app {
+    width: 100%;
+    height: 100%;
+}
+/* Icons */
+
+.icon-user {
+    background-image: url(../img/ic_person_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 28px;
+}
+.icon-search {
+    background-image: url(../img/search.svg);
+    background-repeat: no-repeat;
+    background-size: 28px;
+}
+.icon-menu {
+    background-image: url(../img/ic_menu_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 28px;
+}
+.icon-exit {
+    background-image: url(../img/ic_exit_to_app_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
+.icon-smile {
+    background-image: url(../img/ic_mood_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
+.icon-edit {
+    background-image: url(../img/ic_mode_edit_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
+.icon-drop-down {
+    background-image: url(../img/ic_arrow_drop_down_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
+.circle64 {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    -webkit-border-radius: 32px;
+    -moz-border-radius: 32px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+}
+.circle48 {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    -webkit-border-radius: 24px;
+    -moz-border-radius: 24px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, .8);
+}
+/* mToolbar */
+
+.mtoolbar {
+    display: block;
+    padding-left: 20px;
+    padding-right: 5px;
+    position: relative;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 64px;
+    background-color: #283593;
+    color: #fff;
+    box-shadow: 0 2px 3px 0px #C2C2C2;
+}
+.mtoolbar .tcontent {
+    width: 100%;
+}
+.mtoolbar .title {
+    text-align: center;
+    font-size: 1.3em;
+    line-height: 0;
+    height: 64px;
+    width: 33%;
+}
+.mtoolbar .left-buttons {
+    height: 64px;
+    width: 33%;
+}
+.mtoolbar .right-buttons {
+    height: 64px;
+    width: 33%;
+}
+.mtoolbar .right-buttons .inner {
+    float: right;
+}
+/* mButonn */
+
+.mbutton {
+    display: inline-block;
+    line-height: 36px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.mbutton:active {
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+.mbutton-icon {
+    display: block;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    border-radius: 2px;
+    background-position: center;
+    float: left;
+    margin-right: 10px;
+}
+.mbutton-icon:hover {
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.mbutton-icon:active {
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+/* mSendPanel */
+
+.msendpanel {
+    width: 100%;
+}
+.msendpanel table {
+    width: 100%;
+}
+.msendpanel .message {
+    width: 100%;
+    padding-left: 10px;
+    padding-bottom: 1px;
+    padding-right: 10px;
+    position: relative;
+}
+.msendpanel .smile {
+    padding-left: 8px;
+}
+.msendpanel .smile .inner {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+.msendpanel .send {
+    width: 1%;
+    padding-right: 10px;
+}
+.msendpanel .send .mbutton {
+    background-color: #F4F4F4;
+    color: #333;
+}
+.msendpanel .send .mbutton:active {
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.msendpanel input {
+    width: 100%;
+    border: 0;
+    height: 36px;
+    padding: 0;
+    margin: 0;
+    text-indent: 5px;
+    outline: 0;
+    border-radius: 2px 0px 0px 2px;
+    color: #333;
+    font-size: 0.9em;
+    border-bottom: 2px solid #303F9F;
+    background-color: transparent;
+}
+/* mChatList */
+
+.mchatlist {
+    height: 100%;    
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: auto;
+}
+.mchatlist .title {
+    line-height: 48px;
+    font-size: 0.9em;
+    color: #777;
+}
+.mchatlist .item table {
+    width: 100%;
+}
+.mchatlist .item .photo {
+    width: 72px;
+}
+.mchatlist .item .data {
+    padding-left: 16px;
+}
+.mchatlist .item .nick {
+    font-weight: bold;
+}
+.mchatlist .item .message {
+    font-size: 0.9em;
+    padding-top: 2px;
+    color: #777;
+}
+.mchatlist .item .line {
+    padding-left: 16px;
+}
+.mchatlist .item .line hr {
+    border: 0;
+    background-color: #ddd;
+    height: 1px;
+}
+/* mSidePanel */
+
+.msidepanel {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.msidepanel .table {
+    width: 100%;
+    height: 100%;
+}
+.msidepanel .panel {
+    vertical-align: top;
+    background: #fff;
+    width: 270px;
+    height: 100%;
+    box-shadow: 0 0px 30px 1px #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 9999;
+}
+.msidepanel .panel .info {
+    position: relative;
+    /*height: 180px;*/
+    height: 120px;
+    background: #1a237e;
+    /*background-image: url(../img/tile1.jpg);*/
+    padding: 16px 16px 24px 16px;
+    color: #fff;
+}
+.msidepanel .panel .info .photo {
+    padding-right: 32px;
+}
+.msidepanel .panel .info .nick {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.msidepanel .panel .info .data {
+    position: absolute;
+    bottom: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.msidepanel .panel .info .data li {
+    padding-bottom: 3px;
+}
+.msidepanel .panel .info .buttons {
+    position: absolute;
+    top: 8px;
+    right: 0px;
+}
+.msidepanel .panel .info .more {
+    position: absolute;
+    bottom: 24px;
+    right: 0px;
+}
+
+.msidepanel .panel .list {
+    overflow-y: auto;
+    padding: 16px 0px 16px 16px;
+    position: absolute;
+}
+.msidepanel .panel .list .user {
+    width: 100%;
+    padding-bottom: 8px;
+    cursor: pointer;
+}
+
+.msidepanel .panel .list .user .nick {
+    width: 100%;
+    font-size: 0.9em;
+}
+
+.msidepanel .panel .list .user .command .mbutton-icon {
+    background-size: 14px;
+}
+
+.msidepanel .panel .list .user .photo {
+    width: 1%;
+    padding-right: 16px;
+}
+.msidepanel .overlay {
+    background-color: rgba(102, 102, 102, 0.05);
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/* mToogleGroup */
+
+.mtogglegroup {
+    display: inline-block;
+    line-height: 32px;
+}
+.mtogglegroup .mgbutton {
+    position: relative;
+    font-size: 1rem;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.mtogglegroup .mgbutton.active {
+    color: #333;
+    background: #fff;
+}
+.mtogglegroup .mgbutton.right {
+    border-radius: 0px 4px 4px 0px;
+    border-left: 0;
+}
+.mtogglegroup .mgbutton.left {
+    border-radius: 4px 0px 0px 4px;
+}
+.mtogglegroup .mgbutton .sticker {
+    position: absolute;
+    z-index: 9999;
+    top: -8px;
+    right: -8px;
+    font-size: 0.9em;
+    background: #EF2E1B;
+    padding-left: 1px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 11px;
+    color: #FFF;
+}
+
+/* mContentSlider */
+
+.mcontentslider {
+    overflow: hidden;
+}
+
+.mcontentslider .host {
+    height: 100%;
+}

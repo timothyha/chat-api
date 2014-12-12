@@ -1,30 +1,15 @@
-function newSidePanel() {
-    var self = {};
-
-    self.workplace = $('<div></div>');
+function newSidePanel(id) {
+    var self = {};        
+    self.onUserInfoTap = undefined;   
+    
+    if (id !== undefined) {
+        self.workplace = $('#'+id);
+    } else {
+        self.workplace = $('<div></div>');
+        $(document.body).append(self.workplace);
+    }    
+    
     self.workplace.addClass("msidepanel");
-
-/*    self.workplace.append($('\
-                            <div class="panel">\
-                                <div class="info">\
-                                        <table cellpadding="0" cellspacing="0">\
-                                            <tr>\
-                                                <td class="photo">\
-                                                    <img class="circle64" src="./img/photo.jpg"></img>\
-                                                </td>\
-                                                <td>\
-                                                    <div class="nick">Grabli66</div>\
-                                                </td>\
-                                            </tr>\
-                                        </table>\
-                                        <ul class="data">\
-                                            <li class="email">grabli66@gmail.com</li>\
-                                        </ul>\
-                                </div>\
-                                <div class="list"></div>\
-                            </div>\
-                            <div class="overlay"></div>\
-                            '));*/
 
     self.workplace.append($('\
                             <div class="panel">\
@@ -43,22 +28,20 @@ function newSidePanel() {
                             </div>\
                             <div class="overlay"></div>\
                             '));
-    
-    $(document.body).append(self.workplace);
 
     var overlay = self.workplace.find(".overlay");
-    overlay.bind("click", function () {
-        self.workplace.hide();
+    binder.tap(overlay, function () {
+        self.hide();
         return this;
-    });
+    });    
 
     self.setUserInfo = function (item) {
         /*var photo = self.workplace.find(".info .photo img");
-        var email = self.workplace.find(".info .email");
-        var nick = self.workplace.find(".info .nick");        
-        photo.attr("src", "./img/photo.jpg");
-        email.text("grabli66@gmail.com");
-        nick.text("Grabli66");*/
+         var email = self.workplace.find(".info .email");
+         var nick = self.workplace.find(".info .nick");        
+         photo.attr("src", "./img/photo.jpg");
+         email.text("grabli66@gmail.com");
+         nick.text("Grabli66");*/
         return this;
     };
 
@@ -68,6 +51,11 @@ function newSidePanel() {
 
         for (var i = 0; i < users.length; i++) {
             var usr = users[i];
+            var photo = 'img/nophoto.jpg';
+            if ((usr.photo !== undefined) && (usr.photo !== "")) {
+                photo = '{0}{1}'.format(global.chatRoot, usr.photo);
+            }
+
             var userInfo = $('\
                          <table class="user" cellpadding="0" cellspacing="0">\
                             <tr>\
@@ -78,11 +66,18 @@ function newSidePanel() {
                                     {1}\
                                 </td>\
                                 <td class="command">\
-                                    <div class="mbutton-icon icon-search"></div>\
+                                    <div class="mbutton-icon icon-search" data-id="{2}"></div>\
                                 </td>\
                             </tr>\
-                         </table>'.format(usr.photo, usr.nick));
+                         </table>'.format(photo, usr.login, usr.id));
             userList.append(userInfo);
+            
+            binder.tap(userInfo.find('.command .mbutton-icon'), function() {
+                if (self.onUserInfoTap !== undefined) {
+                    var id = $(this).attr('data-id');
+                    self.onUserInfoTap(id);
+                }
+            });           
         }
         return this;
     };
@@ -90,6 +85,16 @@ function newSidePanel() {
     self.show = function () {
         self.workplace.show();
         self.resize();
+        self.workplace.find('.panel').animate({"left": '0'}, 300);
+        return this;
+    };
+
+    self.hide = function () {
+        var panel = self.workplace.find('.panel');
+        panel.animate({"left": -panel.width()},300, function () {
+            self.workplace.hide();
+            self.resize();
+        });
         return this;
     };
 
@@ -99,5 +104,6 @@ function newSidePanel() {
         list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
     }
 
+    self.hide();
     return self;
 }
