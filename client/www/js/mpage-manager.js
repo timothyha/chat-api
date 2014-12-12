@@ -1,13 +1,13 @@
 var pageManager = {
     history: [],    
-    loadPage: function (s) {
+    loadPage: function (s, params) {
         $(".app").load('pages/{0}.html'.format(s), function () {
             // TODO: call save state            
             pageManager.history.push(s);
-            page.init();            
+            page.init(params);            
         });
     },
-    back: function(s) {
+    back: function() {
         // TODO        
     },
     clear: function() {

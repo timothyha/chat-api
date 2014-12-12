@@ -1,14 +1,13 @@
 <script type="text/javascript">
     var page = {
-        init : function () {
+        init: function () {
             this.resize();
             $('.load-progress').hide();
 
-            chatService.onError = function (e) {
-                if (e === chatService.ERROR_USER_NOT_FOUND) {                    
-                    page.showForm();
-                    page.showError('Неправильный логин или пароль');
-                }
+            chatService.onError = function (err) {
+                page.showForm();
+                page.showError(chatService.getErrorDescription(err));
+
             };
 
             $('#enter').bind('click', function () {
@@ -22,24 +21,24 @@
                 });
             });
         },
-        showError : function (msg) {
+        showError: function (msg) {
             var err = $('.error');
             err.css('visibility', 'visible');
             err.text(msg);
         },
-        hideError : function() {
+        hideError: function () {
             var err = $('.error');
             err.css('visibility', 'hidden');
         },
-        showForm : function () {
+        showForm: function () {
             $('.form-items').show();
             $('.load-progress').hide();
         },
-        showLoading : function () {
+        showLoading: function () {
             $('.form-items').hide();
             $('.load-progress').show();
         },
-        resize : function () {
+        resize: function () {
             var form = $('.login-form');
             var height = form.height();
             form.css('top', (document.body.clientHeight / 2) - (height / 2));
@@ -50,7 +49,7 @@
 
 <div class="login-page">
     <div class="login-form">
-        <h1>Jesus Christ.ru</h1>
+        <h1 style="display: none">Jesus Christ.ru</h1>
         <div class="form-items">
             <div class="error"></div>
             <div class="item">
