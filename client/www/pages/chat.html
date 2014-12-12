@@ -80,8 +80,12 @@
             page.contentSlider.resize();
         },
         timerWork: function () {
-            chatService.getUserList(function (res) {
-                page.sidePanel.setUsers(res);
+            /*chatService.getUserList(function (res) {
+                page.sidePanel.setUsers(res);                
+            });*/
+            
+            chatService.getPublicMessages(0, function(res) {
+               console.log(res); 
             });
         },
         startDataTimer: function () {

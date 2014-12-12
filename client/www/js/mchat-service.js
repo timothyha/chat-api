@@ -49,7 +49,13 @@ var chatService = {
     logout: function (name, password, onData) {
         chatService.callService('logout', {}, onData);
     },
-    getPublicMessages: function (lastid, onData) {
+    getPublicMessages: function (laststamp, onData) {
+        chatService.callService('public', {
+            session: chatService.user.session,
+            laststamp: laststamp
+        }, function(res) {
+            onData(res);
+        });
     },
     getPrivateMessages: function (lastid, onData) {
     },
