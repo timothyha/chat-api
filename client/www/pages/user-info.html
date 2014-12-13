@@ -1,35 +1,133 @@
+<style type="text/css">      
+    .mtoolbar {
+        box-shadow: none;
+        background-color: transparent !important;
+    }
+
+    .photo {
+        position: fixed;
+        width: 100%;
+        height: 400px;
+        box-shadow: 0 2px 3px 0px #C2C2C2;
+        background-repeat: no-repeat;                
+    }
+    
+    .groups {
+        position: absolute;
+        width: 100%;
+        top: 400px;
+        padding-top: 8px;
+        padding-left: 16px;
+    }        
+    
+    .groups .group .item {
+        width: 100%;
+        height: 72px;
+    }
+    
+    .groups .group .item .tip {
+        color: #aaa;
+    }
+    
+    .groups .group .item .icon-place {
+        width: 56px;
+    }
+    
+    .groups .group .icon-place img {
+        width: 30px;
+        height: 30px;
+    }
+    
+</style>
+
 <script type="text/javascript">
     var page = {
-        init : function(id) {
+        init: function (id) {
             newToolbar('toolbar')
                     .addButton({
                         position: "left",
                         type: "icon",
-                        icon: "menu",
-                        onTap : function () {
+                        icon: "back",
+                        onTap: function () {
                             pageManager.back();
-                        }
-                    })
-                    .addButton({
-                        position: "right",
-                        type: "icon",
-                        "icon": "exit",
-                        onTap : function () {
-                            // TODO: confirm dialog, logout
-
-                            pageManager.clear();
-                            pageManager.loadPage('login');
                         }
                     })
                     .setTitle({
                         type: "text",
-                        text: "Информация"
+                        text: "Ata"
                     });
+            
+            var photo = $('.photo');            
+            photo.css('background-image', 'url(img/photo4.jpg)');
+            
+            var groups = $('.groups');
+            groups.append($('<div class="group">\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">город</div>\
+                                            Владимир\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_email_24px_gray.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">электронный адрес</div>\
+                                            ata@fm.ru\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">день рождения</div>\
+                                            17 июня 2000г\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">вероисповедание</div>\
+                                            Адвентист 100500 дня\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">о себе</div>\
+                                            Ем колбасу по утрам, запиваю лимонадом и иду на работу.\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                            </div>'));
         }
     };
 </script>
 
-<div class="header">
-    <div id="toolbar" class="mtoolbar">
-    </div>
+<div class="photo">
+    <div class="header">
+        <div id="toolbar" class="mtoolbar">
+        </div>
+    </div> 
+</div>
+
+<div class="groups">
 </div>

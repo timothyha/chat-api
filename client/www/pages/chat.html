@@ -1,16 +1,41 @@
+<style type="text/css">
+    .header {
+        position: fixed;
+        height: 64px;
+        width: 100%;
+        top: 0;
+    }
+    .footer {
+        position: fixed;
+        height: 64px;
+        line-height: 64px;
+        width: 100%;
+        background: #FAFAFA;
+        border-top: 1px solid #DDDDDD;
+        bottom: 0;
+    }
+    .content {
+        position: absolute;
+        width: 100%;
+        background: transparent;
+        z-index: 9998;
+    }
+
+</style>
+
 <script type="text/javascript">
     var page = {
-        isStoped : false,
+        isStoped: false,
         init: function () {
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
-                        onTap : function () {
+                        onTap: function () {
                             page.contentSlider.selectContent(0);
                         }
                     }).addButton({
                 text: "Приват",
-                onTap : function () {
+                onTap: function () {
                     page.contentSlider.selectContent(1);
                 }
             });
@@ -25,7 +50,7 @@
                         position: "left",
                         type: "icon",
                         icon: "menu",
-                        onTap : function () {
+                        onTap: function () {
                             page.sidePanel.show();
                         }
                     })
@@ -33,7 +58,7 @@
                         position: "right",
                         type: "icon",
                         "icon": "exit",
-                        onTap : function () {
+                        onTap: function () {
                             // TODO: confirm dialog, logout
 
                             pageManager.clear();
@@ -57,13 +82,13 @@
             page.sendPanel = newSendPanel('send-panel');
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
-            page.sidePanel.onUserInfoTap = function(item) {
+            page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.loadPage('user-info', item);
             };
-                        
+
             chatService.onError = function (err) {
                 if (!page.isStoped) {
-                    
+
                 }
             };
 
@@ -80,13 +105,13 @@
             page.contentSlider.resize();
         },
         timerWork: function () {
-            /*chatService.getUserList(function (res) {
-                page.sidePanel.setUsers(res);                
-            });*/
-            
-            chatService.getPublicMessages(0, function(res) {
-               console.log(res); 
+            chatService.getUserList(function (res) {
+                page.sidePanel.setUsers(res);
             });
+
+            /* chatService.getPublicMessages(0, function (res) {
+             console.log(res);
+             });*/
         },
         startDataTimer: function () {
             page.timerWork();
@@ -96,13 +121,13 @@
                 }
             }, 5000);
         },
-        saveState : function () {
-            
+        saveState: function () {
+
         },
-        loadState : function () {
-            
+        loadState: function () {
+
         },
-        stop : function() {
+        stop: function () {
             page.isStoped = true;
             clearInterval(page.timer);
         }
