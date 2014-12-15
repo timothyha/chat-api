@@ -67,6 +67,11 @@ input {
     background-repeat: no-repeat;
     background-size: 26px;
 }
+.icon-back {
+    background-image: url(../img/ic_arrow_back_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
 .circle64 {
     width: 64px;
     height: 64px;

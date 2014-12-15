@@ -11,9 +11,11 @@ function newChatlist(id) {
     self.title = $('<div class="title">07 декабря 2014</div>');
     self.workplace.append(self.title);
 
-    self.addItem = function (item) {
-        var nick = item.recepient === undefined ? item.nick : item.nick + " к " + item.recepient;
-
+    self.addItem = function (item) {        
+        if (item.color === 'LOGIN') return;
+        if (item.color === 'LOGOUT') return;
+        var nick = item.to === "" ? item.from : item.from + " к " + item.to;
+        
         self.workplace.append('<div class="item">\
                               <table cellpadding="0" cellspacing="0">\
                                 <tr>\
@@ -33,10 +35,16 @@ function newChatlist(id) {
                                     </td>\
                                 </tr>\
                               </table>\
-                              </div>'.format(item.photo, nick, item.message));
-    }
+                              </div>'.format('photo2', nick, item.message));
+    };
 
-    self.addItem({
+    self.addItems = function (items) {
+        for (var i = 0; i < items.length; i++) {
+            self.addItem(items[i]);
+        }
+    };
+
+  /*  self.addItem({
         nick: "Ata",
         message: "Привет. Как дела?",
         photo: "photo2"
@@ -75,8 +83,8 @@ function newChatlist(id) {
         message: "А я хочу свинные отбивные с чесночным соусом, и макароны.",
         photo: "photo4"
     });
-    
-    self.hide = function() {
+*/
+    self.hide = function () {
         self.workplace.hide();
     };
 
