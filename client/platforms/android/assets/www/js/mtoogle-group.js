@@ -23,7 +23,9 @@ function newToggleGroup(id) {
         buttons.append(button);
         
         binder.tap(button, function() {
-            buttons.find('.mgbutton').removeClass('active');
+            var buts = buttons.find('.mgbutton');
+            self.selectedIndex = button.index();            
+            buts.removeClass('active');
             button.addClass('active');
             if (item.onTap !== undefined) item.onTap();
         });             
@@ -49,8 +51,16 @@ function newToggleGroup(id) {
         var buttons = self.workplace.find('.buttons');
         var childs = buttons.children();
         var it = $(childs[item.index]);
-        it.remove('.sticker');
+        it.find('.sticker').remove();
         it.append($('<div class="sticker">{0}</div>'.format(item.text)));
+        return this;
+    };
+    
+    self.clearSticker = function(index) {
+        var buttons = self.workplace.find('.buttons');
+        var childs = buttons.children();
+        var it = $(childs[index]);
+        it.find('.sticker').remove();               
         return this;
     };
     

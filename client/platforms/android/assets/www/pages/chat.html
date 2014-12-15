@@ -1,31 +1,58 @@
+<style type="text/css">
+    .header {
+        position: fixed;
+        height: 64px;
+        width: 100%;
+        top: 0;
+    }
+    .footer {
+        position: fixed;
+        height: 64px;
+        line-height: 64px;
+        width: 100%;
+        background: #FAFAFA;
+        border-top: 1px solid #DDDDDD;
+        bottom: 0;
+    }
+    .content {
+        position: absolute;
+        width: 100%;
+        background: transparent;
+        z-index: 9998;
+    }
+
+</style>
+
 <script type="text/javascript">
     var page = {
-        isStoped : false,
+        isStoped: false,
+        privateUnread: 0,
         init: function () {
+            chatService.lastPublicStamp = 0;
+            chatService.lastPrivateStamp = 0;
+
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
-                        onTap : function () {
+                        onTap: function () {
                             page.contentSlider.selectContent(0);
                         }
-                    }).addButton({
-                text: "Приват",
-                onTap : function () {
-                    page.contentSlider.selectContent(1);
-                }
-            });
-
-            page.toggleGroup.setSticker({
-                index: 1,
-                text: "3"
-            });
+                    })
+                    .addButton({
+                        text: "Приват",
+                        onTap: function () {
+                            page.contentSlider.selectContent(1);
+                            page.privateUnread = 0;
+                            page.toggleGroup.clearSticker(1);                            
+                        }
+                    });
 
             newToolbar('toolbar')
                     .addButton({
                         position: "left",
                         type: "icon",
                         icon: "menu",
-                        click: function () {
+                        onTap: function () {
                             page.sidePanel.show();
                         }
                     })
@@ -33,7 +60,7 @@
                         position: "right",
                         type: "icon",
                         "icon": "exit",
-                        click: function () {
+                        onTap: function () {
                             // TODO: confirm dialog, logout
 
                             pageManager.clear();
@@ -57,13 +84,13 @@
             page.sendPanel = newSendPanel('send-panel');
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
-            page.sidePanel.onUserInfoClicked = function(item) {
+            page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.loadPage('user-info', item);
             };
-                        
+
             chatService.onError = function (err) {
                 if (!page.isStoped) {
-                    
+
                 }
             };
 
@@ -83,6 +110,32 @@
             chatService.getUserList(function (res) {
                 page.sidePanel.setUsers(res);
             });
+
+            chatService.getPublicMessages(function (res) {
+                var mess = res.reverse();
+                //console.log(mess);
+                page.publicChatList.addItems(mess);
+                page.publicChatList.clearLast();
+            });
+
+            chatService.getPrivateMessages(function (res) {
+                var mess = res.reverse();
+                // console.log(mess);
+
+                if (page.toggleGroup.selectedIndex !== 1) {
+                    page.privateUnread += mess.length;                    
+                    page.toggleGroup.setSticker({
+                        index: 1,
+                        text: page.privateUnread < 33 ? page.privateUnread : '33+'
+                    });
+                } else {
+                    page.privateUnread = 0;
+                    page.toggleGroup.clearSticker(1);
+                }
+
+                page.privateChatList.addItems(mess);
+                page.privateChatList.clearLast();
+            });
         },
         startDataTimer: function () {
             page.timerWork();
@@ -92,13 +145,13 @@
                 }
             }, 5000);
         },
-        saveState : function () {
-            
+        saveState: function () {
+
         },
-        loadState : function () {
-            
+        loadState: function () {
+
         },
-        stop : function() {
+        stop: function () {
             page.isStoped = true;
             clearInterval(page.timer);
         }

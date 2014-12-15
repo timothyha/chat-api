@@ -7,6 +7,7 @@ var chatService = {
     user: undefined,
     userList: undefined,
     lastPublicStamp: 0,
+    lastPrivateStamp: 0,
     publicMessages: [],
     getErrorDescription: function (err) {
         if (err === chatService.ERROR_USER_NOT_FOUND) {
@@ -67,7 +68,20 @@ var chatService = {
             }
         });
     },
-    getPrivateMessages: function (lastid, onData) {
+    getPrivateMessages: function (onData) {
+        chatService.callService('private', {
+            session : chatService.user.session,
+            laststamp : chatService.lastPrivateStamp,
+            limit : chatService.messageLimit
+        }, function (res) {
+            try {                                
+                /*chatService.publicMessages = res;*/
+                chatService.lastPrivateStamp = res[0].stamp;                
+                onData(res);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     },
     getUserList: function (onData) {
         chatService.callService('users', {

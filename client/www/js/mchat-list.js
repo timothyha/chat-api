@@ -59,47 +59,7 @@ function newChatlist(id) {
             }            
         }
     };
-
-  /*  self.addItem({
-        nick: "Ata",
-        message: "Привет. Как дела?",
-        photo: "photo2"
-    });
-    self.addItem({
-        nick: "Grabli66",
-        message: "Отлично. Пишу чат. А ты иди готовь ужин.",
-        photo: "photo",
-        recepient: "Ata"
-    });
-    self.addItem({
-        nick: "FreeBird",
-        message: "Что Вы будете есть на ужин?",
-        photo: "photo3"
-    });
-    self.addItem({
-        nick: "Добродетельная",
-        message: "Наверное макароны с катлетой.",
-        photo: "photo4",
-        recepient: "FreeBird"
-    });
-    self.addItem({
-        nick: "Ata",
-        message: "Сейчас сготовлю утку с аппельсинами. И картошку по деревенски.",
-        photo: "photo2",
-        recepient: "FreeBird"
-    });
-    self.addItem({
-        nick: "FreeBird",
-        message: "Тоже хочу такое.",
-        photo: "photo3",
-        recepient: "Ata"
-    });
-    self.addItem({
-        nick: "Добродетельная",
-        message: "А я хочу свинные отбивные с чесночным соусом, и макароны.",
-        photo: "photo4"
-    });
-*/
+    
     self.hide = function () {
         self.workplace.hide();
     };
