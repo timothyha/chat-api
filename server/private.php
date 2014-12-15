@@ -1,6 +1,6 @@
 <?php
 
-# Test: curl --data "session=value1" https://jesuschrist.ru/chapi/private
+# Test: curl --data "session=value1&laststamp=value2&limit=value3" https://jesuschrist.ru/chapi/private
 
 include "common.php";
 
@@ -8,13 +8,18 @@ $sid = intval($_POST['session']);
 $login = check_user_session($sid);
 
 $laststamp = intval($_POST['laststamp']);
+$msglimit = intval($_POST['limit']);
+
+if($msglimit==0) $msglimit = 1000;
 
 # get current private messages
 try {
 
-    $q = $db->prepare("SELECT mtime as stamp, mfrom as from_user, mto as to_user, mtext as message, mcolor as color FROM chatpriv WHERE ? in (mfrom, mto) AND mtime > ? ORDER BY mtime");
+    $q = $db->prepare("SELECT c.mtime as stamp, c.mfrom as from_user, c.mto as to_user, c.mtext as message, c.mcolor as color, u.cid as id 
+        FROM chatpriv c join chatusers u on c.mfrom=u.cnick WHERE ? in (mfrom, mto) AND mtime > ? ORDER BY mtime LIMIT ?");
     $q->bindValue(1, $login, PDO::PARAM_STR);
     $q->bindValue(2, $laststamp, PDO::PARAM_INT);
+    $q->bindValue(3, $msglimit, PDO::PARAM_INT);
     $q->execute();
 
     $rows = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -24,8 +29,9 @@ try {
 
         foreach ($rows as $row) {           
             $messages[] = array(
-                    "stamp" => date("Y-m-d H:i", $row['stamp']),
+                    "stamp" => $row['stamp'],
                     "from" => output_conv($row['from_user']),
+                    "fromid" => $row['id'],
                     "to" => textlevel($row['to_user']),
                     "message" => output_conv($row['message']),
                     "color" => $row['color']
