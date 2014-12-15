@@ -109,9 +109,11 @@
                 page.sidePanel.setUsers(res);
             });
 
-            /* chatService.getPublicMessages(0, function (res) {
-             console.log(res);
-             });*/
+             chatService.getPublicMessages(function (res) {
+                var mess = res.slice(-30).reverse();
+                console.log(mess);
+                page.publicChatList.addItems(mess);
+             });
         },
         startDataTimer: function () {
             page.timerWork();

@@ -3,8 +3,10 @@ var chatService = {
     ERROR_INTERNAL: 'ERROR_INTERNAL',
     ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',
     onError: null,
-    user : undefined,
-    userList : undefined,
+    user: undefined,
+    userList: undefined,
+    lastPublicStamp: 0,
+    publicMessages: [],
     getErrorDescription: function (err) {
         if (err === chatService.ERROR_USER_NOT_FOUND) {
             return 'Неправильный логин или пароль';
@@ -13,7 +15,7 @@ var chatService = {
         } else if (err === chatService.ERR_USER_NOT_CONNECTED) {
             return  'Сессии не существует или она истекла.';
         }
-        
+
         return 'Неизвестная ошибка';
     },
     callService: function (funcName, params, onData) {
@@ -23,7 +25,7 @@ var chatService = {
             data: params,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             success: function (res) {
-                try {                                        
+                try {
                     if ((res.err === undefined) || (res.err === "")) {
                         onData(res);
                     } else {
@@ -41,7 +43,7 @@ var chatService = {
         chatService.callService('login', {
             login: name,
             password: password
-        }, function(res) {
+        }, function (res) {
             chatService.user = res;
             onData(res);
         });
@@ -49,12 +51,18 @@ var chatService = {
     logout: function (name, password, onData) {
         chatService.callService('logout', {}, onData);
     },
-    getPublicMessages: function (laststamp, onData) {
+    getPublicMessages: function (onData) {
         chatService.callService('public', {
             session: chatService.user.session,
-            laststamp: laststamp
-        }, function(res) {
-            onData(res);
+            laststamp: chatService.lastPublicStamp
+        }, function (res) {
+            try {
+                chatService.publicMessages = res;
+                chatService.lastPublicStamp = res[res.length - 1].stamp;                
+                onData(res);
+            } catch (e) {
+
+            }
         });
     },
     getPrivateMessages: function (lastid, onData) {
@@ -62,7 +70,7 @@ var chatService = {
     getUserList: function (onData) {
         chatService.callService('users', {
             session: chatService.user.session
-        }, function(res) {
+        }, function (res) {
             chatService.userList = res;
             onData(res);
         });
