@@ -27,6 +27,8 @@
     var page = {
         isStoped: false,
         init: function () {
+            chatService.lastPublicStamp  = 0;
+            
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
@@ -110,9 +112,10 @@
             });
 
              chatService.getPublicMessages(function (res) {
-                var mess = res.slice(-30).reverse();
+                var mess = res.reverse();
                 console.log(mess);
                 page.publicChatList.addItems(mess);
+                page.publicChatList.clearLast();                
              });
         },
         startDataTimer: function () {
