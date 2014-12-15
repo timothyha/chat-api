@@ -9,6 +9,7 @@ check_user_session($sid);
 
 $laststamp = intval($_POST['laststamp']);
 $msglimit = intval($_POST['limit']);
+if($msglimit==0) $msglimit = 100;
 
 # get current public messages
 try {
