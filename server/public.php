@@ -15,7 +15,7 @@ if($msglimit==0) $msglimit = 100;
 try {
 
     $q = $db->prepare("SELECT c.mtime as stamp, c.mfrom as from_user, c.mto as to_user, c.mtext as message, c.mcolor as color, u.cid as id 
-        FROM chatmsgs c join chatusers u on c.mfrom = u.cnick WHERE (hidden=0) AND ((mprivate=0) OR (mfrom='')) AND mtime > ? ORDER BY mtime LIMIT ?");
+        FROM chatmsgs c join chatusers u on c.mfrom = u.cnick WHERE (hidden=0) AND ((mprivate=0) OR (mfrom='')) AND mtime > ? ORDER BY mtime DESC LIMIT ?");
     $q->bindValue(1, $laststamp, PDO::PARAM_INT);
     $q->bindValue(2, $msglimit, PDO::PARAM_INT);
     $q->execute();
