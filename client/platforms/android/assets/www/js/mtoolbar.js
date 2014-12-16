@@ -1,7 +1,7 @@
 function newToolbar(id) {
     var self = {};
 
-    if (id != undefined) {
+    if (id !== undefined) {
         self.workplace = $('#' + id);
     } else {
         self.workplace = $('<div></div>');
@@ -26,12 +26,12 @@ function newToolbar(id) {
             b = $('<div class="mbutton-icon icon-{0}"></div>'.format(item.icon));
         }
 
-        b.bind('click', item.click);
+        binder.tap(b, item.onTap)        
 
-        if (item.position == "left") {
+        if (item.position === "left") {
             var leftButtons = self.workplace.find('.left-buttons');
             leftButtons.append(b);
-        } else if (item.position == "right") {
+        } else if (item.position === "right") {
             var rightButtons = self.workplace.find('.right-buttons .inner');
             rightButtons.append(b);
         }

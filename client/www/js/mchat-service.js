@@ -1,11 +1,13 @@
 var chatService = {
     ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     ERROR_INTERNAL: 'ERROR_INTERNAL',
-    ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',
+    ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',    
     onError: null,
+    messageLimit : 30,
     user: undefined,
     userList: undefined,
     lastPublicStamp: 0,
+    lastPrivateStamp: 0,
     publicMessages: [],
     getErrorDescription: function (err) {
         if (err === chatService.ERROR_USER_NOT_FOUND) {
@@ -53,19 +55,33 @@ var chatService = {
     },
     getPublicMessages: function (onData) {
         chatService.callService('public', {
-            session: chatService.user.session,
-            laststamp: chatService.lastPublicStamp
+            session : chatService.user.session,
+            laststamp : chatService.lastPublicStamp,
+            limit : chatService.messageLimit
         }, function (res) {
-            try {
-                chatService.publicMessages = res;
-                chatService.lastPublicStamp = res[res.length - 1].stamp;                
+            try {                                
+                /*chatService.publicMessages = res;*/
+                chatService.lastPublicStamp = res[0].stamp;                
                 onData(res);
             } catch (e) {
-
+                console.log(e);
             }
         });
     },
-    getPrivateMessages: function (lastid, onData) {
+    getPrivateMessages: function (onData) {
+        chatService.callService('private', {
+            session : chatService.user.session,
+            laststamp : chatService.lastPrivateStamp,
+            limit : chatService.messageLimit
+        }, function (res) {
+            try {                                
+                /*chatService.publicMessages = res;*/
+                chatService.lastPrivateStamp = res[0].stamp;                
+                onData(res);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     },
     getUserList: function (onData) {
         chatService.callService('users', {

@@ -51,16 +51,16 @@ function newSidePanel(id) {
 
         for (var i = 0; i < users.length; i++) {
             var usr = users[i];
-            var photo = 'img/nophoto.jpg';
+            /*var photo = 'img/nophoto.jpg';
             if ((usr.photo !== undefined) && (usr.photo !== "")) {
                 photo = '{0}{1}'.format(global.chatRoot, usr.photo);
-            }
+            }*/
 
             var userInfo = $('\
                          <table class="user" cellpadding="0" cellspacing="0">\
                             <tr>\
                                 <td class="photo">\
-                                    <img class="circle48" src="{0}" />\
+                                    <img class="circle48" src="{0}/chat/gallery/ok/{2}.jpg" />\
                                 </td>\
                                 <td class="nick">\
                                     {1}\
@@ -69,7 +69,7 @@ function newSidePanel(id) {
                                     <div class="mbutton-icon icon-search" data-id="{2}"></div>\
                                 </td>\
                             </tr>\
-                         </table>'.format(photo, usr.login, usr.id));
+                         </table>'.format(global.chatRoot, usr.login, usr.id));
             userList.append(userInfo);
             
             binder.tap(userInfo.find('.command .mbutton-icon'), function() {

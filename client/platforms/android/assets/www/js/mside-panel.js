@@ -1,6 +1,6 @@
 function newSidePanel(id) {
     var self = {};        
-    self.onUserInfoClicked = undefined;   
+    self.onUserInfoTap = undefined;   
     
     if (id !== undefined) {
         self.workplace = $('#'+id);
@@ -30,10 +30,10 @@ function newSidePanel(id) {
                             '));
 
     var overlay = self.workplace.find(".overlay");
-    overlay.bind("click", function () {
+    binder.tap(overlay, function () {
         self.hide();
         return this;
-    });
+    });    
 
     self.setUserInfo = function (item) {
         /*var photo = self.workplace.find(".info .photo img");
@@ -51,16 +51,16 @@ function newSidePanel(id) {
 
         for (var i = 0; i < users.length; i++) {
             var usr = users[i];
-            var photo = 'img/nophoto.jpg';
+            /*var photo = 'img/nophoto.jpg';
             if ((usr.photo !== undefined) && (usr.photo !== "")) {
                 photo = '{0}{1}'.format(global.chatRoot, usr.photo);
-            }
+            }*/
 
             var userInfo = $('\
                          <table class="user" cellpadding="0" cellspacing="0">\
                             <tr>\
                                 <td class="photo">\
-                                    <img class="circle48" src="{0}" />\
+                                    <img class="circle48" src="{0}/chat/gallery/ok/{2}.jpg" />\
                                 </td>\
                                 <td class="nick">\
                                     {1}\
@@ -69,15 +69,15 @@ function newSidePanel(id) {
                                     <div class="mbutton-icon icon-search" data-id="{2}"></div>\
                                 </td>\
                             </tr>\
-                         </table>'.format(photo, usr.login, usr.id));
+                         </table>'.format(global.chatRoot, usr.login, usr.id));
             userList.append(userInfo);
             
-            userInfo.find('.command .mbutton-icon').bind('click', function() {
-                if (self.onUserInfoClicked !== undefined) {
+            binder.tap(userInfo.find('.command .mbutton-icon'), function() {
+                if (self.onUserInfoTap !== undefined) {
                     var id = $(this).attr('data-id');
-                    self.onUserInfoClicked(id);
+                    self.onUserInfoTap(id);
                 }
-            });
+            });           
         }
         return this;
     };
