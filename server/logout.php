@@ -15,6 +15,11 @@ try {
     $q->bindValue(2, $sid, PDO::PARAM_INT);
     $q->execute();
 
+    $q = $db->prepare("INSERT INTO chatmsgs(mtime,mfrom,mto,mcolor,mtext,mhtml) VALUES(?,'','','LOGOUT',?,0)");
+    $q->bindValue(1, $stamp, PDO::PARAM_INT);
+    $q->bindValue(2, $sid, PDO::PARAM_INT);
+    $q->execute();
+    
     echo json_encode(array("stamp"=>$stamp));
 
 } catch(PDOException $e) {
