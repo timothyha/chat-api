@@ -2,14 +2,16 @@ var chatService = {
     ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     ERROR_INTERNAL: 'ERROR_INTERNAL',
     ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',    
-    onError: null,
+    ERR_MESSAGES_EMPTY: 'ERR_MESSAGES_EMPTY',    
+    onError: undefined,
+    requests: [],
     messageLimit : 30,
     user: undefined,
     userDescription: undefined,
     userList: undefined,
     lastPublicStamp: 0,
     lastPrivateStamp: 0,
-    publicMessages: [],
+    publicMessages: [],    
     getErrorDescription: function (err) {
         if (err === chatService.ERROR_USER_NOT_FOUND) {
             return 'Неправильный логин или пароль';
@@ -21,40 +23,62 @@ var chatService = {
 
         return 'Неизвестная ошибка';
     },
-    callService: function (funcName, params, onData) {
-        $.ajax({
+    callService: function (funcName, params, onData, onError) {
+        var request = $.ajax({
             type: "POST",
             url: 'https://jesuschrist.ru/chapi/{0}'.format(funcName),
             data: params,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            success: function (res) {
+            success: function (res) {                
+                var ind = chatService.requests.indexOf(request);
+                delete chatService.requests[ind];
+                
                 try {
                     if ((res.err === undefined) || (res.err === "")) {
                         onData(res);
                     } else {
-                        if (chatService.onError !== null)
-                            chatService.onError(res.err);
+                        if (onError !== undefined) {
+                            onError(res.err);
+                        } else {
+                            if (chatService.onError !== undefined) {
+                                chatService.onError(res.err);
+                            }
+                        }
                     }
                 } catch (e) {
                     if (chatService.onError !== null)
                         chatService.onError(chatService.ERROR_INTERNAL);
                 }
             }
-        });
+        });        
+        chatService.requests.push(request);
     },
-    login: function (name, password, onData) {
+    abortAll: function() {
+        for (var i = 0; i < chatService.requests.length; i++) {
+            var req = chatService.requests[i];
+            if (req !== undefined) {
+                chatService.requests[i].abort();
+            }
+        }
+        chatService.requests = [];
+    },
+    login: function (name, password, onData, onError) {
         chatService.callService('login', {
             login: name,
             password: password
         }, function (res) {
             chatService.user = res;
             onData(res);
-        });
+        },onError);
     },
-    logout: function (name, password, onData) {
-        chatService.callService('logout', {}, onData);
+    logout: function (onData, onError) {
+        chatService.callService('logout', {
+            session : chatService.user.session
+        }, function (res) {            
+            onData(res);
+        },onError);
     },
-    getPublicMessages: function (onData) {
+    getPublicMessages: function (onData, onError) {
         chatService.callService('public', {
             session : chatService.user.session,
             laststamp : chatService.lastPublicStamp,
@@ -67,9 +91,9 @@ var chatService = {
             } catch (e) {
                 console.log(e);
             }
-        });
+        }, onError);
     },
-    getPrivateMessages: function (onData) {
+    getPrivateMessages: function (onData, onError) {
         chatService.callService('private', {
             session : chatService.user.session,
             laststamp : chatService.lastPrivateStamp,
@@ -82,30 +106,30 @@ var chatService = {
             } catch (e) {
                 console.log(e);
             }
-        });
+        },onError);
     },
-    getUserList: function (onData) {
+    getUserList: function (onData, onError) {
         chatService.callService('users', {
             session: chatService.user.session
         }, function (res) {
             chatService.userList = res;
             onData(res);
-        });
+        },onError);
     },
-    getSelfInfo: function(onData) {
+    getSelfInfo: function(onData, onError) {
         chatService.getUserInfo(chatService.user.id, function(res) {
             chatService.userDescription = res;
-        });
+        },onError);
     },
-    getUserInfo: function(userId, onData) {        
+    getUserInfo: function(userId, onData, onError) {        
         chatService.callService('info', {
             session: chatService.user.session,
             userid: userId
         }, function (res) {
             onData(res[0]);
-        });
+        },onError);
     },
-    sendMessage: function (room, text, to, onData) {
+    sendMessage: function (room, text, to, onData, onError) {
         console.log(to);
         chatService.callService('send', {
             session: chatService.user.session,
@@ -114,6 +138,6 @@ var chatService = {
             to: to
         }, function (res) {            
             onData(res);
-        });
+        },onError);
     }
 };

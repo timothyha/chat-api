@@ -27,12 +27,15 @@
     var page = {
         isStoped: false,
         privateUnread: 0,
+        publicSended: false,
+        privateSended: false,
         init: function () {
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
-            
-            if (chatService.userDescription === undefined) chatService.getSelfInfo();
-            
+
+            if (chatService.userDescription === undefined)
+                chatService.getSelfInfo();
+
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
@@ -45,7 +48,7 @@
                         onTap: function () {
                             page.contentSlider.selectContent(1);
                             page.privateUnread = 0;
-                            page.toggleGroup.clearSticker(1);                            
+                            page.toggleGroup.clearSticker(1);
                         }
                     });
 
@@ -64,8 +67,7 @@
                         type: "icon",
                         "icon": "exit",
                         onTap: function () {
-                            // TODO: confirm dialog, logout
-
+                            chatService.logout();
                             pageManager.clear();
                             pageManager.loadPage('login');
                         }
@@ -85,8 +87,8 @@
             };
 
             page.sendPanel = newSendPanel('send-panel');
-            page.sendPanel.onSend = function(text) {
-                chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function(res) {
+            page.sendPanel.onSend = function (text) {
+                chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function (res) {
                     console.log(res);
                 });
             };
@@ -95,14 +97,14 @@
             page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.loadPage('user-info', item);
             };
-            
-            page.sidePanel.onUserSelect = function(login) {                
+
+            page.sidePanel.onUserSelect = function (login) {
                 global.recepient = login;
             };
 
             chatService.onError = function (err) {
                 if (!page.isStoped) {
-                    
+
                 }
             };
 
@@ -118,40 +120,60 @@
             page.sidePanel.resize();
             page.contentSlider.resize();
         },
-        setTitleDate : function() {            
+        setTitleDate: function () {
             var str = moment().format("LL", "ru");
             page.publicChatList.setTitle(str);
             page.privateChatList.setTitle(str);
-        },        
+        },
         timerWork: function () {
             page.setTitleDate();
-            
+
             chatService.getUserList(function (res) {
                 page.sidePanel.setUsers(res);
             });
 
-            chatService.getPublicMessages(function (res) {
-                var mess = res.reverse();                
-                page.publicChatList.addItems(mess);
-                page.publicChatList.clearLast();
-            });
+            if (page.publicSended === false) {
+                page.publicSended = true;                
+                chatService.getPublicMessages(function (res) {
+                    var mess = res.reverse();
+                    page.publicChatList.addItems(mess);
+                    page.publicChatList.clearLast();
+                    page.publicSended = false;                                        
+                }, function(err) {                    
+                    if (err === chatService.ERR_MESSAGES_EMPTY) {
+                        page.publicSended = false;
+                    } else {
+                        chatService.onError(err);
+                    }
+                });                
+            }            
 
-            chatService.getPrivateMessages(function (res) {
-                var mess = res.reverse();
-                if (page.toggleGroup.selectedIndex !== 1) {
-                    page.privateUnread += mess.length;                    
-                    page.toggleGroup.setSticker({
-                        index: 1,
-                        text: page.privateUnread < 33 ? page.privateUnread : '33+'
-                    });
-                } else {
-                    page.privateUnread = 0;
-                    page.toggleGroup.clearSticker(1);
-                }
+            if (!page.privateSended) {
+                page.privateSended = true;
+                chatService.getPrivateMessages(function (res) {
+                    var mess = res.reverse();
+                    if (page.toggleGroup.selectedIndex !== 1) {
+                        page.privateUnread += mess.length;
+                        page.toggleGroup.setSticker({
+                            index: 1,
+                            text: page.privateUnread < 33 ? page.privateUnread : '33+'
+                        });
+                    } else {
+                        page.privateUnread = 0;
+                        page.toggleGroup.clearSticker(1);
+                    }
 
-                page.privateChatList.addItems(mess);
-                page.privateChatList.clearLast();
-            });
+                    page.privateChatList.addItems(mess);
+                    page.privateChatList.clearLast();
+                    page.privateSended = false;
+                }, function(err) {
+                    if (err === chatService.ERR_MESSAGES_EMPTY) {
+                        page.privateSended = false;
+                    } else {
+                        chatService.onError(err);
+                    }
+                });
+            }
         },
         startDataTimer: function () {
             page.timerWork();
@@ -167,9 +189,10 @@
         loadState: function () {
 
         },
-        stop: function () {
+        stop: function () {            
             page.isStoped = true;
             clearInterval(page.timer);
+            chatService.abortAll();
         }
     }
 </script>

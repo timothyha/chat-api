@@ -5,6 +5,7 @@ var pageManager = {
             page.saveState();
             page.stop();
         } catch (e) {
+            console.log(e);
         }
 
         $(".app").load('pages/{0}.html'.format(s), function () {
