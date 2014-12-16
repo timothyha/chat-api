@@ -71,6 +71,7 @@ function newSidePanel(id) {
             binder.tap(userInfo.find('.nick'), function() {
                 if (self.onUserSelect) {                    
                     self.onUserSelect($(this).attr('data-login'));
+                    self.hide();
                 }
             });
             
