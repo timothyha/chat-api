@@ -1,15 +1,15 @@
 function newSidePanel(id) {
-    var self = {};        
-    self.onUserInfoTap = undefined;   
+    var self = {};
+    self.onUserInfoTap = undefined;
     self.onUserSelect = undefined;
-    
+
     if (id !== undefined) {
-        self.workplace = $('#'+id);
+        self.workplace = $('#' + id);
     } else {
         self.workplace = $('<div></div>');
         $(document.body).append(self.workplace);
-    }    
-    
+    }
+
     self.workplace.addClass("msidepanel");
 
     self.workplace.append($('\
@@ -34,15 +34,15 @@ function newSidePanel(id) {
     binder.tap(overlay, function () {
         self.hide();
         return this;
-    });    
+    });
 
     self.setUserInfo = function (item) {
-        /*var photo = self.workplace.find(".info .photo img");
-         var email = self.workplace.find(".info .email");
-         var nick = self.workplace.find(".info .nick");        
-         photo.attr("src", "./img/photo.jpg");
-         email.text("grabli66@gmail.com");
-         nick.text("Grabli66");*/
+        var photo = self.workplace.find(".info .photo img");
+        var email = self.workplace.find(".info .email");
+        var nick = self.workplace.find(".info .nick");
+        photo.attr("src", "./img/photo.jpg");
+        email.text("grabli66@gmail.com");
+        nick.text("Grabli66");
         return this;
     };
 
@@ -67,16 +67,16 @@ function newSidePanel(id) {
                                 </td>\
                             </tr>\
                          </table>'.format(global.chatRoot, usr.login, usr.id));
-                        
-            binder.tap(userInfo.find('.nick'), function() {
-                if (self.onUserSelect) {                    
+
+            binder.tap(userInfo.find('.nick'), function () {
+                if (self.onUserSelect) {
                     self.onUserSelect($(this).attr('data-login'));
                     self.hide();
                 }
             });
-            
-            binder.tap(userInfo.find('.command .mbutton-icon'), function() {
-                if (self.onUserInfoTap !== undefined) {                    
+
+            binder.tap(userInfo.find('.command .mbutton-icon'), function () {
+                if (self.onUserInfoTap !== undefined) {
                     var id = $(this).attr('data-id');
                     self.onUserInfoTap(id);
                 }
@@ -95,7 +95,7 @@ function newSidePanel(id) {
 
     self.hide = function () {
         var panel = self.workplace.find('.panel');
-        panel.animate({"left": -panel.width()},300, function () {
+        panel.animate({"left": -panel.width()}, 300, function () {
             self.workplace.hide();
             self.resize();
         });
@@ -106,7 +106,7 @@ function newSidePanel(id) {
         var list = self.workplace.find('.list');
         var info = self.workplace.find('.info');
         list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
-    }
+    };
 
     self.hide();
     return self;

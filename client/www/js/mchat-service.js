@@ -5,6 +5,7 @@ var chatService = {
     onError: null,
     messageLimit : 30,
     user: undefined,
+    userDescription: undefined,
     userList: undefined,
     lastPublicStamp: 0,
     lastPrivateStamp: 0,
@@ -89,6 +90,16 @@ var chatService = {
             session: chatService.user.session
         }, function (res) {
             chatService.userList = res;
+            onData(res);
+        });
+    },
+    getUserInfo: function(userId, onData) {        
+        chatService.callService('info', {
+            session: chatService.user.session,
+            userid: userId
+        }, function (res) { 
+            chatService.userDescription = res;
+            console.log(res);
             onData(res);
         });
     },
