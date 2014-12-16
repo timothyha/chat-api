@@ -1,7 +1,7 @@
 chat-api
 ========
 
-API for chat server at jesuschrist.ru
+API for chat server at jesuschrist.ru - developed by timothyha and Grabli66
 
 - SSL only
 - JSON format, POST requests

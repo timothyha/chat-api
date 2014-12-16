@@ -30,7 +30,7 @@ try {
                     "stamp" => $row['stamp'],
                     "from" => output_conv($row['from_user']),
                     "fromid" => $row['id'],
-                    "to" => textlevel($row['to_user']),
+                    "to" => output_conv($row['to_user']),
                     "message" => output_conv($row['message']),
                     "color" => $row['color']
                 );

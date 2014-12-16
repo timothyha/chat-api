@@ -5,7 +5,7 @@
 include "common.php";
 
 $sid = intval($_POST['session']);
-$login = check_user_session($sid);
+list($login, $nextlogin, $color) = check_user_session($sid);
 
 $laststamp = intval($_POST['laststamp']);
 $msglimit = intval($_POST['limit']);
@@ -32,7 +32,7 @@ try {
                     "stamp" => $row['stamp'],
                     "from" => output_conv($row['from_user']),
                     "fromid" => $row['id'],
-                    "to" => textlevel($row['to_user']),
+                    "to" => output_conv($row['to_user']),
                     "message" => output_conv($row['message']),
                     "color" => $row['color']
                 );
