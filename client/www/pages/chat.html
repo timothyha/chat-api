@@ -30,7 +30,9 @@
         init: function () {
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
-
+            
+            chatService.getUserInfo(chatService.user.id);
+            
             page.toggleGroup = newToggleGroup()
                     .addButton({
                         text: "Общий",
@@ -93,8 +95,7 @@
                 pageManager.loadPage('user-info', item);
             };
             
-            page.sidePanel.onUserSelect = function(login) {
-                console.log(login);
+            page.sidePanel.onUserSelect = function(login) {                
                 global.recepient = login;
             };
 
