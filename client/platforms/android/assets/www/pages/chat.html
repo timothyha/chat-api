@@ -82,15 +82,25 @@
             };
 
             page.sendPanel = newSendPanel('send-panel');
+            page.sendPanel.onSend = function(text) {
+                chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function(res) {
+                    console.log(res);
+                })
+            };
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
             page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.loadPage('user-info', item);
             };
+            
+            page.sidePanel.onUserSelect = function(login) {
+                console.log(login);
+                global.recepient = login;
+            };
 
             chatService.onError = function (err) {
                 if (!page.isStoped) {
-
+                    
                 }
             };
 
@@ -106,7 +116,14 @@
             page.sidePanel.resize();
             page.contentSlider.resize();
         },
+        setTitleDate : function() {            
+            var str = moment().format("LL", "ru");
+            page.publicChatList.setTitle(str);
+            page.privateChatList.setTitle(str);
+        },        
         timerWork: function () {
+            page.setTitleDate();
+            
             chatService.getUserList(function (res) {
                 page.sidePanel.setUsers(res);
             });

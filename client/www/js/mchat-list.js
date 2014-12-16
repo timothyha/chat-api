@@ -7,16 +7,17 @@ function newChatlist(id) {
     }
 
     self.workplace.addClass("mchatlist");    
-    self.workplace.append($('<div class="title">07 декабря 2014</div><div class="messages"></div>'));    
+    self.workplace.append($('<div class="title"></div><div class="messages"></div>'));    
+    self.title = self.workplace.find(".title");
     self.messages = self.workplace.find(".messages");
-    
-    
+        
     self.addItem = function (item) {        
         if (item.color === 'LOGIN') return;
         if (item.color === 'LOGOUT') return;
         var nick = item.to === "" ? item.from : item.from + " к " + item.to;
                
-        var stampStr = getTime(item.stamp);
+        //var stampStr = getTime(item.stamp);
+        var stampStr = moment(item.stamp * 1000).format("HH:mm:ss");
         
         var newItem = $('<div class="item">\
                               <table cellpadding="0" cellspacing="0">\
@@ -58,6 +59,10 @@ function newChatlist(id) {
                 toRemove[i].remove();
             }            
         }
+    };
+    
+    self.setTitle = function(text) {
+        self.title.text(text);
     };
     
     self.hide = function () {
