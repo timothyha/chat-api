@@ -1,6 +1,7 @@
 function newSidePanel(id) {
     var self = {};        
     self.onUserInfoTap = undefined;   
+    self.onUserSelect = undefined;
     
     if (id !== undefined) {
         self.workplace = $('#'+id);
@@ -51,10 +52,6 @@ function newSidePanel(id) {
 
         for (var i = 0; i < users.length; i++) {
             var usr = users[i];
-            /*var photo = 'img/nophoto.jpg';
-            if ((usr.photo !== undefined) && (usr.photo !== "")) {
-                photo = '{0}{1}'.format(global.chatRoot, usr.photo);
-            }*/
 
             var userInfo = $('\
                          <table class="user" cellpadding="0" cellspacing="0">\
@@ -62,7 +59,7 @@ function newSidePanel(id) {
                                 <td class="photo">\
                                     <img class="circle48" src="{0}/chat/gallery/ok/{2}.jpg" />\
                                 </td>\
-                                <td class="nick">\
+                                <td class="nick" data-login="{1}">\
                                     {1}\
                                 </td>\
                                 <td class="command">\
@@ -70,14 +67,21 @@ function newSidePanel(id) {
                                 </td>\
                             </tr>\
                          </table>'.format(global.chatRoot, usr.login, usr.id));
-            userList.append(userInfo);
+                        
+            binder.tap(userInfo.find('.nick'), function() {
+                if (self.onUserSelect) {                    
+                    self.onUserSelect($(this).attr('data-login'));
+                    self.hide();
+                }
+            });
             
             binder.tap(userInfo.find('.command .mbutton-icon'), function() {
-                if (self.onUserInfoTap !== undefined) {
+                if (self.onUserInfoTap !== undefined) {                    
                     var id = $(this).attr('data-id');
                     self.onUserInfoTap(id);
                 }
-            });           
+            });
+            userList.append(userInfo);
         }
         return this;
     };

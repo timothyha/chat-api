@@ -76,7 +76,8 @@ var chatService = {
         }, function (res) {
             try {                                
                 /*chatService.publicMessages = res;*/
-                chatService.lastPrivateStamp = res[0].stamp;                
+                chatService.lastPrivateStamp = res[0].stamp;
+                console.log(res);
                 onData(res);
             } catch (e) {
                 console.log(e);
@@ -91,6 +92,15 @@ var chatService = {
             onData(res);
         });
     },
-    sendMessage: function (room, text, onData) {
+    sendMessage: function (room, text, to, onData) {
+        console.log(to);
+        chatService.callService('send', {
+            session: chatService.user.session,
+            private: room,
+            message: text,
+            to: to
+        }, function (res) {            
+            onData(res);
+        });
     }
 };
