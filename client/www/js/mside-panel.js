@@ -15,13 +15,13 @@ function newSidePanel(id) {
     self.workplace.append($('\
                             <div class="panel">\
                                 <div class="info">\
-                                    <img class="circle64" src="./img/photo.jpg"></img>\
+                                    <img class="circle64"></img>\
                                     <div class="buttons">\
                                         <div class="mbutton-icon icon-edit"></div>\
                                     </div>\
                                     <ul class="data">\
-                                        <li class="nick">Grabli66</li>\
-                                        <li class="email">grabli66@gmail.com</li>\
+                                        <li class="nick"></li>\
+                                        <li class="town"></li>\
                                     </ul>\
                                     <div class="mbutton-icon icon-drop-down more"></div>\
                                 </div>\
@@ -37,12 +37,12 @@ function newSidePanel(id) {
     });
 
     self.setUserInfo = function (item) {
-        var photo = self.workplace.find(".info .photo img");
-        var email = self.workplace.find(".info .email");
+        var photo = self.workplace.find(".info img");
+        var about = self.workplace.find(".info .town");
         var nick = self.workplace.find(".info .nick");
-        photo.attr("src", "./img/photo.jpg");
-        email.text("grabli66@gmail.com");
-        nick.text("Grabli66");
+        photo.attr("src", "{0}{1}".format(global.chatRoot, item.photo));
+        about.text(item.town);
+        nick.text(item.login);
         return this;
     };
 

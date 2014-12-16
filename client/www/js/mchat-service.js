@@ -77,8 +77,7 @@ var chatService = {
         }, function (res) {
             try {                                
                 /*chatService.publicMessages = res;*/
-                chatService.lastPrivateStamp = res[0].stamp;
-                console.log(res);
+                chatService.lastPrivateStamp = res[0].stamp;                
                 onData(res);
             } catch (e) {
                 console.log(e);
@@ -93,14 +92,17 @@ var chatService = {
             onData(res);
         });
     },
+    getSelfInfo: function(onData) {
+        chatService.getUserInfo(chatService.user.id, function(res) {
+            chatService.userDescription = res;
+        });
+    },
     getUserInfo: function(userId, onData) {        
         chatService.callService('info', {
             session: chatService.user.session,
             userid: userId
-        }, function (res) { 
-            chatService.userDescription = res;
-            console.log(res);
-            onData(res);
+        }, function (res) {
+            onData(res[0]);
         });
     },
     sendMessage: function (room, text, to, onData) {

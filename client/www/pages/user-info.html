@@ -1,49 +1,64 @@
 <style type="text/css">      
-    .mtoolbar {
-        box-shadow: none;
-        background-color: transparent !important;
+    .info-content {
+        position: absolute;
+        top: 64px;
+        width: 100%;        
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    
+    .photo {        
+        height: 35%;
+        min-height: 200px;
+        padding-top: 16px;              
     }
 
-    .photo {        
-        position: fixed;
-        width: 100%;
-        height: 400px;
-        box-shadow: 0 2px 3px 0px #C2C2C2;
-        background-repeat: no-repeat;                
+    .photo img {
+        height: 100%;        
+        display: block;        
+        box-shadow: 0 1px 10px 1px #CDCDCD;
+        border: 1px solid #C8C8C8;
+        padding: 8px;
+        margin: auto;
     }
-    
-    .groups {
-        position: absolute;
-        width: 100%;
-        top: 400px;
-        padding-top: 8px;
-        padding-left: 16px;
+
+    .groups {        
+        width: 100%;        
+        padding-top: 32px;
+        padding-bottom: 16px;
     }        
-    
+
     .groups .group .item {
         width: 100%;
         height: 72px;
+        padding-left: 16px;
+        padding-right: 16px;
     }
     
+    .groups .group .item.fill {
+        background: #eee;
+    }
+
     .groups .group .item .tip {
-        color: #aaa;
+        color: #3F51B5;
     }
-    
+
     .groups .group .item .icon-place {
         width: 56px;
     }
-    
+
     .groups .group .icon-place img {
         width: 30px;
         height: 30px;
     }
-    
+
 </style>
 
 <script type="text/javascript">
     var page = {
         init: function (id) {
-            newToolbar('toolbar')
+
+            page.toolbar = newToolbar('toolbar')
                     .addButton({
                         position: "left",
                         type: "icon",
@@ -51,83 +66,103 @@
                         onTap: function () {
                             pageManager.back();
                         }
-                    })
-                    .setTitle({
-                        type: "text",
-                        text: "Ata"
                     });
-            
-            var photo = $('.photo');            
-            photo.css('background-image', 'url(img/photo4.jpg)');
-            
-            var groups = $('.groups');
-            groups.append($('<div class="group">\
-                                <table class="item" cellpadding="0" cellspacing="0">\
+
+            page.photo = $('.photo');
+            page.groups = $('.groups');
+            page.groups.append($('<div class="group">\
+                                <table class="item fill" cellpadding="0" cellspacing="0">\
                                     <tr>\
                                         <td class="icon-place">\
                                             <img src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">имя</div>\
+                                            <div class="realname"></div>\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img class="sex-img" src="img/ic_person_24px_grey.svg">\
+                                        </td>\
+                                        <td>\
+                                            <div class="tip">пол</div>\
+                                            <div class="sex"></div>\
+                                        </td>\
+                                    </tr>\
+                                </table>\
+                                <table class="item fill" cellpadding="0" cellspacing="0">\
+                                    <tr>\
+                                        <td class="icon-place">\
+                                            <img src="img/ic_location_city_24px_grey.svg">\
                                         </td>\
                                         <td>\
                                             <div class="tip">город</div>\
-                                            Владимир\
+                                            <div class="town"></div>\
                                         </td>\
                                     </tr>\
                                 </table>\
                                 <table class="item" cellpadding="0" cellspacing="0">\
                                     <tr>\
                                         <td class="icon-place">\
-                                            <img src="img/ic_email_24px_gray.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">электронный адрес</div>\
-                                            ata@fm.ru\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/ic_person_24px_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">день рождения</div>\
-                                            17 июня 2000г\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/ic_person_24px_grey.svg">\
+                                            <img src="img/book_grey.svg">\
                                         </td>\
                                         <td>\
                                             <div class="tip">вероисповедание</div>\
-                                            Адвентист 100500 дня\
+                                            <div class="belief"></div>\
                                         </td>\
                                     </tr>\
                                 </table>\
-                                <table class="item" cellpadding="0" cellspacing="0">\
+                                <table class="item fill" cellpadding="0" cellspacing="0">\
                                     <tr>\
                                         <td class="icon-place">\
-                                            <img src="img/ic_person_24px_grey.svg">\
+                                            <img src="img/ic_comment_24px_grey.svg">\
                                         </td>\
                                         <td>\
                                             <div class="tip">о себе</div>\
-                                            Ем колбасу по утрам, запиваю лимонадом и иду на работу.\
+                                            <div class="about"></div>\
                                         </td>\
                                     </tr>\
                                 </table>\
                             </div>'));
+            chatService.getUserInfo(id, function (res) {
+                $('.photo img').attr('src', '{0}{1}'.format(global.chatRoot, res.photo));
+
+                page.toolbar.setTitle({
+                    type: "text",
+                    text: res.login
+                });
+
+                page.groups.find(".town").text(res.town === "" ? "не указан" : res.town);
+                page.groups.find(".sex").text(res.sex === "1" ? "мужской" : "женский");
+                page.groups.find(".belief").text(res.belief === "" ? "не указано" : res.belief);
+                page.groups.find(".realname").text(res.realname === "" ? "не указано" : res.realname);
+                page.groups.find(".about").text(res.about === "" ? "не указано" : res.about);
+                
+                page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");                
+            });
+
+            page.resize();
+        },
+        resize: function () {
+            var height = $(window).height() - $('.header').height();
+            $('.info-content').css('height', height);
         }
     };
 </script>
 
-<div class="photo">
-    <div class="header">
-        <div id="toolbar" class="mtoolbar">
-        </div>
-    </div> 
-</div>
+<div class="header">
+    <div id="toolbar" class="mtoolbar">
+    </div>
+</div> 
 
-<div class="groups">
+<div class="info-content">
+    <div class="photo">
+        <img src="" />
+    </div>
+
+    <div class="groups">
+    </div>
 </div>

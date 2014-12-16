@@ -31,7 +31,7 @@
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
             
-            chatService.getUserInfo(chatService.user.id);
+            if (chatService.userDescription === undefined) chatService.getSelfInfo();
             
             page.toggleGroup = newToggleGroup()
                     .addButton({
@@ -55,6 +55,7 @@
                         type: "icon",
                         icon: "menu",
                         onTap: function () {
+                            page.sidePanel.setUserInfo(chatService.userDescription);
                             page.sidePanel.show();
                         }
                     })
@@ -87,7 +88,7 @@
             page.sendPanel.onSend = function(text) {
                 chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function(res) {
                     console.log(res);
-                })
+                });
             };
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
@@ -130,16 +131,13 @@
             });
 
             chatService.getPublicMessages(function (res) {
-                var mess = res.reverse();
-                //console.log(mess);
+                var mess = res.reverse();                
                 page.publicChatList.addItems(mess);
                 page.publicChatList.clearLast();
             });
 
             chatService.getPrivateMessages(function (res) {
                 var mess = res.reverse();
-                // console.log(mess);
-
                 if (page.toggleGroup.selectedIndex !== 1) {
                     page.privateUnread += mess.length;                    
                     page.toggleGroup.setSticker({
