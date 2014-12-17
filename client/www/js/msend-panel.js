@@ -1,6 +1,8 @@
 function newSendPanel(id) {
     var self = {};
     self.onSend = undefined;
+    self.onClearUser = undefined;
+    self.onClearTime = undefined;
 
     if (id !== undefined) {
         self.workplace = $('#' + id);
@@ -12,12 +14,16 @@ function newSendPanel(id) {
 
     self.workplace.append(
             '<table cellpadding="0" cellspacing="0">\
-        <tr>\
-            <td class="smile"><div class="inner icon-smile"></div></td>\
-            <td class="message"><input placeholder="Сообщение" /></td>\
-            <td class="send"><div class="mbutton">Отпр.</div></td>\
-        </tr>\
-        </table>');
+                <tr>\
+                    <td class="smile"><div class="inner icon-smile"></div></td>\
+                    <td class="message">\
+                        <input placeholder="Сообщение" />\
+                        <div class="user"></div>\
+                        <div class="time"></div>\
+                    </td>\
+                    <td class="send"><div class="mbutton">Отпр.</div></td>\
+                </tr>\
+            </table>');
 
     self.message = self.workplace.find('.message input');
     self.button = self.workplace.find('.send .mbutton');
@@ -27,6 +33,34 @@ function newSendPanel(id) {
             self.message.val("");
         }
     });
-
+    
+    binder.tap(self.workplace.find('.user'), function() {
+        self.clearUser();
+    });
+    
+    self.setUser = function(name) {
+        if (name === undefined) return;
+        var user = self.workplace.find('.user');
+        var inp = self.workplace.find('.message input');
+        user.text(name);
+        user.show();
+        inp.css('text-indent', user.outerWidth() + 8);
+    };
+    
+    self.setTime = function(time) {
+        
+    };
+    
+    self.clearUser = function() {
+        self.workplace.find('.message .user').hide();
+        var inp = self.workplace.find('.message input');
+        inp.css('text-indent', 0);
+        if (self.onClearUser !== undefined) self.onClearUser();
+    };
+    
+    self.clearTime = function() {
+        
+    };
+        
     return self;
 }

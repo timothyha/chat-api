@@ -169,12 +169,25 @@ input {
     width: 100%;
 }
 .msendpanel .message {
+    position: relative;
     width: 100%;
     padding-left: 10px;
     padding-bottom: 1px;
     padding-right: 10px;
     position: relative;
 }
+.msendpanel .message .user {
+    display: none;
+    position: absolute;
+    top: 21px;
+    font-size: 0.8em;
+    background-color: #1B5E20;
+    line-height: 18px;
+    padding: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
 .msendpanel .smile {
     padding-left: 8px;
 }

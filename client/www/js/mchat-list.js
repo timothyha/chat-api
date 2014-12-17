@@ -14,7 +14,7 @@ function newChatlist(id) {
     self.addItem = function (item) {        
         if (item.color === 'LOGIN') return;
         if (item.color === 'LOGOUT') return;
-        var nick = item.to === "" ? item.from : item.from + " к " + item.to;
+        var nick = item.to === "" ? item.from : item.from + " ะบ " + item.to;
                
         //var stampStr = getTime(item.stamp);
         var stampStr = moment(item.stamp * 1000).format("HH:mm:ss");

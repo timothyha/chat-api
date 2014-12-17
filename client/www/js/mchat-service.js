@@ -130,7 +130,6 @@ var chatService = {
         },onError);
     },
     sendMessage: function (room, text, to, onData, onError) {
-        console.log(to);
         chatService.callService('send', {
             session: chatService.user.session,
             private: room,

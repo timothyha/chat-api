@@ -67,9 +67,11 @@
                         type: "icon",
                         "icon": "exit",
                         onTap: function () {
-                            chatService.logout();
-                            pageManager.clear();
-                            pageManager.loadPage('login');
+                            page.stop();
+                            chatService.logout(function () {
+                                pageManager.clear();
+                                pageManager.loadPage('login');
+                            });
                         }
                     })
                     .setTitle({
@@ -89,8 +91,11 @@
             page.sendPanel = newSendPanel('send-panel');
             page.sendPanel.onSend = function (text) {
                 chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function (res) {
-                    console.log(res);
+                    //console.log(res);
                 });
+            };
+            page.sendPanel.onClearUser = function () {
+                global.recepient = "";
             };
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
@@ -100,6 +105,7 @@
 
             page.sidePanel.onUserSelect = function (login) {
                 global.recepient = login;
+                page.sendPanel.setUser(global.recepient);
             };
 
             chatService.onError = function (err) {
@@ -133,20 +139,20 @@
             });
 
             if (page.publicSended === false) {
-                page.publicSended = true;                
+                page.publicSended = true;
                 chatService.getPublicMessages(function (res) {
                     var mess = res.reverse();
                     page.publicChatList.addItems(mess);
                     page.publicChatList.clearLast();
-                    page.publicSended = false;                                        
-                }, function(err) {                    
+                    page.publicSended = false;
+                }, function (err) {
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.publicSended = false;
                     } else {
                         chatService.onError(err);
                     }
-                });                
-            }            
+                });
+            }
 
             if (!page.privateSended) {
                 page.privateSended = true;
@@ -166,7 +172,7 @@
                     page.privateChatList.addItems(mess);
                     page.privateChatList.clearLast();
                     page.privateSended = false;
-                }, function(err) {
+                }, function (err) {
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.privateSended = false;
                     } else {
@@ -189,12 +195,13 @@
         loadState: function () {
 
         },
-        stop: function () {            
+        stop: function () {
             page.isStoped = true;
             clearInterval(page.timer);
             chatService.abortAll();
         }
-    }
+    };
+    window['page'] = page;
 </script>
 
 <div class="header">
