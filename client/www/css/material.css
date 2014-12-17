@@ -171,10 +171,10 @@ input {
 .msendpanel .message {
     position: relative;
     width: 100%;
-    padding-left: 10px;
     padding-bottom: 1px;
     padding-right: 10px;
     position: relative;
+    padding-left: 4px;
 }
 .msendpanel .message .user {
     display: none;
@@ -190,12 +190,37 @@ input {
 
 .msendpanel .smile {
     padding-left: 8px;
+    padding-right: 8px;
 }
 .msendpanel .smile .inner {
     width: 24px;
     height: 24px;
     cursor: pointer;
 }
+.msendpanel .smile.active {
+    background-color: #222222;
+}
+
+.msendpanel .smile-popup {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 176px;
+    background-color: #222222;
+    bottom: 64px;
+    left: 0px;
+    z-index: 9998;
+}
+
+.msendpanel .smile-popup img {
+    display: block;
+    /* width: 20px; */
+    height: 20px;
+    padding: 7px;
+    cursor: pointer;
+    float: left;
+}
+
 .msendpanel .send {
     width: 1%;
     padding-right: 10px;
