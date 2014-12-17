@@ -24,7 +24,9 @@
 </style>
 
 <script type="text/javascript">
+    /* Основная страница с чатом */
     var page = {
+        TIMER_WORK_INTERVAL : 5000,                         // Период работы основного таймера
         isStoped: false,
         privateUnread: 0,
         publicSended: false,
@@ -109,16 +111,14 @@
             };
 
             chatService.onError = function (err) {
-                if (!page.isStoped) {
-
-                }
+                // TODO Сделать обработку ошибок                
             };
 
             this.resize();
-            this.startDataTimer();
+            this.startDataTimer();                      // Запускает основной таймер, который запрашивает все данные
         },
         resize: function () {
-            // TODO: remove magic
+            // TODO: убрать магию
             var height = $(window).height() - 128;
             var cont = $(".content");
             cont.css("height", height + "px");
@@ -137,7 +137,8 @@
             chatService.getUserList(function (res) {
                 page.sidePanel.setUsers(res);
             });
-
+            
+            // Если не было уже такого запроса, то запрашивает сообщения общей комнаты
             if (page.publicSended === false) {
                 page.publicSended = true;
                 chatService.getPublicMessages(function (res) {
@@ -153,7 +154,8 @@
                     }
                 });
             }
-
+            
+            // Если не было уже такого запроса, то запрашивает сообщения приватной комнаты
             if (!page.privateSended) {
                 page.privateSended = true;
                 chatService.getPrivateMessages(function (res) {
@@ -187,7 +189,7 @@
                 if (!page.isStoped) {
                     page.timerWork();
                 }
-            }, 5000);
+            }, page.TIMER_WORK_INTERVAL);
         },
         saveState: function () {
 
@@ -195,6 +197,7 @@
         loadState: function () {
 
         },
+        // Вызывается при остановки деятельности страницы
         stop: function () {
             page.isStoped = true;
             clearInterval(page.timer);

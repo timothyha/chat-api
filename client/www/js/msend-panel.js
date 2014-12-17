@@ -29,14 +29,26 @@ function newSendPanel(id) {
     self.button = self.workplace.find('.send .mbutton');
     binder.tap(self.button, function () {
         if (self.onSend) {
-            self.onSend(self.message.val());
-            self.message.val("");
+            self.send();
         }
     });
     
     binder.tap(self.workplace.find('.user'), function() {
         self.clearUser();
     });
+    
+    binder.keyup(self.message, function(e) {
+        if (e.keyCode === binder.ENTER_KEY) {
+            self.send();
+        }
+    });  
+    
+    self.send = function() {
+        var val = self.message.val();
+        if (val === "") return;
+        self.onSend(val);
+        self.message.val("");
+    };
     
     self.setUser = function(name) {
         if (name === undefined) return;

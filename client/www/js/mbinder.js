@@ -1,6 +1,7 @@
 var binder = {
+    ENTER_KEY : 13,
     isTouch: false,
-    init: function () {
+    init : function () {
         try {
             document.createEvent("TouchEvent");
             binder.isTouch = true;
@@ -8,12 +9,15 @@ var binder = {
         }
 
     },
-    tap: function (e, call) {
+    tap : function (e, call) {
         if (binder.isTouch) {
             e.bind('touchend', call);
         } else {
             e.bind('click', call);
         }
+    },
+    keyup : function(e, call) {
+        e.bind('keyup', call);
     }
 };
 

@@ -35,15 +35,16 @@
                 });
             };
         }
-
+        /* Точка входа */
         $(document).ready(function () {
-            setDateLocale();
-            binder.init();            
-            pageManager.loadPage('login');
+            setDateLocale();                        // Устанавливает локаль для даты и времени
+            binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"
+            pageManager.loadPage('login');          // Загружает страницу login
         });
         
+        /* Передает событие изменение размера окна текущей странице */
         window.onresize = function() {
-           page.resize();
+           window.page.resize();
         };
     </script>
 
