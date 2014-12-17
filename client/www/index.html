@@ -40,6 +40,14 @@
             setDateLocale();                        // Устанавливает локаль для даты и времени
             binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"
             pageManager.loadPage('login');          // Загружает страницу login
+            /*var expr = /\(\(\d+\)\)/g;            
+            var str = 'Good ((101))';
+            var r = String(expr.exec(str));
+                        
+            var num = r.substring(2, r.length-2);
+            var rstr = str.replace(r, '{0}/chat/i/{1}.jpg'.format(global.chatRoot, num));
+            console.log(rstr);*/
+            
         });
         
         /* Передает событие изменение размера окна текущей странице */
