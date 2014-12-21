@@ -1,4 +1,4 @@
-﻿var chatService = {
+var chatService = {
     ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     ERROR_INTERNAL: 'ERROR_INTERNAL',
     ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',    

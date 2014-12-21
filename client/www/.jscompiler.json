@@ -1,0 +1,8 @@
+{
+	"project": "www",
+	"inputs": ["js/libs/jquery/jquery.js","js/libs/jquery.touchswipe/jquery.touchSwipe.js","js/libs/moments/moment.js", "js/mbinder.js","js/mchat-list.js","js/mchat-service.js","js/mcontent-slider.js", "js/mglobal.js","js/mpage-manager.js","js/msend-panel.js","js/mside-panel.js","js/mtoogle-group.js", "js/mtoolbar.js"],
+	"output": "js/jchat.min.js",
+	"generateMap": false,
+	"mangle": true,
+	"isolate": false
+}
