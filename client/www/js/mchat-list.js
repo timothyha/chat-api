@@ -1,10 +1,12 @@
-﻿function newChatlist(id) {
+function newChatlist(id) {
     var self = {};
     if (id !== undefined) {
         self.workplace = $('#' + id);
     } else {
         self.workplace = $('<div></div>');
     }
+    
+    self.onMessageTap = undefined;
 
     self.workplace.addClass("mchatlist");    
     self.workplace.append($('<div class="title"></div><div class="messages"></div>'));    
@@ -17,14 +19,14 @@
         var nick = item.to === "" ? item.from : item.from + " к " + item.to;                      
         var stampStr = moment(item.stamp * 1000).format("HH:mm:ss");
         
-        var newItem = $('<div class="item">\
+        var newItem = $('<div class="item" data-login="{5}">\
                               <table cellpadding="0" cellspacing="0">\
                                 <tr>\
                                     <td class="photo">\
                                         <img class="circle64" src="{0}/chat/gallery/ok/{1}.jpg" />\
                                     </td>\
                                     <td class="data">\
-                                        <div class="nick">{2}</div>\
+                                        <div class="nick" data-login="{5}">{2}</div>\
                                         <div class="message">{3}</div>\
                                         <div class="time">{4}</div>\
                                     </td>\
@@ -37,7 +39,11 @@
                                     </td>\
                                 </tr>\
                               </table>\
-                              </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr));
+                              </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr, item.from));
+        
+        binder.tap(newItem, function() {
+            if (self.onMessageTap) self.onMessageTap($(this).attr("data-login"));
+        });
         
         self.messages.prepend(newItem);
         newItem.fadeIn("slow");
