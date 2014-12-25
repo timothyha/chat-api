@@ -7,6 +7,7 @@ function newChatlist(id) {
     }
     
     self.onMessageTap = undefined;
+    self.onTimeTap = undefined;
 
     self.workplace.addClass("mchatlist");    
     self.workplace.append($('<div class="title"></div><div class="messages"></div>'));    
@@ -22,12 +23,14 @@ function newChatlist(id) {
         var newItem = $('<div class="item" data-login="{5}">\
                               <table cellpadding="0" cellspacing="0">\
                                 <tr>\
-                                    <td class="photo">\
+                                    <td class="photo onmessage">\
                                         <img class="circle64" src="{0}/chat/gallery/ok/{1}.jpg" />\
                                     </td>\
-                                    <td class="data">\
-                                        <div class="nick" data-login="{5}">{2}</div>\
+                                    <td class="data onmessage">\
+                                        <div class="nick">{2}</div>\
                                         <div class="message">{3}</div>\
+                                    </td>\
+                                    <td class="ontime">\
                                         <div class="time">{4}</div>\
                                     </td>\
                                 </tr>\
@@ -41,8 +44,13 @@ function newChatlist(id) {
                               </table>\
                               </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr, item.from));
         
-        binder.tap(newItem, function() {
-            if (self.onMessageTap) self.onMessageTap($(this).attr("data-login"));
+        binder.tap(newItem.find('.onmessage'), function() {
+            if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
+        });
+        
+        binder.tap(newItem.find('.ontime'), function() {
+            if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
+            if (self.onTimeTap) self.onTimeTap($(this).find('.time').text());
         });
         
         self.messages.prepend(newItem);

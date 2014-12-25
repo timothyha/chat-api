@@ -40,12 +40,14 @@
                 .addButton({
                     text: "Общий",
                     onTap: function () {
+                        page.sendPanel.clearUser();
                         page.contentSlider.selectContent(0);
                     }
                 })
                 .addButton({
                     text: "Приват",
                     onTap: function () {
+                        page.sendPanel.clearUser();
                         page.contentSlider.selectContent(1);
                         page.privateUnread = 0;
                         page.toggleGroup.clearSticker(1);
@@ -83,24 +85,51 @@
             page.publicChatList = newChatlist();
             page.publicChatList.onMessageTap = function(login) {
                 global.recepient = login;
+                page.sendPanel.clearTime();
                 page.sendPanel.setUser(global.recepient);
+            };
+            page.publicChatList.onTimeTap = function(time) {
+                global.messageTime = time;
+                page.sendPanel.setTime(global.messageTime);
             };
             
             page.privateChatList = newChatlist();
+            page.privateChatList.onMessageTap = function(login) {
+                global.recepient = login;
+                page.sendPanel.clearTime();
+                page.sendPanel.setUser(global.recepient);
+            };
+            page.privateChatList.onTimeTap = function(time) {
+                global.messageTime = time;
+                page.sendPanel.setTime(global.messageTime);
+            };
+            
             page.contentSlider.addControl(page.publicChatList);
             page.contentSlider.addControl(page.privateChatList);
             page.contentSlider.onChange = function (ind) {
                 page.toggleGroup.select(ind);
+                page.sendPanel.clearUser();
+                if (ind === 1) {
+                    page.privateUnread = 0;
+                    page.toggleGroup.clearSticker(1);
+                }
             };
 
             page.sendPanel = newSendPanel('send-panel');
             page.sendPanel.onSend = function (text) {
+                if (text === "") return;
+                if (global.messageTime !== "") {
+                    text = '{0}, {1}'.format(global.messageTime, text);
+                }
                 chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function (res) {
                     //console.log(res);
                 });
             };
             page.sendPanel.onClearUser = function () {
                 global.recepient = "";
+            };
+            page.sendPanel.onClearTime = function () {
+                global.messageTime = "";
             };
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});

@@ -57,6 +57,10 @@ function newSendPanel(id) {
         self.clearUser();
     });
     
+    binder.tap(self.workplace.find('.time'), function() {
+        self.clearTime();
+    });
+    
     binder.keyup(self.message, function(e) {
         if (e.keyCode === binder.ENTER_KEY) {
             self.send();
@@ -87,18 +91,30 @@ function newSendPanel(id) {
     };
     
     self.clearUser = function() {
+        self.clearTime();
         self.workplace.find('.message .user').hide();
         var inp = self.workplace.find('.message input');
         inp.css('text-indent', 0);
         if (self.onClearUser !== undefined) self.onClearUser();
     };
     
-    self.setTime = function(time) {
-        // TODO
+    self.setTime = function(stamp) {
+        if (stamp === undefined) return;
+        var user = self.workplace.find('.user');
+        var time = self.workplace.find('.time');
+        var inp = self.workplace.find('.message input');
+        time.text(stamp);
+        time.show();
+        time.css('left', user.outerWidth() + 6);
+        inp.css('text-indent', user.outerWidth() + time.outerWidth() + 8);
     };       
     
     self.clearTime = function() {
-        // TODO
+        self.workplace.find('.message .time').hide();
+        var inp = self.workplace.find('.message input');
+        var user = self.workplace.find('.user');
+        inp.css('text-indent', user.outerWidth() + 8);
+        if (self.onClearTime !== undefined) self.onClearTime();
     };
         
     return self;

@@ -13,7 +13,7 @@ var binder = {
         if (binder.isTouch) {
             e.bind('touchend', call);
         } else {
-            e.bind('click', call);
+            e.bind('mouseup', call);
         }
     },
     keyup : function(e, call) {

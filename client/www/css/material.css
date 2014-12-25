@@ -187,6 +187,17 @@ input {
     color: #fff;
     cursor: pointer;
 }
+.msendpanel .message .time {
+    display: none;
+    position: absolute;
+    top: 21px;
+    font-size: 0.8em;
+    background-color: #283593;
+    line-height: 18px;
+    padding: 4px;
+    color: #fff;
+    cursor: pointer;
+}
 
 .msendpanel .smile {
     padding-left: 8px;
@@ -284,12 +295,22 @@ input {
     padding-top: 2px;
     color: #777;
 }
+
+.mchatlist .item .onmessage {
+    cursor: pointer;
+}
+
+.mchatlist .item .ontime {
+    position: relative;
+}
+
 .mchatlist .item .time {
     position: absolute;
     top: 0px;
     right: 0px;
     font-size: 0.8em;
     color: #777;
+    cursor: pointer;
 }
 
 
