@@ -10,9 +10,15 @@ function newChatlist(id) {
     self.onTimeTap = undefined;
 
     self.workplace.addClass("mchatlist");    
-    self.workplace.append($('<div class="title"></div><div class="messages"></div>'));    
+    self.workplace.append($('\
+                            <div class="title">\
+                            </div>\
+                            <img class="load" src="img/loader.gif" />\
+                            <div class="messages">\
+                            </div>'));    
     self.title = self.workplace.find(".title");
     self.messages = self.workplace.find(".messages");
+    self.loadIndicator = self.workplace.find('.load');
         
     self.addItem = function (item) {        
         if (item.color === 'LOGIN') return;
@@ -79,6 +85,14 @@ function newChatlist(id) {
     
     self.hide = function () {
         self.workplace.hide();
+    };
+    
+    self.showLoadIndicator = function() {
+        self.loadIndicator.show();
+    };
+    
+    self.hideLoadIndicator = function() {
+        self.loadIndicator.hide();
     };
 
     return self;

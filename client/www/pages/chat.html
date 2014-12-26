@@ -187,12 +187,15 @@
             // Если не было уже такого запроса, то запрашивает сообщения общей комнаты
             if (page.publicSended === false) {
                 page.publicSended = true;
+                page.publicChatList.showLoadIndicator();
                 chatService.getPublicMessages(function (res) {
+                    page.publicChatList.hideLoadIndicator();
                     var mess = page.fixSmiles(res.reverse());
                     page.publicChatList.addItems(mess);
                     page.publicChatList.clearLast();
                     page.publicSended = false;
                 }, function (err) {
+                    page.publicChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.publicSended = false;
                     } else {
@@ -204,7 +207,9 @@
             // Если не было уже такого запроса, то запрашивает сообщения приватной комнаты
             if (!page.privateSended) {
                 page.privateSended = true;
+                page.privateChatList.showLoadIndicator();
                 chatService.getPrivateMessages(function (res) {
+                    page.privateChatList.hideLoadIndicator();
                     var mess =  page.fixSmiles(res.reverse());
                     if (page.toggleGroup.selectedIndex !== 1) {
                         page.privateUnread += mess.length;
@@ -221,6 +226,7 @@
                     page.privateChatList.clearLast();
                     page.privateSended = false;
                 }, function (err) {
+                     page.privateChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.privateSended = false;
                     } else {
