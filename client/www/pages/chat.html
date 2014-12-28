@@ -30,9 +30,11 @@
         publicSended: false,
         privateSended: false,
         init: function () {
+            if (!chatService.restoreUser()) return;
+            
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
-
+            
             if (chatService.userDescription === undefined)
                 chatService.getSelfInfo();
 
@@ -72,7 +74,7 @@
                         page.stop();
                         chatService.logout(function () {
                             pageManager.clear();
-                            pageManager.loadPage('login');
+                            pageManager.navigate('login');
                         });
                     }
                 })
@@ -134,7 +136,7 @@
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
             page.sidePanel.onUserInfoTap = function (item) {
-                pageManager.loadPage('user-info', item);
+                pageManager.navigate('user-info/{0}'.format(item));
             };
 
             page.sidePanel.onUserSelect = function (login) {
@@ -143,7 +145,11 @@
             };
 
             chatService.onError = function (err) {
-                // TODO Сделать обработку ошибок                
+                if (err === chatService.ERR_USER_NOT_CONNECTED) {
+                    page.stop();
+                    pageManager.clear();
+                    pageManager.navigate('login');
+                }
             };
 
             this.resize();

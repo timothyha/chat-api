@@ -57,7 +57,8 @@
 <script type="text/javascript">
     var page = {
         init: function (id) {
-
+            if (!chatService.restoreUser()) return;
+            
             page.toolbar = newToolbar('toolbar')
                     .addButton({
                         position: "left",
@@ -143,7 +144,15 @@
                 
                 page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");                
             });
-
+            
+            chatService.onError = function (err) {
+                if (err === chatService.ERR_USER_NOT_CONNECTED) {
+                    page.stop();
+                    pageManager.clear();
+                    pageManager.navigate('login');
+                }
+            };
+            
             page.resize();
         },
         resize: function () {

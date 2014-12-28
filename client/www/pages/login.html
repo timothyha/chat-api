@@ -319,9 +319,8 @@
                 var vl = page.validate(login, password);
                 if (vl === undefined) {
                     page.showLoading();
-
                     chatService.login(login, password, function () {
-                        pageManager.loadPage('chat');
+                        pageManager.navigate('chat');
                     });
                 } else {
                     page.showError(vl);

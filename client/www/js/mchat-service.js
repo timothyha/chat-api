@@ -1,3 +1,27 @@
+function setCookie (name, value, expires) {
+      document.cookie = name + "=" + escape(value);
+}
+
+function getCookie(name) {
+	var cookie = " " + document.cookie;
+	var search = " " + name + "=";
+	var setStr = null;
+	var offset = 0;
+	var end = 0;
+	if (cookie.length > 0) {
+		offset = cookie.indexOf(search);
+		if (offset != -1) {
+			offset += search.length;
+			end = cookie.indexOf(";", offset)
+			if (end == -1) {
+				end = cookie.length;
+			}
+			setStr = unescape(cookie.substring(offset, end));
+		}
+	}
+	return(setStr);
+}
+
 var chatService = {
     ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     ERROR_INTERNAL: 'ERROR_INTERNAL',
@@ -62,19 +86,32 @@ var chatService = {
         }
         chatService.requests = [];
     },
+    restoreUser : function() {
+        var user = getCookie("user");
+        if (user === undefined) {
+            if (onError !== undefined) {
+                onError(chatService.ERR_USER_NOT_CONNECTED);
+            }
+            return false;
+        }
+        chatService.user = JSON.parse(user);
+        return true;
+    },
     login: function (name, password, onData, onError) {
         chatService.callService('login', {
             login: name,
             password: password
         }, function (res) {
             chatService.user = res;
+            setCookie("user", JSON.stringify(res));
             onData(res);
         },onError);
     },
     logout: function (onData, onError) {
         chatService.callService('logout', {
             session : chatService.user.session
-        }, function (res) {            
+        }, function (res) {
+            document.cookie = "";
             onData(res);
         },onError);
     },
