@@ -152,8 +152,8 @@
                 }
             };
 
-            this.resize();
-            this.startDataTimer(); // Запускает основной таймер, который запрашивает все данные
+            page.resize();
+            page.startDataTimer(); // Запускает основной таймер, который запрашивает все данные
         },
         resize: function () {
             // TODO: убрать магию
@@ -248,12 +248,6 @@
                     page.timerWork();
                 }
             }, page.TIMER_WORK_INTERVAL);
-        },
-        saveState: function () {
-
-        },
-        loadState: function () {
-
         },
         // Вызывается при остановки деятельности страницы
         stop: function () {

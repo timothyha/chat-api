@@ -479,3 +479,50 @@ input {
 .mcontentslider .host {
     height: 100%;
 }
+
+/* mDialog */
+.mdialog {
+}
+
+.mdialog .inner {
+    display: none;
+    position: absolute;
+    padding: 25px;
+    width: 300px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0px 20px 1px #333;
+    z-index: 9999;
+}
+
+.mdialog .inner .title {
+    font-size: 1.4em;
+    padding-bottom: 10px;
+}
+
+.mdialog .inner .text {
+    color: #777;
+}
+
+.mdialog .inner .buttons {
+    padding-top: 30px;
+    float: right;
+}
+
+.mdialog .inner .buttons td {
+    padding-left: 20px;
+    color: #1976D2;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.mdialog .overlay {
+    display: none;
+    background-color: rgba(3, 3, 3, 0.4);
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

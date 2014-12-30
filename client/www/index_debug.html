@@ -23,6 +23,7 @@
     <script type="text/javascript" src="js/mside-panel.js"></script>
     <script type="text/javascript" src="js/mtoogle-group.js"></script>
     <script type="text/javascript" src="js/mchat-service.js"></script>    
+    <script type="text/javascript" src="js/mdialog.js"></script> 
     <link rel="stylesheet" type="text/css" href="css/material.css" />    
     
     <title>Jesus Christ Mobile Chat</title>
@@ -40,14 +41,13 @@
         $(document).ready(function () {
             setDateLocale();                        // Устанавливает локаль для даты и времени
             binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"
-            
             pageManager.registerRoutes();
         });
         
         /* Передает событие изменение размера окна текущей странице */
-        window.onresize = function() {
+        $(window).resize(function() {
            window.page.resize();
-        };
+        });
     </script>
 
 </head>
