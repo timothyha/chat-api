@@ -26,7 +26,8 @@ var chatService = {
     ERROR_USER_NOT_FOUND: 'ERR_USER_NOT_FOUND',
     ERROR_INTERNAL: 'ERROR_INTERNAL',
     ERR_USER_NOT_CONNECTED: 'ERR_USER_NOT_CONNECTED',    
-    ERR_MESSAGES_EMPTY: 'ERR_MESSAGES_EMPTY',    
+    ERR_MESSAGES_EMPTY: 'ERR_MESSAGES_EMPTY',
+    ERR_SERVER_NOT_RESPOND : 'ERR_SERVER_NOT_RESPOND',
     onError: undefined,
     requests: [],
     messageLimit : 30,
@@ -40,9 +41,11 @@ var chatService = {
         if (err === chatService.ERROR_USER_NOT_FOUND) {
             return 'Неправильный логин или пароль';
         } else if (err === chatService.ERROR_INTERNAL) {
-            return  'Внутренняя ошибка. Обратитесь к разработчику.';
+            return  'Внутренняя ошибка. Обратитесь к разработчику';
         } else if (err === chatService.ERR_USER_NOT_CONNECTED) {
-            return  'Сессии не существует или она истекла.';
+            return  'Сессии не существует или она истекла';
+        } else if (err === chatService.ERR_SERVER_NOT_RESPOND) {
+            return  'Сервер не отвечает';
         }
 
         return 'Неизвестная ошибка';
@@ -70,8 +73,17 @@ var chatService = {
                         }
                     }
                 } catch (e) {
-                    if (chatService.onError !== null)
+                    if (chatService.onError !== undefined)
                         chatService.onError(chatService.ERROR_INTERNAL);
+                }
+            },
+            error : function(err, t, m) {
+                if (chatService.onError !== undefined) {
+                    if (t === "timeout") {
+                        chatService.onError(chatService.ERR_SERVER_NOT_RESPOND);
+                    } else {
+                        chatService.onError(chatService.ERROR_INTERNAL);
+                    }
                 }
             }
         });        

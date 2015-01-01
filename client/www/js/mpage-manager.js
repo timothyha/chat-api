@@ -1,5 +1,5 @@
 var pageManager = {
-    registerRoutes : function() {
+    init : function() {
         Finch.route('', function() {
             pageManager.loadPage('login');
         });

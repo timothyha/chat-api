@@ -21,7 +21,7 @@ function newDialog() {
                            <div class="overlay"></div>\
                         </div>\
                           ');
-    $(document.body).append(self.workplace);
+    $('.app').append(self.workplace);
     
     binder.tap(self.workplace.find('.cancel'), function() {
         if (self.onCancel !== undefined) self.onCancel();

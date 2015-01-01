@@ -56,8 +56,11 @@
 
 <script type="text/javascript">
     var page = {
+        userid : undefined,
         init: function (id) {
             if (!chatService.restoreUser()) return;
+            
+            page.userid = id;
             
             page.toolbar = newToolbar('toolbar')
                     .addButton({
@@ -128,7 +131,32 @@
                                     </tr>\
                                 </table>\
                             </div>'));
-            chatService.getUserInfo(id, function (res) {
+            
+            chatService.onError = function (err) {
+                if (err === chatService.ERR_USER_NOT_CONNECTED) {
+                    page.exit();
+                } else {
+                    page.dialog.show();
+                }
+            };
+            
+            page.dialog = newDialog();
+            page.dialog.onOk = function() {
+                page.start();
+            };
+            
+            page.dialog.onCancel = function() {
+                page.exit();
+            };
+            
+            page.start();
+        },
+        resize: function () {
+            var height = $(window).height() - $('.header').height();
+            $('.info-content').css('height', height);
+        },
+        start : function() {
+            chatService.getUserInfo(page.userid, function (res) {
                 $('.photo img').attr('src', '{0}{1}'.format(global.chatRoot, res.photo));
 
                 page.toolbar.setTitle({
@@ -145,22 +173,14 @@
                 page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");                
             });
             
-            chatService.onError = function (err) {
-                if (err === chatService.ERR_USER_NOT_CONNECTED) {
-                    page.stop();
-                    pageManager.clear();
-                    pageManager.navigate('login');
-                }
-            };
-            
             page.resize();
-        },
-        resize: function () {
-            var height = $(window).height() - $('.header').height();
-            $('.info-content').css('height', height);
         },
         stop : function() {
             
+        },
+        exit : function () {
+            pageManager.clear();
+            pageManager.navigate('login');
         }
     };
     window['page'] = page;

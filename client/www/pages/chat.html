@@ -56,7 +56,7 @@
                     }
                 });
 
-            newToolbar('toolbar')
+            page.toolbar = newToolbar('toolbar')
                 .addButton({
                     position: "left",
                     type: "icon",
@@ -73,8 +73,7 @@
                     onTap: function () {
                         page.stop();
                         chatService.logout(function () {
-                            pageManager.clear();
-                            pageManager.navigate('login');
+                            page.exit();
                         });
                     }
                 })
@@ -143,24 +142,33 @@
                 global.recepient = login;
                 page.sendPanel.setUser(global.recepient);
             };
-
+            
             chatService.onError = function (err) {
                 if (err === chatService.ERR_USER_NOT_CONNECTED) {
+                    page.exit();
+                } else {
                     page.stop();
-                    pageManager.clear();
-                    pageManager.navigate('login');
+                    page.dialog.show();
                 }
             };
+            
+            page.dialog = newDialog();
+            page.dialog.onOk = function() {
+                page.start();
+            };
+            
+            page.dialog.onCancel = function() {
+                page.exit();
+            };
 
-            page.resize();
-            page.startDataTimer(); // Запускает основной таймер, который запрашивает все данные
+            page.start();                                   // Запускает работу таймера
         },
         resize: function () {
-            // TODO: убрать магию
-            var height = $(window).height() - 128;
+            var toolbarHeight = page.toolbar.workplace.height();
+            var height = $(window).height() - toolbarHeight - page.sendPanel.workplace.height();
             var cont = $(".content");
             cont.css("height", height + "px");
-            cont.css("top", "64px");
+            cont.css("top", toolbarHeight);
             page.sidePanel.resize();
             page.contentSlider.resize();
         },
@@ -249,11 +257,25 @@
                 }
             }, page.TIMER_WORK_INTERVAL);
         },
+        start: function () {
+            page.publicSended = false;
+            page.privateSended = false;
+            page.isStoped = false;
+            page.startDataTimer();
+            page.resize();
+        },
         // Вызывается при остановки деятельности страницы
         stop: function () {
+            page.publicChatList.hideLoadIndicator();
+            page.privateChatList.hideLoadIndicator();
             page.isStoped = true;
             clearInterval(page.timer);
             chatService.abortAll();
+        },
+        exit : function () {
+            page.stop();
+            pageManager.clear();
+            pageManager.navigate('login');
         }
     };
     window['page'] = page;
