@@ -19,7 +19,7 @@ function newSendPanel(id) {
                         <div class="inner icon-smile"></div>\
                     </td>\
                     <td class="message">\
-                        <input placeholder="Сообщение" />\
+                        <input class="message-input" readonly="true" />\
                         <div class="user"></div>\
                         <div class="time"></div>\
                     </td>\
@@ -31,7 +31,12 @@ function newSendPanel(id) {
             '.format(global.chatRoot));
 
             //<img src="{0}/chat/i/1.gif" data-code="1" />\
-
+    
+    self.workplace.find('.message-input').pholder({ 
+        className:'placeholder', 
+        pholdertext:'Сообщение' 
+    });;
+        
     self.message = self.workplace.find('.message input');
     self.button = self.workplace.find('.send .mbutton');
     self.smileButton = self.workplace.find('.smile');
@@ -41,7 +46,10 @@ function newSendPanel(id) {
         if ((i === 89) || (i === 98) || (i === 99)) continue;
         var img = $('<img src="{0}/chat/i/{1}.gif" data-code="{1}" />'.format(global.chatRoot, i));
         binder.tap(img, function() {
-            //self.smilePopup.hide();            
+            if (self.message.hasClass("placeholder")) {
+                self.message.removeClass("placeholder");
+                self.message.val("");
+            }
             self.message.val('{0}(({1}))'.format(self.message.val(),$(this).attr('data-code')));
         });
         self.smilePopup.append(img);
@@ -53,12 +61,14 @@ function newSendPanel(id) {
         }
     });
     
-    binder.tap(self.workplace.find('.user'), function() {
-        self.clearUser();
+    binder.down(self.workplace.find('.user'), function(e) {
+        e.preventDefault();        
+        self.clearUser();        
     });
     
-    binder.tap(self.workplace.find('.time'), function() {
-        self.clearTime();
+    binder.down(self.workplace.find('.time'), function(e) {
+        e.preventDefault();        
+        self.clearTime();        
     });
     
     binder.keyup(self.message, function(e) {
@@ -67,11 +77,20 @@ function newSendPanel(id) {
         }
     });
     
+    binder.up(self.message, function(e) {
+        $(this).removeAttr("readonly");
+    });
+    
+    binder.blur(self.message, function(e) {
+        $(this).attr("readonly", "true");
+    });
+    
     binder.tap(self.smileButton, function() {
         // Немного магии. Площадь занимаемая смайликами делется на ширину экрана и добавляется отступ
         self.smilePopup.css('height', (128000 / $(window).width()) + 16);
         self.smilePopup.toggle("fast");
-        self.smileButton.toggleClass("active");        
+        self.smileButton.toggleClass("active");
+        self.clearFocus();
     });
     
     self.send = function() {
@@ -88,6 +107,9 @@ function newSendPanel(id) {
         user.text(name);
         user.show();
         inp.css('text-indent', user.outerWidth() + 8);
+        /*var width = user.outerWidth() + 8;
+        inp.css('padding-left', width);
+        inp.css('width', inp.widht() - width);*/
     };
     
     self.clearUser = function() {
@@ -115,6 +137,10 @@ function newSendPanel(id) {
         var user = self.workplace.find('.user');
         inp.css('text-indent', user.outerWidth() + 8);
         if (self.onClearTime !== undefined) self.onClearTime();
+    };
+    
+    self.clearFocus = function() {
+        self.workplace.find('.message-input').blur();  
     };
         
     return self;

@@ -6,25 +6,45 @@
         overflow-x: hidden;
         overflow-y: auto;
     }
-    
-    .photo {        
+
+    .info-content .inner {
+        width: 100%;
+        height: 100%;
+    }
+
+    .photo {
         height: 35%;
         min-height: 200px;
-        padding-top: 16px;              
+        padding-top: 16px;   
+        padding-bottom: 32px;
     }
 
     .photo img {
-        height: 100%;        
-        display: block;        
+        height: 50%;
+        min-height: 200px;
+        display: block;
         box-shadow: 0 1px 10px 1px #CDCDCD;
         border: 1px solid #C8C8C8;
         padding: 8px;
         margin: auto;
     }
 
-    .groups {        
-        width: 100%;        
-        padding-top: 32px;
+    .fullphoto {  
+        display: none;
+        top: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        background-image: url(https://jesuschrist.ru/chat/gallery/ok/84215.jpg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .groups {
+        vertical-align: top;
+        width: 100%;                
         padding-bottom: 16px;
     }        
 
@@ -34,7 +54,7 @@
         padding-left: 16px;
         padding-right: 16px;
     }
-    
+
     .groups .group .item.fill {
         background: #eee;
     }
@@ -56,12 +76,13 @@
 
 <script type="text/javascript">
     var page = {
-        userid : undefined,
+        userid: undefined,
         init: function (id) {
-            if (!chatService.restoreUser()) return;
-            
+            if (!chatService.restoreUser())
+                return;
+
             page.userid = id;
-            
+
             page.toolbar = newToolbar('toolbar')
                     .addButton({
                         position: "left",
@@ -73,6 +94,7 @@
                     });
 
             page.photo = $('.photo');
+            page.fullphoto = $('.fullphoto');
             page.groups = $('.groups');
             page.groups.append($('<div class="group">\
                                 <table class="item fill" cellpadding="0" cellspacing="0">\
@@ -131,7 +153,17 @@
                                     </tr>\
                                 </table>\
                             </div>'));
-            
+
+            binder.tap(page.photo, function () {
+                page.fullphoto.show();
+                page.groups.hide();
+            });
+
+            binder.tap(page.fullphoto, function () {
+                page.fullphoto.hide();
+                page.groups.show();
+            });
+
             chatService.onError = function (err) {
                 if (err === chatService.ERR_USER_NOT_CONNECTED) {
                     page.exit();
@@ -139,25 +171,27 @@
                     page.dialog.show();
                 }
             };
-            
+
             page.dialog = newDialog();
-            page.dialog.onOk = function() {
+            page.dialog.onOk = function () {
                 page.start();
             };
-            
-            page.dialog.onCancel = function() {
+
+            page.dialog.onCancel = function () {
                 page.exit();
             };
-            
+
             page.start();
         },
         resize: function () {
             var height = $(window).height() - $('.header').height();
             $('.info-content').css('height', height);
+            var photoimg = page.fullphoto.find("img");
         },
-        start : function() {
+        start: function () {
             chatService.getUserInfo(page.userid, function (res) {
                 $('.photo img').attr('src', '{0}{1}'.format(global.chatRoot, res.photo));
+                $('.fullphoto').css('background-image', 'url({0}{1})'.format(global.chatRoot, res.photo));
 
                 page.toolbar.setTitle({
                     type: "text",
@@ -169,16 +203,16 @@
                 page.groups.find(".belief").text(res.belief === "" ? "не указано" : res.belief);
                 page.groups.find(".realname").text(res.realname === "" ? "не указано" : res.realname);
                 page.groups.find(".about").text(res.about === "" ? "не указано" : res.about);
-                
-                page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");                
+
+                page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");
             });
-            
+
             page.resize();
         },
-        stop : function() {
-            
+        stop: function () {
+
         },
-        exit : function () {
+        exit: function () {
             pageManager.clear();
             pageManager.navigate('login');
         }
@@ -192,10 +226,18 @@
 </div> 
 
 <div class="info-content">
-    <div class="photo">
-        <img src="" />
-    </div>
+    <table class="inner" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="photo">               
+                <img src="" />               
+            </td>
+        </tr>
+        <tr>
+            <td class="groups">                
+            </td>
+        </tr>
+    </table>
 
-    <div class="groups">
+    <div class="fullphoto">        
     </div>
 </div>

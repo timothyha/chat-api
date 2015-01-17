@@ -2,7 +2,9 @@ function newSidePanel(id) {
     var self = {};
     self.onUserInfoTap = undefined;
     self.onUserSelect = undefined;
-
+    self.infoHeight = undefined;
+    self.infoCollapsed = true;    
+    
     if (id !== undefined) {
         self.workplace = $('#' + id);
     } else {
@@ -21,7 +23,11 @@ function newSidePanel(id) {
                                     </div>\
                                     <ul class="data">\
                                         <li class="nick"></li>\
+                                        <li class="sex"></li>\
+                                        <li class="name"></li>\
                                         <li class="town"></li>\
+                                        <li class="belief"></li>\
+                                        <li class="about"></li>\
                                     </ul>\
                                     <div class="mbutton-icon icon-drop-down more"></div>\
                                 </div>\
@@ -29,20 +35,71 @@ function newSidePanel(id) {
                             </div>\
                             <div class="overlay"></div>\
                             '));
-
+    
+    self.infoHeight = self.workplace.find(".info").height();
+    
     var overlay = self.workplace.find(".overlay");
-    binder.tap(overlay, function () {
+    binder.tap(overlay, function () {        
         self.hide();
         return this;
     });
+    
+    binder.tap(self.workplace.find(".more"), function() {
+        var info = self.workplace.find(".info");  
+        var more = self.workplace.find(".more");
+        if (!self.infoCollapsed) {
+            self.infoCollapsed = true;            
+            info.animate({height: self.infoHeight + "px"}, 500, function() {
+                self.resize();
+            });
+            more.removeClass("icon-arrow-up").addClass("icon-drop-down");            
+        } else {
+            var height = self.workplace.find(".circle64").height() + self.workplace.find(".data").height();
+            info.animate({height: height + "px"}, 500, function() {
+               self.resize(); 
+            });
+            self.infoCollapsed = false;            
+            more.removeClass("icon-drop-down").addClass("icon-arrow-up");
+        }              
+    });
 
-    self.setUserInfo = function (item) {
-        var photo = self.workplace.find(".info img");
-        var about = self.workplace.find(".info .town");
+    self.setUserInfo = function (item) {        
+        var photo = self.workplace.find(".info img");        
         var nick = self.workplace.find(".info .nick");
-        photo.attr("src", "{0}{1}".format(global.chatRoot, item.photo));
-        about.text(item.town);
+        var sex = self.workplace.find(".info .sex");
+        var name = self.workplace.find(".info .name");
+        var town = self.workplace.find(".info .town");
+        var belief = self.workplace.find(".info .belief");
+        var about = self.workplace.find(".info .about");
+        photo.attr("src", "{0}{1}".format(global.chatRoot, item.photo));                
+        
         nick.text(item.login);
+        sex.text(item.sex === "1" ? "мужской" : "женский");
+        
+        if (!isEmpty(item.name)) {
+            name.text(item.name);            
+        } else {            
+            name.text("имя не указано");
+        }
+        
+        if (!isEmpty(item.town)) {
+            town.text(item.town);            
+        } else {            
+            town.text("город не указан");
+        }  
+        
+        if (!isEmpty(item.belief)) {
+            belief.text(item.belief);            
+        } else {            
+            belief.text("вероисповедание не указано");
+        }
+        
+        if (!isEmpty(item.about)) {
+            about.text(item.about);            
+        } else {            
+            about.text("о себе не указано");
+        }
+        
         return this;
     };
 
@@ -96,18 +153,21 @@ function newSidePanel(id) {
     self.hide = function () {
         var panel = self.workplace.find('.panel');
         panel.animate({"left": -panel.width()}, 300, function () {
+            var info = self.workplace.find(".info");            
+            info.css("height", self.infoHeight);
+            self.infoCollapsed = true;
             self.workplace.hide();
             self.resize();
         });
         return this;
     };
 
-    self.resize = function () {
+    self.resize = function () {        
         var list = self.workplace.find('.list');
         var info = self.workplace.find('.info');
         list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
     };
-
+    self.resize();
     self.hide();
     return self;
 }

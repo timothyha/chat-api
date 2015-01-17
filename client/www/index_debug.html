@@ -2,59 +2,55 @@
 
 <html lang="ru">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <!--<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    ->
-    <!--<script type="text/javascript" src="cordova.js"></script> -->
-    <script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
-    <script type="text/javascript" src="js/libs/finch/finch.js"></script>
-    <script type="text/javascript" src="js/libs/jquery.touchswipe/jquery.touchSwipe.js"></script>    
-    <script type="text/javascript" src="js/libs/moments/moment.js"></script>
-    <script type="text/javascript" src="js/mglobal.js"></script>    
-    <script type="text/javascript" src="js/mbinder.js"></script>
-    <script type="text/javascript" src="js/mpage-manager.js"></script>
-    <script type="text/javascript" src="js/mcontent-slider.js"></script>
-    <script type="text/javascript" src="js/mtoolbar.js"></script>
-    <script type="text/javascript" src="js/mchat-list.js"></script>
-    <script type="text/javascript" src="js/msend-panel.js"></script>
-    <script type="text/javascript" src="js/mside-panel.js"></script>
-    <script type="text/javascript" src="js/mtoogle-group.js"></script>
-    <script type="text/javascript" src="js/mchat-service.js"></script>    
-    <script type="text/javascript" src="js/mdialog.js"></script> 
-    <link rel="stylesheet" type="text/css" href="css/material.css" />    
-    
-    <title>Jesus Christ Mobile Chat</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <!--<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    ->
+        <!--<script type="text/javascript" src="cordova.js"></script> -->
+        <script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
+        <script type="text/javascript" src="js/libs/pholder/jquery.pholder.js"></script>
+        <script type="text/javascript" src="js/libs/finch/finch.js"></script>
+        <script type="text/javascript" src="js/libs/jquery.touchswipe/jquery.touchSwipe.js"></script>    
+        <script type="text/javascript" src="js/libs/moments/moment.js"></script>
+        <script type="text/javascript" src="js/mglobal.js"></script>    
+        <script type="text/javascript" src="js/mbinder.js"></script>
+        <script type="text/javascript" src="js/mpage-manager.js"></script>
+        <script type="text/javascript" src="js/mcontent-slider.js"></script>
+        <script type="text/javascript" src="js/mtoolbar.js"></script>
+        <script type="text/javascript" src="js/mchat-list.js"></script>
+        <script type="text/javascript" src="js/msend-panel.js"></script>
+        <script type="text/javascript" src="js/mside-panel.js"></script>
+        <script type="text/javascript" src="js/mtoogle-group.js"></script>
+        <script type="text/javascript" src="js/mchat-service.js"></script>    
+        <script type="text/javascript" src="js/mdialog.js"></script> 
+        <link rel="stylesheet" type="text/css" href="css/material.css" />    
 
-    <script type="text/javascript">
-        if (!String.prototype.format) {
-            String.prototype.format = function () {
-                var args = arguments;
-                return this.replace(/{(\d+)}/g, function (match, number) {
-                    return typeof args[number] !== 'undefined' ? args[number] : match;
-                });
-            };
-        }
-        /* Точка входа */
-        $(document).ready(function () {
-            setDateLocale();                        // Устанавливает локаль для даты и времени
-            binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"
-            pageManager.init();
-        });
-        
-        /* Передает событие изменение размера окна текущей странице */
-        $(window).resize(function() {
-           window.page.resize();
-        });
-    </script>
+        <title>Jesus Christ Mobile Chat</title>
 
-</head>
+        <script type="text/javascript">
+            "use strict"
 
-<body>
-    <div class="app">
-    </div>
-</body>
+            /* Точка входа */
+            $(document).ready(function () {
+                setDateLocale();                        // Устанавливает локаль для даты и времени
+                binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"
+                pageManager.init();  
+                /*document.body.style.zoom = 0.5;*/
+            });
+
+            /* Передает событие изменение размера окна текущей странице */
+            $(window).resize(function () {
+                window.page.resize();
+            });            
+        </script>
+
+    </head>
+
+    <body>
+        <div class="app">
+        </div>
+    </body>
 
 </html>

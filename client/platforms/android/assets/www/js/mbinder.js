@@ -1,6 +1,7 @@
 var binder = {
+    ENTER_KEY : 13,
     isTouch: false,
-    init: function () {
+    init : function () {
         try {
             document.createEvent("TouchEvent");
             binder.isTouch = true;
@@ -8,12 +9,32 @@ var binder = {
         }
 
     },
-    tap: function (e, call) {
+    tap : function (e, call) {
         if (binder.isTouch) {
             e.bind('touchend', call);
         } else {
-            e.bind('click', call);
+            e.bind('mouseup', call);
         }
+    },
+    up : function (e, call) {
+        if (binder.isTouch) {
+            e.bind('touchend', call);
+        } else {
+            e.bind('mouseup', call);
+        }
+    },
+    down : function (e, call) {
+        if (binder.isTouch) {
+            e.bind('touchstart', call);
+        } else {
+            e.bind('mousedown', call);
+        }
+    },
+    blur : function(e, call) {
+        e.bind('blur', call);
+    },
+    keyup : function(e, call) {
+        e.bind('keyup', call);
     }
 };
 

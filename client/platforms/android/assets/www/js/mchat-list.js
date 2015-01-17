@@ -5,29 +5,38 @@ function newChatlist(id) {
     } else {
         self.workplace = $('<div></div>');
     }
+    
+    self.onMessageTap = undefined;
+    self.onTimeTap = undefined;
 
     self.workplace.addClass("mchatlist");    
-    self.workplace.append($('<div class="title"></div><div class="messages"></div>'));    
+    self.workplace.append($('\
+                            <div class="title">\
+                            </div>\
+                            <img class="load" src="img/loader.gif" />\
+                            <div class="messages">\
+                            </div>'));    
     self.title = self.workplace.find(".title");
     self.messages = self.workplace.find(".messages");
+    self.loadIndicator = self.workplace.find('.load');
         
     self.addItem = function (item) {        
         if (item.color === 'LOGIN') return;
         if (item.color === 'LOGOUT') return;
-        var nick = item.to === "" ? item.from : item.from + " к " + item.to;
-               
-        //var stampStr = getTime(item.stamp);
+        var nick = item.to === "" ? item.from : item.from + " к " + item.to;                      
         var stampStr = moment(item.stamp * 1000).format("HH:mm:ss");
         
-        var newItem = $('<div class="item">\
+        var newItem = $('<div class="item" data-login="{5}">\
                               <table cellpadding="0" cellspacing="0">\
                                 <tr>\
-                                    <td class="photo">\
+                                    <td class="photo onmessage">\
                                         <img class="circle64" src="{0}/chat/gallery/ok/{1}.jpg" />\
                                     </td>\
-                                    <td class="data">\
+                                    <td class="data onmessage">\
                                         <div class="nick">{2}</div>\
                                         <div class="message">{3}</div>\
+                                    </td>\
+                                    <td class="ontime">\
                                         <div class="time">{4}</div>\
                                     </td>\
                                 </tr>\
@@ -39,7 +48,16 @@ function newChatlist(id) {
                                     </td>\
                                 </tr>\
                               </table>\
-                              </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr));
+                              </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr, item.from));
+        
+        binder.tap(newItem.find('.onmessage'), function() {            
+            if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
+        });
+        
+        binder.tap(newItem.find('.ontime'), function() {            
+            if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
+            if (self.onTimeTap) self.onTimeTap($(this).find('.time').text());
+        });
         
         self.messages.prepend(newItem);
         newItem.fadeIn("slow");
@@ -67,6 +85,14 @@ function newChatlist(id) {
     
     self.hide = function () {
         self.workplace.hide();
+    };
+    
+    self.showLoadIndicator = function() {
+        self.loadIndicator.show();
+    };
+    
+    self.hideLoadIndicator = function() {
+        self.loadIndicator.hide();
     };
 
     return self;

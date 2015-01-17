@@ -50,11 +50,11 @@ function newChatlist(id) {
                               </table>\
                               </div>'.format(global.chatRoot, item.fromid, nick, item.message, stampStr, item.from));
         
-        binder.tap(newItem.find('.onmessage'), function() {
+        binder.tap(newItem.find('.onmessage'), function() {            
             if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
         });
         
-        binder.tap(newItem.find('.ontime'), function() {
+        binder.tap(newItem.find('.ontime'), function() {            
             if (self.onMessageTap) self.onMessageTap(newItem.attr("data-login"));
             if (self.onTimeTap) self.onTimeTap($(this).find('.time').text());
         });

@@ -4,7 +4,10 @@
 }
 
 html,
-body {
+body {  
+    position: fixed;
+    top: 0;
+    bottom: 0;
     padding: 0;
     margin: 0;
     -webkit-user-select: none;
@@ -15,6 +18,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: #fff;
 }
 h1,
 h2,
@@ -25,13 +29,27 @@ div,
 span,
 input {
     font-family: 'Roboto', sans-serif;    
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0); 
+    -webkit-tap-highlight-color: transparent;
+    outline-style: none;
 }
+input {    
+    -webkit-user-modify: read-write-plaintext-only;
+    -webkit-appearance: none;
+    outline-style: none;
+}
+
 .app {
     width: 100%;
     height: 100%;
+    background-color: #fff;
 }
-/* Icons */
+.placeholder {
+    color: #aaa !important;
+}
 
+/* Icons */
 .icon-user {
     background-image: url(../img/ic_person_24px.svg);
     background-repeat: no-repeat;
@@ -67,6 +85,11 @@ input {
     background-repeat: no-repeat;
     background-size: 26px;
 }
+.icon-arrow-up {
+    background-image: url(../img/ic_arrow_up_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
 .icon-back {
     background-image: url(../img/ic_arrow_back_24px.svg);
     background-repeat: no-repeat;
@@ -98,7 +121,7 @@ input {
     display: block;
     padding-left: 20px;
     padding-right: 5px;
-    position: relative;
+    position: relative;    
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     height: 64px;
@@ -186,6 +209,7 @@ input {
     padding: 4px;
     color: #fff;
     cursor: pointer;
+    z-index: 9999;
 }
 .msendpanel .message .time {
     display: none;
@@ -197,6 +221,7 @@ input {
     padding: 4px;
     color: #fff;
     cursor: pointer;
+    z-index: 9999;
 }
 
 .msendpanel .smile {
@@ -258,15 +283,15 @@ input {
     border-bottom: 2px solid #303F9F;
     background-color: transparent;
 }
-/* mChatList */
 
+/* mChatList */
 .mchatlist {
     position: relative;
     height: 100%;    
     padding-left: 16px;
     padding-right: 16px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: hidden;    
 }
 .mchatlist .title {
     line-height: 48px;
@@ -334,7 +359,7 @@ input {
 /* mSidePanel */
 
 .msidepanel {
-    position: fixed;
+    position: absolute;
     z-index: 9999;
     top: 0;
     left: 0;
@@ -362,7 +387,7 @@ input {
 .msidepanel .panel .info {
     position: relative;
     /*height: 180px;*/
-    height: 120px;
+    height: 86px;
     background: #1a237e;
     /*background-image: url(../img/tile1.jpg);*/
     padding: 16px 16px 24px 16px;
@@ -376,14 +401,15 @@ input {
     font-size: 1.1em;
 }
 .msidepanel .panel .info .data {
-    position: absolute;
-    bottom: 16px;
+    /* position: absolute; */
+    /* bottom: 16px; */
     list-style: none;
     padding: 0;
+    padding-top: 8px;
     margin: 0;
 }
 .msidepanel .panel .info .data li {
-    padding-bottom: 3px;
+    padding-bottom: 8px;
 }
 .msidepanel .panel .info .buttons {
     position: absolute;
@@ -392,7 +418,7 @@ input {
 }
 .msidepanel .panel .info .more {
     position: absolute;
-    bottom: 24px;
+    top: 81px;
     right: 0px;
 }
 
@@ -400,6 +426,7 @@ input {
     overflow-y: auto;
     padding: 16px 0px 16px 16px;
     position: absolute;
+    z-index: 9999;
 }
 .msidepanel .panel .list .user {
     width: 100%;
@@ -473,11 +500,11 @@ input {
 /* mContentSlider */
 
 .mcontentslider {
-    overflow: hidden;
+    overflow: hidden;    
 }
 
 .mcontentslider .host {
-    height: 100%;
+    height: 100%;    
 }
 
 /* mDialog */

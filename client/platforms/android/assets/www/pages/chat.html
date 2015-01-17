@@ -4,6 +4,7 @@
         height: 64px;
         width: 100%;
         top: 0;
+        left: 0;
     }
     .footer {
         position: fixed;
@@ -13,146 +14,246 @@
         background: #FAFAFA;
         border-top: 1px solid #DDDDDD;
         bottom: 0;
+        left: 0;
     }
     .content {
         position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
         background: transparent;
-        z-index: 9998;
     }
-
 </style>
 
 <script type="text/javascript">
+    /* Основная страница с чатом */
     var page = {
+        TIMER_WORK_INTERVAL: 5000, // Период работы основного таймера
         isStoped: false,
         privateUnread: 0,
+        publicSended: false,
+        privateSended: false,
         init: function () {
+            if (!chatService.restoreUser()) return;
+            
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
+            
+            if (chatService.userDescription === undefined)
+                chatService.getSelfInfo();
 
             page.toggleGroup = newToggleGroup()
-                    .addButton({
-                        text: "Общий",
-                        onTap: function () {
-                            page.contentSlider.selectContent(0);
-                        }
-                    })
-                    .addButton({
-                        text: "Приват",
-                        onTap: function () {
-                            page.contentSlider.selectContent(1);
-                            page.privateUnread = 0;
-                            page.toggleGroup.clearSticker(1);                            
-                        }
-                    });
+                .addButton({
+                    text: "Общий",
+                    onTap: function () {
+                        page.sendPanel.clearUser();
+                        page.contentSlider.selectContent(0);
+                    }
+                })
+                .addButton({
+                    text: "Приват",
+                    onTap: function () {
+                        page.sendPanel.clearUser();
+                        page.contentSlider.selectContent(1);
+                        page.privateUnread = 0;
+                        page.toggleGroup.clearSticker(1);
+                    }
+                });
 
-            newToolbar('toolbar')
-                    .addButton({
-                        position: "left",
-                        type: "icon",
-                        icon: "menu",
-                        onTap: function () {
-                            page.sidePanel.show();
-                        }
-                    })
-                    .addButton({
-                        position: "right",
-                        type: "icon",
-                        "icon": "exit",
-                        onTap: function () {
-                            // TODO: confirm dialog, logout
-
-                            pageManager.clear();
-                            pageManager.loadPage('login');
-                        }
-                    })
-                    .setTitle({
-                        type: "control",
-                        control: page.toggleGroup
-                    });
+            page.toolbar = newToolbar('toolbar')
+                .addButton({
+                    position: "left",
+                    type: "icon",
+                    icon: "menu",
+                    onTap: function () {
+                        page.sidePanel.setUserInfo(chatService.userDescription);
+                        page.sidePanel.show();
+                    }
+                })
+                .addButton({
+                    position: "right",
+                    type: "icon",
+                    "icon": "exit",
+                    onTap: function () {
+                        page.stop();
+                        chatService.logout(function () {
+                            page.exit();
+                        });
+                    }
+                })
+                .setTitle({
+                    type: "control",
+                    control: page.toggleGroup
+                });
 
             page.contentSlider = newContentSlider('content-slider');
             page.publicChatList = newChatlist();
+            page.publicChatList.onMessageTap = function(login) {                
+                global.recepient = login;
+                //page.sendPanel.clearFocus();
+                page.sendPanel.clearTime();
+                page.sendPanel.setUser(global.recepient);
+            };
+            page.publicChatList.onTimeTap = function(time) {                
+                global.messageTime = time;
+                //page.sendPanel.clearFocus();
+                page.sendPanel.setTime(global.messageTime);
+            };
+            
             page.privateChatList = newChatlist();
+            page.privateChatList.onMessageTap = function(login) {
+                global.recepient = login;
+                page.sendPanel.clearTime();
+                page.sendPanel.setUser(global.recepient);
+            };
+            page.privateChatList.onTimeTap = function(time) {
+                global.messageTime = time;
+                page.sendPanel.setTime(global.messageTime);
+            };
+            
             page.contentSlider.addControl(page.publicChatList);
             page.contentSlider.addControl(page.privateChatList);
             page.contentSlider.onChange = function (ind) {
                 page.toggleGroup.select(ind);
+                page.sendPanel.clearUser();
+                if (ind === 1) {
+                    page.privateUnread = 0;
+                    page.toggleGroup.clearSticker(1);
+                }
             };
 
             page.sendPanel = newSendPanel('send-panel');
-            page.sendPanel.onSend = function(text) {
-                chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function(res) {
-                    console.log(res);
-                })
+            page.sendPanel.onSend = function (text) {
+                if (text === "") return;
+                if (global.messageTime !== "") {
+                    text = '{0}, {1}'.format(global.messageTime, text);
+                }
+                chatService.sendMessage(page.toggleGroup.selectedIndex, text, global.recepient, function (res) {
+                    //console.log(res);
+                });
+            };
+            page.sendPanel.onClearUser = function () {
+                global.recepient = "";
+            };
+            page.sendPanel.onClearTime = function () {
+                global.messageTime = "";
             };
 
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
             page.sidePanel.onUserInfoTap = function (item) {
-                pageManager.loadPage('user-info', item);
+                pageManager.navigate('user-info/{0}'.format(item));
+            };
+
+            page.sidePanel.onUserSelect = function (login) {
+                global.recepient = login;
+                page.sendPanel.setUser(global.recepient);
             };
             
-            page.sidePanel.onUserSelect = function(login) {
-                console.log(login);
-                global.recepient = login;
-            };
-
             chatService.onError = function (err) {
-                if (!page.isStoped) {
-                    
+                if (err === chatService.ERR_USER_NOT_CONNECTED) {
+                    page.exit();
+                } else {
+                    page.stop();
+                    page.dialog.show();
                 }
             };
+            
+            page.dialog = newDialog();
+            page.dialog.onOk = function() {
+                page.start();
+            };
+            
+            page.dialog.onCancel = function() {
+                page.exit();
+            };
 
-            this.resize();
-            this.startDataTimer();
+            page.start();                                   // Запускает работу таймера
         },
         resize: function () {
-            // TODO: remove magic
-            var height = $(window).height() - 128;
+            var toolbarHeight = page.toolbar.workplace.height();
+            var height = $(window).height() - toolbarHeight - page.sendPanel.workplace.height();
             var cont = $(".content");
             cont.css("height", height + "px");
-            cont.css("top", "64px");
+            cont.css("top", toolbarHeight);            
             page.sidePanel.resize();
             page.contentSlider.resize();
         },
-        setTitleDate : function() {            
+        setTitleDate: function () {
             var str = moment().format("LL", "ru");
             page.publicChatList.setTitle(str);
             page.privateChatList.setTitle(str);
-        },        
+        },
+        fixSmiles: function (mess) {
+            var expr = /\(\(\d+\)\)/g;
+            for (var i = 0; i < mess.length; i++) {
+                var str = mess[i].message;
+                while (true) {
+                    var r = String(expr.exec(str));
+                    if ((r === undefined) || (r === null) || (r === "null") || (r === "")) break;
+                    var num = r.substring(2, r.length - 2);
+                    str = str.replace(r, '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num));
+                }
+                mess[i].message = str;
+            }
+            return mess;
+        },
         timerWork: function () {
             page.setTitleDate();
-            
+
             chatService.getUserList(function (res) {
                 page.sidePanel.setUsers(res);
             });
 
-            chatService.getPublicMessages(function (res) {
-                var mess = res.reverse();
-                //console.log(mess);
-                page.publicChatList.addItems(mess);
-                page.publicChatList.clearLast();
-            });
+            // Если не было уже такого запроса, то запрашивает сообщения общей комнаты
+            if (page.publicSended === false) {
+                page.publicSended = true;
+                page.publicChatList.showLoadIndicator();
+                chatService.getPublicMessages(function (res) {
+                    page.publicChatList.hideLoadIndicator();
+                    var mess = page.fixSmiles(res.reverse());
+                    page.publicChatList.addItems(mess);
+                    page.publicChatList.clearLast();
+                    page.publicSended = false;
+                }, function (err) {
+                    page.publicChatList.hideLoadIndicator();
+                    if (err === chatService.ERR_MESSAGES_EMPTY) {
+                        page.publicSended = false;
+                    } else {
+                        chatService.onError(err);
+                    }
+                });
+            }
 
-            chatService.getPrivateMessages(function (res) {
-                var mess = res.reverse();
-                // console.log(mess);
+            // Если не было уже такого запроса, то запрашивает сообщения приватной комнаты
+            if (!page.privateSended) {
+                page.privateSended = true;
+                page.privateChatList.showLoadIndicator();
+                chatService.getPrivateMessages(function (res) {
+                    page.privateChatList.hideLoadIndicator();
+                    var mess =  page.fixSmiles(res.reverse());
+                    if (page.toggleGroup.selectedIndex !== 1) {
+                        page.privateUnread += mess.length;
+                        page.toggleGroup.setSticker({
+                            index: 1,
+                            text: page.privateUnread < 33 ? page.privateUnread : '33+'
+                        });
+                    } else {
+                        page.privateUnread = 0;
+                        page.toggleGroup.clearSticker(1);
+                    }
 
-                if (page.toggleGroup.selectedIndex !== 1) {
-                    page.privateUnread += mess.length;                    
-                    page.toggleGroup.setSticker({
-                        index: 1,
-                        text: page.privateUnread < 33 ? page.privateUnread : '33+'
-                    });
-                } else {
-                    page.privateUnread = 0;
-                    page.toggleGroup.clearSticker(1);
-                }
-
-                page.privateChatList.addItems(mess);
-                page.privateChatList.clearLast();
-            });
+                    page.privateChatList.addItems(mess);
+                    page.privateChatList.clearLast();
+                    page.privateSended = false;
+                }, function (err) {
+                     page.privateChatList.hideLoadIndicator();
+                    if (err === chatService.ERR_MESSAGES_EMPTY) {
+                        page.privateSended = false;
+                    } else {
+                        chatService.onError(err);
+                    }
+                });
+            }
         },
         startDataTimer: function () {
             page.timerWork();
@@ -160,19 +261,30 @@
                 if (!page.isStoped) {
                     page.timerWork();
                 }
-            }, 5000);
+            }, page.TIMER_WORK_INTERVAL);
         },
-        saveState: function () {
-
+        start: function () {
+            page.publicSended = false;
+            page.privateSended = false;
+            page.isStoped = false;
+            page.startDataTimer();
+            page.resize();
         },
-        loadState: function () {
-
-        },
+        // Вызывается при остановки деятельности страницы
         stop: function () {
+            page.publicChatList.hideLoadIndicator();
+            page.privateChatList.hideLoadIndicator();
             page.isStoped = true;
             clearInterval(page.timer);
+            chatService.abortAll();
+        },
+        exit : function () {
+            page.stop();
+            pageManager.clear();
+            pageManager.navigate('login');
         }
-    }
+    };
+    window['page'] = page;
 </script>
 
 <div class="header">
@@ -181,8 +293,6 @@
 </div>
 
 <div id="content-slider" class="content">
-    <!--    <div id="chat-list">
-        </div> -->
 </div>
 
 <div class="footer">
@@ -192,5 +302,5 @@
     </div>
 </div>
 
-<div id="overlay">    
+<div id="overlay">
 </div>
