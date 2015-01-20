@@ -8,7 +8,6 @@
 	-o-backface-visibility:hidden;
 	backface-visibility:hidden;
 	/* Fix of Webkit flickering */
-	z-index:1;
 }
 .swiper-wrapper {
 	position:relative;
