@@ -1,0 +1,16 @@
+{
+  "name": "JChat",
+  "xwalk_version": "1",
+  "start_url": "www/index_debug.html",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "density": "4.0"
+    }
+  ],
+  "xwalk_hosts": [
+      "https://*/"
+  ]
+}

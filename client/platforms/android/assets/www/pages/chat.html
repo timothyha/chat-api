@@ -34,97 +34,63 @@
         publicSended: false,
         privateSended: false,
         init: function () {
-            if (!chatService.restoreUser()) return;
-            
+            if (!chatService.restoreUser())
+                return;
+
             chatService.lastPublicStamp = 0;
             chatService.lastPrivateStamp = 0;
-            
+
             if (chatService.userDescription === undefined)
                 chatService.getSelfInfo();
 
             page.toggleGroup = newToggleGroup()
-                .addButton({
-                    text: "Общий",
-                    onTap: function () {
-                        page.sendPanel.clearUser();
-                        page.contentSlider.selectContent(0);
-                    }
-                })
-                .addButton({
-                    text: "Приват",
-                    onTap: function () {
-                        page.sendPanel.clearUser();
-                        page.contentSlider.selectContent(1);
-                        page.privateUnread = 0;
-                        page.toggleGroup.clearSticker(1);
-                    }
-                });
+                    .addButton({
+                        text: "Общий",
+                        onTap: function () {
+                            page.sendPanel.clearUser();                            
+                            page.swiper.swipeTo(0);
+                        }
+                    })
+                    .addButton({
+                        text: "Приват",
+                        onTap: function () {
+                            page.sendPanel.clearUser();                            
+                            page.swiper.swipeTo(1);
+                            page.privateUnread = 0;
+                            page.toggleGroup.clearSticker(1);
+                        }
+                    });
 
             page.toolbar = newToolbar('toolbar')
-                .addButton({
-                    position: "left",
-                    type: "icon",
-                    icon: "menu",
-                    onTap: function () {
-                        page.sidePanel.setUserInfo(chatService.userDescription);
-                        page.sidePanel.show();
-                    }
-                })
-                .addButton({
-                    position: "right",
-                    type: "icon",
-                    "icon": "exit",
-                    onTap: function () {
-                        page.stop();
-                        chatService.logout(function () {
-                            page.exit();
-                        });
-                    }
-                })
-                .setTitle({
-                    type: "control",
-                    control: page.toggleGroup
-                });
-
-            page.contentSlider = newContentSlider('content-slider');
-            page.publicChatList = newChatlist();
-            page.publicChatList.onMessageTap = function(login) {                
-                global.recepient = login;
-                //page.sendPanel.clearFocus();
-                page.sendPanel.clearTime();
-                page.sendPanel.setUser(global.recepient);
-            };
-            page.publicChatList.onTimeTap = function(time) {                
-                global.messageTime = time;
-                //page.sendPanel.clearFocus();
-                page.sendPanel.setTime(global.messageTime);
-            };
+                    .addButton({
+                        position: "left",
+                        type: "icon",
+                        icon: "menu",
+                        onTap: function () {
+                            page.sidePanel.setUserInfo(chatService.userDescription);
+                            page.sidePanel.show();
+                        }
+                    })
+                    .addButton({
+                        position: "right",
+                        type: "icon",
+                        "icon": "exit",
+                        onTap: function () {
+                            page.stop();
+                            chatService.logout(function () {
+                                page.exit();
+                            });
+                        }
+                    })
+                    .setTitle({
+                        type: "control",
+                        control: page.toggleGroup
+                    });
             
-            page.privateChatList = newChatlist();
-            page.privateChatList.onMessageTap = function(login) {
-                global.recepient = login;
-                page.sendPanel.clearTime();
-                page.sendPanel.setUser(global.recepient);
-            };
-            page.privateChatList.onTimeTap = function(time) {
-                global.messageTime = time;
-                page.sendPanel.setTime(global.messageTime);
-            };
-            
-            page.contentSlider.addControl(page.publicChatList);
-            page.contentSlider.addControl(page.privateChatList);
-            page.contentSlider.onChange = function (ind) {
-                page.toggleGroup.select(ind);
-                page.sendPanel.clearUser();
-                if (ind === 1) {
-                    page.privateUnread = 0;
-                    page.toggleGroup.clearSticker(1);
-                }
-            };
-
             page.sendPanel = newSendPanel('send-panel');
             page.sendPanel.onSend = function (text) {
-                if (text === "") return;
+                if (text === "")
+                    return;
                 if (global.messageTime !== "") {
                     text = '{0}, {1}'.format(global.messageTime, text);
                 }
@@ -138,7 +104,7 @@
             page.sendPanel.onClearTime = function () {
                 global.messageTime = "";
             };
-
+            
             page.sidePanel = newSidePanel('overlay').setUserInfo({});
             page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.navigate('user-info/{0}'.format(item));
@@ -147,8 +113,32 @@
             page.sidePanel.onUserSelect = function (login) {
                 global.recepient = login;
                 page.sendPanel.setUser(global.recepient);
-            };
+            };                        
             
+            page.publicChatList = newChatlist('public-list');
+            page.publicChatList.onMessageTap = function (login) {
+                global.recepient = login;
+                //page.sendPanel.clearFocus();
+                page.sendPanel.clearTime();
+                page.sendPanel.setUser(global.recepient);
+            };
+            page.publicChatList.onTimeTap = function (time) {
+                global.messageTime = time;
+                //page.sendPanel.clearFocus();
+                page.sendPanel.setTime(global.messageTime);
+            };
+
+            page.privateChatList = newChatlist('private-list');            
+            page.privateChatList.onMessageTap = function (login) {
+                global.recepient = login;
+                page.sendPanel.clearTime();
+                page.sendPanel.setUser(global.recepient);
+            };
+            page.privateChatList.onTimeTap = function (time) {
+                global.messageTime = time;
+                page.sendPanel.setTime(global.messageTime);
+            };
+
             chatService.onError = function (err) {
                 if (err === chatService.ERR_USER_NOT_CONNECTED) {
                     page.exit();
@@ -157,26 +147,48 @@
                     page.dialog.show();
                 }
             };
-            
+
             page.dialog = newDialog();
-            page.dialog.onOk = function() {
+            page.dialog.onOk = function () {
                 page.start();
             };
-            
-            page.dialog.onCancel = function() {
-                page.exit();
-            };
 
-            page.start();                                   // Запускает работу таймера
+            page.dialog.onCancel = function () {
+                page.exit();
+            };        
+
+            page.swiper = $('.swiper-pages').swiper({
+                onTouchEnd : function(e) {                    
+                    page.toggleGroup.select(e.activeLoopIndex);
+                }
+            });
+            page.swipers = [];
+            
+            $('.scroll-container').each(function () {
+                page.swipers.push($(this).swiper({
+                    mode: 'vertical',
+                    scrollContainer: true,
+                    mousewheelControl: true,
+                    scrollbar: {
+                        container: $(this).find('.swiper-scrollbar')[0]
+                    }
+                }));
+            });
+
+            page.start();                                   // Запускает работу таймера                       
         },
         resize: function () {
             var toolbarHeight = page.toolbar.workplace.height();
             var height = $(window).height() - toolbarHeight - page.sendPanel.workplace.height();
-            var cont = $(".content");
-            cont.css("height", height + "px");
-            cont.css("top", toolbarHeight);            
             page.sidePanel.resize();
-            page.contentSlider.resize();
+
+            $('.swiper-pages').css({
+                top: toolbarHeight,
+                height: height
+            });
+            
+            page.swipers[0].reInit();
+            page.swipers[1].reInit();
         },
         setTitleDate: function () {
             var str = moment().format("LL", "ru");
@@ -189,7 +201,8 @@
                 var str = mess[i].message;
                 while (true) {
                     var r = String(expr.exec(str));
-                    if ((r === undefined) || (r === null) || (r === "null") || (r === "")) break;
+                    if ((r === undefined) || (r === null) || (r === "null") || (r === ""))
+                        break;
                     var num = r.substring(2, r.length - 2);
                     str = str.replace(r, '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num));
                 }
@@ -214,6 +227,7 @@
                     page.publicChatList.addItems(mess);
                     page.publicChatList.clearLast();
                     page.publicSended = false;
+                    page.swipers[0].reInit();
                 }, function (err) {
                     page.publicChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
@@ -230,7 +244,7 @@
                 page.privateChatList.showLoadIndicator();
                 chatService.getPrivateMessages(function (res) {
                     page.privateChatList.hideLoadIndicator();
-                    var mess =  page.fixSmiles(res.reverse());
+                    var mess = page.fixSmiles(res.reverse());
                     if (page.toggleGroup.selectedIndex !== 1) {
                         page.privateUnread += mess.length;
                         page.toggleGroup.setSticker({
@@ -245,8 +259,9 @@
                     page.privateChatList.addItems(mess);
                     page.privateChatList.clearLast();
                     page.privateSended = false;
+                    page.swipers[1].reInit();
                 }, function (err) {
-                     page.privateChatList.hideLoadIndicator();
+                    page.privateChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.privateSended = false;
                     } else {
@@ -259,7 +274,7 @@
             page.timerWork();
             page.timer = setInterval(function () {
                 if (!page.isStoped) {
-                    page.timerWork();
+                    page.timerWork();                    
                 }
             }, page.TIMER_WORK_INTERVAL);
         },
@@ -278,7 +293,7 @@
             clearInterval(page.timer);
             chatService.abortAll();
         },
-        exit : function () {
+        exit: function () {
             page.stop();
             pageManager.clear();
             pageManager.navigate('login');
@@ -292,7 +307,31 @@
     </div>
 </div>
 
-<div id="content-slider" class="content">
+<div class="swiper-container swiper-pages">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="swiper-container scroll-container">
+                <div class="swiper-scrollbar"></div>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="page-inner" id="public-list">                            
+                        </div> 
+                    </div>
+                </div>
+            </div>                       
+        </div>
+        <div class="swiper-slide">
+            <div class="swiper-container scroll-container">
+                <div class="swiper-scrollbar"></div>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="page-inner" id="private-list">                            
+                        </div> 
+                    </div>
+                </div>
+            </div>                       
+        </div>
+    </div>
 </div>
 
 <div class="footer">

@@ -6,7 +6,8 @@ module.exports = function (grunt) {
                 files: {
                     'www/js/jchat.min.js': [
                         'www/js/libs/jquery/jquery.js',
-                        'www/js/libs/jquery.touchSwipe/jquery.touchSwipe.js',
+						'www/js/libs/swiper/swiper.js',
+						'www/js/libs/swiper/scrollbar.js',
                         'www/js/libs/moments/moment.js',
                         'www/js/libs/pholder/jquery.pholder.js',
                         'www/js/libs/finch/finch.js',

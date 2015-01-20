@@ -1,0 +1,403 @@
+<style type="text/css">
+    .login-page {
+        background: #283593;           
+        height: 100%;
+        position: relative;
+    }
+    .login-form {
+        position: absolute;
+        width: 300px;
+        margin: auto;
+        color: #fff;
+        text-align: center;
+    }
+    .login-form .item {
+        padding-bottom: 16px;
+    }
+    .login-form .error {
+        padding-bottom: 16px;
+        color: #FF4C4C;
+    }
+
+    .login-form h1 {
+        font-size: 1.5em;
+        padding-bottom: 24px;
+    }
+    .login-form .item input {
+        border: 0;
+        height: 32px;
+        outline: 0;
+        border-radius: 2px;
+        width: 100%;
+        text-indent: 10px;
+        font-size: 1em;
+        color: #444;
+    }
+    .login-form .buttons {
+        padding-top: 24px;
+    }
+    .login-form .mbutton {
+        width: 100%;
+        padding: 0;
+        background-color: #303F9F;
+    }
+    .login-form .links {
+        padding-top: 48px;
+        font-size: 0.9em;
+    }
+    .login-form .links div {
+        padding-bottom: 10px;
+    }
+    .login-form .links a {
+        color: #fff;
+        text-decoration: none;
+    }
+    .login-form .links a:hover {
+        text-decoration: underline;
+    }
+
+    .loader{
+        display: inline-block;
+        width: 120px;
+        height: 50px;
+    }
+
+    .loader div{
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        position: relative;
+        top: -30px;
+        float: left;
+        margin: 10px;
+        opacity: 0;
+    }
+
+    .loader .left{
+        background-color: #3498db;
+
+        -webkit-animation: fall 1s  ease-in-out infinite;
+        -moz-animation: fall 1s  ease-in-out infinite;
+        -ms-animation: fall 1s  ease-in-out infinite;
+        animation: fall 1s ease-in-out infinite;    
+    }
+
+    .loader .middle{
+        background-color: #9b59b6;
+
+        -webkit-animation: fall 1s  ease-in-out infinite;
+        -moz-animation: fall 1s  ease-in-out infinite;
+        -ms-animation: fall 1s  ease-in-out infinite;
+        animation: fall 1s ease-in-out infinite;
+        -webkit-animation-delay: 0.1s;
+        -moz-animation-delay: 0.1s;
+        -ms-animation-delay: 0.1s;
+        animation-delay: 0.1s;
+    }
+
+    .loader .right{
+        background-color: #e74c3c;
+
+        -webkit-animation: fall 1s ease-in-out infinite;
+        -moz-animation: fall 1s  ease-in-out infinite;
+        -ms-animation: fall 1s  ease-in-out infinite;
+        animation: fall 1s ease-in-out infinite;
+        -webkit-animation-delay: 0.2s;
+        -moz-animation-delay: 0.2s;
+        -ms-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+    }
+
+
+
+    /* ANIMATION */
+    @-webkit-keyframes fall {
+        10% {
+            opacity: 0.5;
+        }
+        20% {
+            opacity: 1;
+            top: 0px;
+        }
+        80% {
+            opacity: 1;
+            top: 0px;
+        }
+        90% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0;
+            top: 30px;
+        }
+    }
+    @-moz-keyframes fall {
+        10% {
+            opacity: 0.5;
+        }
+        20% {
+            opacity: 1;
+            top: 0px;
+        }
+        80% {
+            opacity: 1;
+            top: 0px;
+        }
+        90% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0;
+            top: 30px;
+        }
+    }
+    @-ms-keyframes fall {
+        10% {
+            opacity: 0.5;
+        }
+        20% {
+            opacity: 1;
+            top: 0px;
+        }
+        80% {
+            opacity: 1;
+            top: 0px;
+        }
+        90% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0;
+            top: 30px;
+        }
+    }
+    keyframes fall {
+        10% {
+            opacity: 0.5;
+        }
+        20% {
+            opacity: 1;
+            top: 0px;
+        }
+        80% {
+            opacity: 1;
+            top: 0px;
+        }
+        90% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0;
+            top: 30px;
+        }
+    }
+
+    /* 240x320 */
+
+    @media (min-width: 0px) and (max-width: 240px) and (min-height: 0px) and (max-height: 320px) and (orientation: portrait) {
+        .login-form {
+            width: 200px;
+            height: 300px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .login-form .buttons {
+            padding-top: 8px;
+        }
+        .login-form .links {
+            padding-top: 16px;
+        }
+    }
+    @media (min-width: 0px) and (max-width: 320px) and (min-height: 0px) and (max-height: 240px) and (orientation: landscape) {
+        .login-form {
+            width: 280px;
+            height: 250px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            padding: 0;
+        }
+        .login-form .buttons {
+            padding-top: 0px;
+        }
+        .login-form .links {
+            padding-top: 8px;
+        }
+    }
+    /* 240x480 */
+
+    @media (min-width: 0px) and (max-width: 240px) and (min-height: 321px) and (max-height: 480px) and (orientation: portrait) {
+        .login-form {
+            width: 200px;
+            height: 480px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .login-form .buttons {
+            padding-top: 24px;
+        }
+        .login-form .links {
+            padding-top: 48px;
+        }
+    }
+    @media (min-width: 321px) and (max-width: 480px) and (min-height: 0px) and (max-height: 240px) and (orientation: landscape) {
+        .login-form {
+            width: 300px;
+            height: 250px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            padding: 0;
+        }
+        .login-form .buttons {
+            padding-top: 0px;
+        }
+        .login-form .links {
+            padding-top: 8px;
+        }
+    }
+    /* 320x480 */
+
+    @media (min-width: 241px) and (max-width: 320px) and (min-height: 321px) and (max-height: 480px) and (orientation: portrait) {
+        .login-form {
+            width: 200px;
+            height: 480px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .login-form .buttons {
+            padding-top: 24px;
+        }
+        .login-form .links {
+            padding-top: 48px;
+        }
+    }
+    @media (min-width: 321px) and (max-width: 480px) and (min-height: 241px) and (max-height: 320px) and (orientation: landscape) {
+        .login-form {
+            width: 300px;
+            height: 320px;
+        }
+        .login-form h1 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            padding: 0;
+            padding-bottom: 8px;
+        }
+        .login-form .buttons {
+            padding-top: 8px;
+        }
+        .login-form .links {
+            padding-top: 16px;
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    var page = {
+        init: function () {
+            $('.load-progress').hide();
+
+            chatService.onError = function (err) {
+                page.showForm();
+                page.showError(chatService.getErrorDescription(err));
+
+            };
+
+            $('#enter').bind('click', function () {
+                var login = $('#login').val();
+                var password = $('#password').val();
+                
+                var vl = page.validate(login, password);
+                if (vl === undefined) {
+                    page.showLoading();
+                    chatService.login(login, password, function () {
+                        pageManager.navigate('chat');
+                    });
+                } else {
+                    page.showError(vl);
+                }
+            });
+            
+            page.resize();
+        },
+        validate : function(l, p) {
+            var res = undefined;
+            if (l === "") res = "Не задано имя пользователя";
+            if (p === "") {
+                if (res !== undefined) {
+                    res += " и пароль"
+                } else {
+                    res = "Не задан пароль";
+                }
+            }
+            return res;
+        },
+        showError: function (msg) {
+            var err = $('.error');
+            err.css('visibility', 'visible');
+            err.text(msg);
+        },
+        hideError: function () {
+            var err = $('.error');
+            err.css('visibility', 'hidden');
+        },
+        showForm: function () {
+            $('.form-items').show();
+            $('.load-progress').hide();
+        },
+        showLoading: function () {
+            $('.form-items').hide();
+            $('.load-progress').show();
+        },
+        resize: function () {
+            var form = $('.login-form');
+            var height = form.height();
+            form.css('top', (document.body.clientHeight / 2) - (height / 2));
+            form.css('left', (document.body.clientWidth / 2) - form.width() / 2);
+        },
+        stop: function () {
+
+        }
+    };
+    window['page'] = page;
+</script>
+
+<div class="login-page">
+    <div class="login-form">
+        <h1>Jesus Christ Mobile Chat</h1>
+        <div class="form-items">
+            <div class="error"></div>
+            <div class="item">
+                <input id="login" placeholder="Логин" />
+            </div>
+            <div class="item">
+                <input id="password" type="password" placeholder="Пароль" />
+            </div>
+            <div class="buttons">
+                <div id="enter" class="mbutton">Войти</div>
+            </div>
+            <div class="links">
+                <div><a href="#">Регистрация</a>
+                </div>
+                <div><a href="#">Напомнить пароль</a>
+                </div>
+            </div>
+        </div>
+        <div class="load-progress">
+            <h2>Вход</h2>
+            <div class="loader">
+                <div class="left"></div>
+                <div class="middle"></div>
+                <div class="right"></div>
+            </div>
+        </div>
+    </div>
+</div>
