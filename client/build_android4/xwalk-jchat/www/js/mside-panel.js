@@ -3,8 +3,8 @@ function newSidePanel(id) {
     self.onUserInfoTap = undefined;
     self.onUserSelect = undefined;
     self.infoHeight = undefined;
-    self.infoCollapsed = true;    
-    
+    self.infoCollapsed = true;
+
     if (id !== undefined) {
         self.workplace = $('#' + id);
     } else {
@@ -31,75 +31,85 @@ function newSidePanel(id) {
                                     </ul>\
                                     <div class="mbutton-icon icon-drop-down more"></div>\
                                 </div>\
-                                <div class="list"></div>\
+                                <div class="swiper-container swiper-users">\
+                                    <div class="swiper-wrapper">\
+                                        <div class="swiper-slide list">\
+                                        </div>\
+                                    </div>\
+                                </div>\
                             </div>\
                             <div class="overlay"></div>\
                             '));
-    
     self.infoHeight = self.workplace.find(".info").height();
-    
+
+    self.swiper = $('.swiper-users').swiper({
+        mode: 'vertical',
+        scrollContainer: true,
+        mousewheelControl: true
+    });
+
     var overlay = self.workplace.find(".overlay");
-    binder.tap(overlay, function () {        
+    binder.tap(overlay, function () {
         self.hide();
         return this;
     });
-    
-    binder.tap(self.workplace.find(".more"), function() {
-        var info = self.workplace.find(".info");  
+
+    binder.tap(self.workplace.find(".more"), function () {
+        var info = self.workplace.find(".info");
         var more = self.workplace.find(".more");
         if (!self.infoCollapsed) {
-            self.infoCollapsed = true;            
-            info.animate({height: self.infoHeight + "px"}, 500, function() {
+            self.infoCollapsed = true;
+            info.animate({height: self.infoHeight + "px"}, 500, function () {
                 self.resize();
             });
-            more.removeClass("icon-arrow-up").addClass("icon-drop-down");            
+            more.removeClass("icon-arrow-up").addClass("icon-drop-down");
         } else {
             var height = self.workplace.find(".circle64").height() + self.workplace.find(".data").height();
-            info.animate({height: height + "px"}, 500, function() {
-               self.resize(); 
+            info.animate({height: height + "px"}, 500, function () {
+                self.resize();
             });
-            self.infoCollapsed = false;            
+            self.infoCollapsed = false;
             more.removeClass("icon-drop-down").addClass("icon-arrow-up");
-        }              
+        }
     });
 
-    self.setUserInfo = function (item) {        
-        var photo = self.workplace.find(".info img");        
+    self.setUserInfo = function (item) {
+        var photo = self.workplace.find(".info img");
         var nick = self.workplace.find(".info .nick");
         var sex = self.workplace.find(".info .sex");
         var name = self.workplace.find(".info .name");
         var town = self.workplace.find(".info .town");
         var belief = self.workplace.find(".info .belief");
         var about = self.workplace.find(".info .about");
-        photo.attr("src", "{0}{1}".format(global.chatRoot, item.photo));                
-        
+        photo.attr("src", "{0}{1}".format(global.chatRoot, item.photo));
+
         nick.text(item.login);
         sex.text(item.sex === "1" ? "мужской" : "женский");
-        
+
         if (!isEmpty(item.name)) {
-            name.text(item.name);            
-        } else {            
+            name.text(item.name);
+        } else {
             name.text("имя не указано");
         }
-        
+
         if (!isEmpty(item.town)) {
-            town.text(item.town);            
-        } else {            
+            town.text(item.town);
+        } else {
             town.text("город не указан");
-        }  
-        
+        }
+
         if (!isEmpty(item.belief)) {
-            belief.text(item.belief);            
-        } else {            
+            belief.text(item.belief);
+        } else {
             belief.text("вероисповедание не указано");
         }
-        
+
         if (!isEmpty(item.about)) {
-            about.text(item.about);            
-        } else {            
+            about.text(item.about);
+        } else {
             about.text("о себе не указано");
         }
-        
+
         return this;
     };
 
@@ -125,21 +135,22 @@ function newSidePanel(id) {
                             </tr>\
                          </table>'.format(global.chatRoot, usr.login, usr.id));
 
-            binder.tap(userInfo.find('.nick'), function () {
+            binder.tap(userInfo.find('.nick'), function (e) {                
                 if (self.onUserSelect) {
-                    self.onUserSelect($(this).attr('data-login'));
+                    self.onUserSelect($(e.target).attr('data-login'));
                     self.hide();
                 }
             });
 
             binder.tap(userInfo.find('.command .mbutton-icon'), function () {
                 if (self.onUserInfoTap !== undefined) {
-                    var id = $(this).attr('data-id');
+                    var id = $(e.target).attr('data-id');
                     self.onUserInfoTap(id);
                 }
             });
             userList.append(userInfo);
         }
+
         return this;
     };
 
@@ -147,13 +158,14 @@ function newSidePanel(id) {
         self.workplace.show();
         self.resize();
         self.workplace.find('.panel').animate({"left": '0'}, 300);
+        self.swiper.reInit();
         return this;
     };
 
     self.hide = function () {
         var panel = self.workplace.find('.panel');
         panel.animate({"left": -panel.width()}, 300, function () {
-            var info = self.workplace.find(".info");            
+            var info = self.workplace.find(".info");
             info.css("height", self.infoHeight);
             self.infoCollapsed = true;
             self.workplace.hide();
@@ -162,8 +174,8 @@ function newSidePanel(id) {
         return this;
     };
 
-    self.resize = function () {        
-        var list = self.workplace.find('.list');
+    self.resize = function () {
+        var list = self.workplace.find('.swiper-users');
         var info = self.workplace.find('.info');
         list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
     };

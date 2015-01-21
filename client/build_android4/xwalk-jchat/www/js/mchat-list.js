@@ -58,11 +58,11 @@ function newChatlist(id) {
                 self.onMessageTap(newItem.attr("data-login"));
         });
 
-        binder.tap(newItem.find('.ontime'), function () {
+        binder.tap(newItem.find('.ontime'), function (e) {
             if (self.onMessageTap)
                 self.onMessageTap(newItem.attr("data-login"));
             if (self.onTimeTap)
-                self.onTimeTap($(this).find('.time').text());
+                self.onTimeTap(newItem.find('.time').text());
         });
 
         self.messages.prepend(newItem);

@@ -1,33 +1,66 @@
 var binder = {
     ENTER_KEY : 13,
     isTouch: false,
+    isMoved: false,
     init : function () {
         try {
             document.createEvent("TouchEvent");
-            binder.isTouch = true;
+            binder.isTouch = true;            
         } catch (e) {
         }
-
-    },
-    tap : function (e, call) {
-        if (binder.isTouch) {
-            e.bind('touchend', call);
+        
+        if (binder.isTouch) {            
+            $(document).bind('touchstart', function() {
+                binder.isMoved = false;                
+            });
+            $(document).bind('touchmove', function() {                
+                binder.isMoved = true;
+            });
         } else {
-            e.bind('mouseup', call);
+            $(document).bind('mousedown', function() {
+                binder.isMoved = false;                
+            }); 
+            
+            $(document).bind('mousemove', function() {                
+                binder.isMoved = true;
+            });            
         }
     },
-    up : function (e, call) {
+    tap : function (e, call) {                        
         if (binder.isTouch) {
-            e.bind('touchend', call);
+            e.bind('touchend', function(e) {
+                if (!binder.isMoved) call(e);
+            });
         } else {
-            e.bind('mouseup', call);
+            e.bind('click', function(e) {                
+                if (!binder.isMoved) call(e);
+            });
+        }        
+    },
+    up : function (e, call) {
+        if (binder.isMoved) return;
+        
+        if (binder.isTouch) {
+            e.bind('touchend', function(e) {
+                if (!binder.isMoved) call(e);
+            });
+        } else {
+            e.bind('mouseup', function(e) {                
+                if (!binder.isMoved) call(e);
+            });
         }
     },
     down : function (e, call) {
+        if (binder.isMoved) return;
+        
         if (binder.isTouch) {
-            e.bind('touchstart', call);
+            e.bind('touchstart', function(e) {
+                if (!binder.isMoved) call(e);
+            });
         } else {
-            e.bind('mousedown', call);
+            e.bind('mousedown', function(e) {                
+                if (!binder.isMoved) call(e);
+            });
         }
     },
     blur : function(e, call) {

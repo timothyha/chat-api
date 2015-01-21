@@ -45,12 +45,12 @@ function newSendPanel(id) {
     for (var i = 1; i < 91; i++) {
         if ((i === 89) || (i === 98) || (i === 99)) continue;
         var img = $('<img src="{0}/chat/i/{1}.gif" data-code="{1}" />'.format(global.chatRoot, i));
-        binder.tap(img, function() {
+        binder.tap(img, function(e) {
             if (self.message.hasClass("placeholder")) {
                 self.message.removeClass("placeholder");
                 self.message.val("");
             }
-            self.message.val('{0}(({1}))'.format(self.message.val(),$(this).attr('data-code')));
+            self.message.val('{0}(({1}))'.format(self.message.val(),$(e.target).attr('data-code')));
         });
         self.smilePopup.append(img);
     }
@@ -61,12 +61,12 @@ function newSendPanel(id) {
         }
     });
     
-    binder.down(self.workplace.find('.user'), function(e) {
+    binder.tap(self.workplace.find('.user'), function(e) {
         e.preventDefault();        
         self.clearUser();        
     });
     
-    binder.down(self.workplace.find('.time'), function(e) {
+    binder.tap(self.workplace.find('.time'), function(e) {
         e.preventDefault();        
         self.clearTime();        
     });
@@ -77,12 +77,12 @@ function newSendPanel(id) {
         }
     });
     
-    binder.up(self.message, function(e) {
-        $(this).removeAttr("readonly");
+    binder.tap(self.message, function(e) {
+        $(e.target).removeAttr("readonly");
     });
     
     binder.blur(self.message, function(e) {
-        $(this).attr("readonly", "true");
+        $(e.target).attr("readonly", "true");
     });
     
     binder.tap(self.smileButton, function() {
@@ -107,9 +107,6 @@ function newSendPanel(id) {
         user.text(name);
         user.show();
         inp.css('text-indent', user.outerWidth() + 8);
-        /*var width = user.outerWidth() + 8;
-        inp.css('padding-left', width);
-        inp.css('width', inp.widht() - width);*/
     };
     
     self.clearUser = function() {

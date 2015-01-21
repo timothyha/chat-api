@@ -421,10 +421,7 @@ input {
 }
 
 .msidepanel .panel .list {
-    overflow-y: auto;
     padding: 16px 0px 16px 16px;
-    position: absolute;
-    z-index: 9999;
 }
 .msidepanel .panel .list .user {
     width: 100%;
