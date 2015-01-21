@@ -142,7 +142,7 @@ function newSidePanel(id) {
                 }
             });
 
-            binder.tap(userInfo.find('.command .mbutton-icon'), function () {
+            binder.tap(userInfo.find('.command .mbutton-icon'), function (e) {
                 if (self.onUserInfoTap !== undefined) {
                     var id = $(e.target).attr('data-id');
                     self.onUserInfoTap(id);
