@@ -1,13 +1,9 @@
 <style type="text/css">      
-    .info-content {
-        position: absolute;
-        top: 64px;
+    .swiper-info {
         width: 100%;        
-        overflow-x: hidden;
-        overflow-y: auto;
     }
-
-    .info-content .inner {
+    
+    .swiper-info .inner {
         width: 100%;
         height: 100%;
     }
@@ -29,18 +25,19 @@
         margin: auto;
     }
 
-    .fullphoto {  
+    .fullphoto {
         display: none;
         top: 0;
+        left: 0;
         position: absolute;
         width: 100%;
-        height: 100%;
+        min-height: 100%;
         background-color: #fff;
-        background-image: url(https://jesuschrist.ru/chat/gallery/ok/84215.jpg);
+        background-size: cover !important;
         background-repeat: no-repeat;
-        background-size: contain;
         background-position: center;
-    }
+        z-index: 9999;
+    }        
 
     .groups {
         vertical-align: top;
@@ -154,13 +151,22 @@
                                 </table>\
                             </div>'));
 
+
+            page.swiper = $('.swiper-info').swiper({
+                mode: 'vertical',
+                scrollContainer: true,
+                mousewheelControl: true
+            });
+
             binder.tap(page.photo, function () {
                 page.fullphoto.show();
+                page.photo.hide();
                 page.groups.hide();
             });
 
             binder.tap(page.fullphoto, function () {
                 page.fullphoto.hide();
+                page.photo.show();
                 page.groups.show();
             });
 
@@ -185,13 +191,14 @@
         },
         resize: function () {
             var height = $(window).height() - $('.header').height();
-            $('.info-content').css('height', height);
-            var photoimg = page.fullphoto.find("img");
+            $('.swiper-info').css('height', height);
+            page.swiper.reInit();
+            
         },
         start: function () {
             chatService.getUserInfo(page.userid, function (res) {
                 $('.photo img').attr('src', '{0}{1}'.format(global.chatRoot, res.photo));
-                $('.fullphoto').css('background-image', 'url({0}{1})'.format(global.chatRoot, res.photo));
+                page.fullphoto.css('background', 'url({0}{1})'.format(global.chatRoot, res.photo));
 
                 page.toolbar.setTitle({
                     type: "text",
@@ -205,6 +212,7 @@
                 page.groups.find(".about").text(res.about === "" ? "не указано" : res.about);
 
                 page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");
+                page.swiper.reInit();
             });
 
             page.resize();
@@ -225,19 +233,23 @@
     </div>
 </div> 
 
-<div class="info-content">
-    <table class="inner" cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="photo">               
-                <img src="" />               
-            </td>
-        </tr>
-        <tr>
-            <td class="groups">                
-            </td>
-        </tr>
-    </table>
-
-    <div class="fullphoto">        
+<div class="swiper-container swiper-info">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide inner">
+            <table class="inner" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="photo">               
+                        <img src="" />               
+                    </td>
+                </tr>
+                <tr>
+                    <td class="groups">                
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
+</div>
+
+<div class="fullphoto">    
 </div>

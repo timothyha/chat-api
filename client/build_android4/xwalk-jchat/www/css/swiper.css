@@ -73,20 +73,14 @@
 }
 
 /* Scrollbars */
-.swiper-scrollbar {
-	position: absolute;
-	right: 5px;
-	top: 2%;
-	width: 5px;
-	height: 96%;
-	background: rgba(0,0,0,0.2);
-	border-radius: 5px;
-	z-index: 10;
+.swiper-scrollbar {  
+  position:absolute;
+  right:3px;
+  top:5px;
+  height:99%;
+  width:3px;
 }
 .swiper-scrollbar-drag {
-	height: 100%;
-	width: 100%;
-	position: relative;
-	background: rgba(255,255,255,0.5);
-	border-radius: 10px;
+  background:rgba(0,0,0,0.3); 
+  border-radius: 3px;
 }
