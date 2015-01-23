@@ -1,0 +1,1 @@
+python build_android4/make_apk.py --package=skyprojects.apps.jchat --manifest=build_android4\xwalk-jchat\manifest.json

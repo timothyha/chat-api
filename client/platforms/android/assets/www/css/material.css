@@ -1,5 +1,13 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('../img/Roboto-Regular.ttf') format('truetype');
+}
+
 html,
-body {
+body {  
+    position: fixed;
+    top: 0;
+    bottom: 0;
     padding: 0;
     margin: 0;
     -webkit-user-select: none;
@@ -10,6 +18,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: #fff;    
 }
 h1,
 h2,
@@ -19,14 +28,29 @@ p,
 div,
 span,
 input {
-    font-family: 'Roboto', sans-serif;    
+    font-family: 'Roboto', sans-serif;
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0); 
+    -webkit-tap-highlight-color: transparent;
+    outline-style: none;
 }
+input {    
+    -webkit-user-modify: read-write-plaintext-only;
+    -webkit-appearance: none;
+    outline-style: none;
+}
+
 .app {
     width: 100%;
     height: 100%;
+    background-color: #fff;
 }
-/* Icons */
 
+.placeholder {
+    color: #aaa !important;
+}
+
+/* Icons */
 .icon-user {
     background-image: url(../img/ic_person_24px.svg);
     background-repeat: no-repeat;
@@ -62,6 +86,11 @@ input {
     background-repeat: no-repeat;
     background-size: 26px;
 }
+.icon-arrow-up {
+    background-image: url(../img/ic_arrow_up_24px.svg);
+    background-repeat: no-repeat;
+    background-size: 26px;
+}
 .icon-back {
     background-image: url(../img/ic_arrow_back_24px.svg);
     background-repeat: no-repeat;
@@ -93,7 +122,7 @@ input {
     display: block;
     padding-left: 20px;
     padding-right: 5px;
-    position: relative;
+    position: relative;    
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     height: 64px;
@@ -164,20 +193,71 @@ input {
     width: 100%;
 }
 .msendpanel .message {
+    position: relative;
     width: 100%;
-    padding-left: 10px;
     padding-bottom: 1px;
     padding-right: 10px;
     position: relative;
+    padding-left: 4px;
 }
+.msendpanel .message .user {
+    display: none;
+    position: absolute;
+    top: 21px;
+    font-size: 0.8em;
+    background-color: #1B5E20;
+    line-height: 18px;
+    padding: 4px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 9999;
+}
+.msendpanel .message .time {
+    display: none;
+    position: absolute;
+    top: 21px;
+    font-size: 0.8em;
+    background-color: #283593;
+    line-height: 18px;
+    padding: 4px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 9999;
+}
+
 .msendpanel .smile {
     padding-left: 8px;
+    padding-right: 8px;
 }
 .msendpanel .smile .inner {
     width: 24px;
     height: 24px;
     cursor: pointer;
 }
+.msendpanel .smile.active {
+    background-color: #222222;
+}
+
+.msendpanel .smile-popup {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 176px;
+    background-color: #222222;
+    bottom: 64px;
+    left: 0px;
+    z-index: 9999;
+}
+
+.msendpanel .smile-popup img {
+    display: block;
+    /* width: 20px; */
+    height: 20px;
+    padding: 7px;
+    cursor: pointer;
+    float: left;
+}
+
 .msendpanel .send {
     width: 1%;
     padding-right: 10px;
@@ -204,14 +284,12 @@ input {
     border-bottom: 2px solid #303F9F;
     background-color: transparent;
 }
-/* mChatList */
 
+/* mChatList */
 .mchatlist {
-    height: 100%;    
+    position: relative;    
     padding-left: 16px;
-    padding-right: 16px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    padding-right: 16px;   
 }
 .mchatlist .title {
     line-height: 48px;
@@ -219,11 +297,19 @@ input {
     color: #777;
 }
 
+.mchatlist .load {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    width: 20px;
+    height: 20px;
+}
+
 .mchatlist .item {
     display: none;
 }
 
-.mchatlist .item table {
+.mchatlist .item table {    
     width: 100%;
 }
 .mchatlist .item .photo {
@@ -241,12 +327,22 @@ input {
     padding-top: 2px;
     color: #777;
 }
+
+.mchatlist .item .onmessage {
+    cursor: pointer;
+}
+
+.mchatlist .item .ontime {
+    position: relative;
+}
+
 .mchatlist .item .time {
     position: absolute;
     top: 0px;
     right: 0px;
     font-size: 0.8em;
     color: #777;
+    cursor: pointer;
 }
 
 
@@ -261,7 +357,7 @@ input {
 /* mSidePanel */
 
 .msidepanel {
-    position: fixed;
+    position: absolute;
     z-index: 9999;
     top: 0;
     left: 0;
@@ -289,7 +385,7 @@ input {
 .msidepanel .panel .info {
     position: relative;
     /*height: 180px;*/
-    height: 120px;
+    height: 86px;
     background: #1a237e;
     /*background-image: url(../img/tile1.jpg);*/
     padding: 16px 16px 24px 16px;
@@ -303,14 +399,15 @@ input {
     font-size: 1.1em;
 }
 .msidepanel .panel .info .data {
-    position: absolute;
-    bottom: 16px;
+    /* position: absolute; */
+    /* bottom: 16px; */
     list-style: none;
     padding: 0;
+    padding-top: 8px;
     margin: 0;
 }
 .msidepanel .panel .info .data li {
-    padding-bottom: 3px;
+    padding-bottom: 8px;
 }
 .msidepanel .panel .info .buttons {
     position: absolute;
@@ -319,14 +416,12 @@ input {
 }
 .msidepanel .panel .info .more {
     position: absolute;
-    bottom: 24px;
+    top: 81px;
     right: 0px;
 }
 
 .msidepanel .panel .list {
-    overflow-y: auto;
     padding: 16px 0px 16px 16px;
-    position: absolute;
 }
 .msidepanel .panel .list .user {
     width: 100%;
@@ -400,9 +495,56 @@ input {
 /* mContentSlider */
 
 .mcontentslider {
-    overflow: hidden;
+    overflow: hidden;    
 }
 
 .mcontentslider .host {
+    height: 100%;    
+}
+
+/* mDialog */
+.mdialog {
+}
+
+.mdialog .inner {
+    display: none;
+    position: absolute;
+    padding: 25px;
+    width: 300px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0px 20px 1px #333;
+    z-index: 9999;
+}
+
+.mdialog .inner .title {
+    font-size: 1.4em;
+    padding-bottom: 10px;
+}
+
+.mdialog .inner .text {
+    color: #777;
+}
+
+.mdialog .inner .buttons {
+    padding-top: 30px;
+    float: right;
+}
+
+.mdialog .inner .buttons td {
+    padding-left: 20px;
+    color: #1976D2;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.mdialog .overlay {
+    display: none;
+    background-color: rgba(3, 3, 3, 0.4);
+    width: 100%;
     height: 100%;
+    z-index: 9998;
+    position: absolute;
+    top: 0;
+    left: 0;
 }

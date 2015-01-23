@@ -1,14 +1,12 @@
 <style type="text/css">
     .login-page {
-        background: linear-gradient(to bottom, #283593 0%,#1A237E 100%);
-        /*    background-color: #283593;*/
+        background: #283593;           
         height: 100%;
         position: relative;
     }
     .login-form {
         position: absolute;
         width: 300px;
-        height: 550px;
         margin: auto;
         color: #fff;
         text-align: center;
@@ -22,7 +20,7 @@
     }
 
     .login-form h1 {
-        font-size: 3.3em;
+        font-size: 1.5em;
         padding-bottom: 24px;
     }
     .login-form .item input {
@@ -202,7 +200,7 @@
             height: 300px;
         }
         .login-form h1 {
-            font-size: 2em;
+            font-size: 1em;
             margin-bottom: 8px;
         }
         .login-form .buttons {
@@ -218,7 +216,7 @@
             height: 250px;
         }
         .login-form h1 {
-            font-size: 1.5em;
+            font-size: 1em;
             margin-bottom: 8px;
             padding: 0;
         }
@@ -237,7 +235,7 @@
             height: 480px;
         }
         .login-form h1 {
-            font-size: 3em;
+            font-size: 1em;
             margin-bottom: 8px;
         }
         .login-form .buttons {
@@ -253,7 +251,7 @@
             height: 250px;
         }
         .login-form h1 {
-            font-size: 1.5em;
+            font-size: 1em;
             margin-bottom: 8px;
             padding: 0;
         }
@@ -272,7 +270,7 @@
             height: 480px;
         }
         .login-form h1 {
-            font-size: 3em;
+            font-size: 1em;
             margin-bottom: 8px;
         }
         .login-form .buttons {
@@ -288,7 +286,7 @@
             height: 320px;
         }
         .login-form h1 {
-            font-size: 2em;
+            font-size: 1em;
             margin-bottom: 8px;
             padding: 0;
             padding-bottom: 8px;
@@ -305,7 +303,6 @@
 <script type="text/javascript">
     var page = {
         init: function () {
-            this.resize();
             $('.load-progress').hide();
 
             chatService.onError = function (err) {
@@ -317,13 +314,31 @@
             $('#enter').bind('click', function () {
                 var login = $('#login').val();
                 var password = $('#password').val();
-
-                page.showLoading();
-
-                chatService.login(login, password, function () {
-                    pageManager.loadPage('chat');
-                });
+                
+                var vl = page.validate(login, password);
+                if (vl === undefined) {
+                    page.showLoading();
+                    chatService.login(login, password, function () {
+                        pageManager.navigate('chat');
+                    });
+                } else {
+                    page.showError(vl);
+                }
             });
+            
+            page.resize();
+        },
+        validate : function(l, p) {
+            var res = undefined;
+            if (l === "") res = "Не задано имя пользователя";
+            if (p === "") {
+                if (res !== undefined) {
+                    res += " и пароль"
+                } else {
+                    res = "Не задан пароль";
+                }
+            }
+            return res;
         },
         showError: function (msg) {
             var err = $('.error');
@@ -348,25 +363,23 @@
             form.css('top', (document.body.clientHeight / 2) - (height / 2));
             form.css('left', (document.body.clientWidth / 2) - form.width() / 2);
         },
-        saveState: function () {
-
-        },
         stop: function () {
 
         }
     };
+    window['page'] = page;
 </script>
 
 <div class="login-page">
     <div class="login-form">
-        <h1>Jesus Christ.ru</h1>
+        <h1>Jesus Christ Mobile Chat</h1>
         <div class="form-items">
             <div class="error"></div>
             <div class="item">
-                <input id="login" placeholder="Логин" />
+                <input id="login" placeholder="Логин" value="MegaGrabli" />
             </div>
             <div class="item">
-                <input id="password" type="password" placeholder="Пароль" />
+                <input id="password" type="password" placeholder="Пароль" value="NONE66" />
             </div>
             <div class="buttons">
                 <div id="enter" class="mbutton">Войти</div>
