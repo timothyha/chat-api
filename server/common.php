@@ -42,7 +42,7 @@ function check_user_session($sid) {
 
     try {
         // TODO: memcached could help here, to store user params
-        $q = $db->prepare("select cnick as login, cnextlogin as nextlogin, ccolor as color from chatusers where sid = ?");
+        $q = $db->prepare("select cnick as login, cnextlogin as nextlogin, cbantext as bantext, ccolor as color from chatusers where sid = ?");
         $q->bindValue(1, $sid, PDO::PARAM_INT);
         $q->execute();
 
@@ -51,7 +51,12 @@ function check_user_session($sid) {
             echo json_encode(array("err"=>"ERR_USER_NOT_CONNECTED"));
             die();
         }
-        return array($rows[0]['login'], $rows[0]['nextlogin'], $rows[0]['color']);
+        return array(
+            'login' => $rows[0]['login'], 
+            'nextlogin' => $rows[0]['nextlogin'], 
+            'color' => $rows[0]['color'], 
+            'bantext' => $rows[0]['bantext']
+            );
         
     } catch(PDOException $e) {
         echo json_encode(array("err"=>"ERR_MYSQL_ERROR"));
