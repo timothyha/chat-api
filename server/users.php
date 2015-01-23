@@ -12,7 +12,7 @@ $color = $user_session['color'];
 $bantext = $user_session['bantext'];
 
 if($nextlogin > time()) {
-   echo json_encode(array("err"=>"ERR_USER_BANNED", "error_message"=>output_conv($bantext)));
+   echo json_encode(array("err"=>"ERR_USER_BANNED", "error_nextlogin"=>$nextlogin, "error_message"=>output_conv($bantext)));
    die();
 }   
 
