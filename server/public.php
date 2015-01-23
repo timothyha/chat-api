@@ -5,7 +5,11 @@
 include "common.php";
 
 $sid = intval($_POST['session']);
-check_user_session($sid);
+$user_session = check_user_session($sid);
+$login = $user_session['login'];
+$nextlogin = $user_session['login'];
+$color = $user_session['color'];
+$bantext = $user_session['bantext'];
 
 $laststamp = intval($_POST['laststamp']);
 $msglimit = intval($_POST['limit']);
