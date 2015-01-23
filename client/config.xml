@@ -7,6 +7,13 @@
     <author email="jesuschrist@gmail.com" href="jesuschrist.ru">
         Jesus Christ Team
     </author>
+	<platform name="android">
+              <icon density="ldpi" src="icon.png"/>
+              <icon density="mdpi" src="icon.png"/>
+              <icon density="hdpi" src="icon.png"/>
+              <icon density="xhdpi" src="icon.png"/>
+     </platform>
+	
     <content src="index.html"/>
     <access origin="*"/>
 </widget>
