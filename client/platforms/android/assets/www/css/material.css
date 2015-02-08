@@ -50,51 +50,59 @@ input {
     color: #aaa !important;
 }
 
+.w100 {
+    width: 100%;
+}
+
+.h100 {
+    height: 100%;
+}
+
 /* Icons */
 .icon-user {
-    background-image: url(../img/ic_person_24px.svg);
+    background-image: url(../img/person124px.png);
     background-repeat: no-repeat;
-    background-size: 28px;
+    background-size: 22px;
 }
 .icon-search {
-    background-image: url(../img/search.svg);
+    background-image: url(../img/search124.png);
     background-repeat: no-repeat;
-    background-size: 28px;
+    background-size: 22px;
 }
 .icon-menu {
-    background-image: url(../img/ic_menu_24px.svg);
+    background-image: url(../img/menu124.png);
     background-repeat: no-repeat;
-    background-size: 28px;
+    background-size: 22px;
 }
 .icon-exit {
-    background-image: url(../img/ic_exit_to_app_24px.svg);
+    background-image: url(../img/exit124.png);
     background-repeat: no-repeat;
-    background-size: 26px;
+    background-size: 20px;
 }
 .icon-smile {
-    background-image: url(../img/ic_mood_24px.svg);
+    background-image: url(../img/mood124.png);
     background-repeat: no-repeat;
-    background-size: 26px;
+    background-size: 20px;
 }
 .icon-edit {
-    background-image: url(../img/ic_mode_edit_24px.svg);
+    background-image: url(../img/edit124.png);
     background-repeat: no-repeat;
-    background-size: 26px;
+    background-size: 20px;
 }
 .icon-drop-down {
-    background-image: url(../img/ic_arrow_drop_down_24px.svg);
+    background-image: url(../img/dropdown124.png);
     background-repeat: no-repeat;
     background-size: 26px;
 }
 .icon-arrow-up {
-    background-image: url(../img/ic_arrow_up_24px.svg);
+    background-image: url(../img/arrowup124.png);
     background-repeat: no-repeat;
     background-size: 26px;
 }
 .icon-back {
-    background-image: url(../img/ic_arrow_back_24px.svg);
+    background-image: url(../img/back124.png);
     background-repeat: no-repeat;
-    background-size: 26px;
+    background-size: 20px;
 }
 .circle64 {
     width: 64px;
@@ -128,7 +136,8 @@ input {
     height: 64px;
     background-color: #283593;
     color: #fff;
-    box-shadow: 0 2px 3px 0px #C2C2C2;
+    -webkit-box-shadow: 0 2px 3px 0px #C2C2C2;
+    box-shadow: 0 2px 3px 0px #C2C2C2;    
 }
 .mtoolbar .tcontent {
     width: 100%;
@@ -159,12 +168,14 @@ input {
     font-size: 0.9rem;
     cursor: pointer;
     border-radius: 2px;
-    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);    
     padding-left: 8px;
     padding-right: 8px;
 }
 .mbutton:active {
-    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);    
     background-color: rgba(0, 0, 0, 0.05) !important;
 }
 .mbutton-icon {
@@ -178,9 +189,11 @@ input {
     margin-right: 10px;
 }
 .mbutton-icon:hover {
+    -webkit-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .mbutton-icon:active {
+    -webkit-box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
     box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
     background-color: rgba(0, 0, 0, 0.05);
 }
@@ -192,37 +205,42 @@ input {
 .msendpanel table {
     width: 100%;
 }
-.msendpanel .message {
-    position: relative;
+.msendpanel .message {    
     width: 100%;
-    padding-bottom: 1px;
-    padding-right: 10px;
-    position: relative;
-    padding-left: 4px;
 }
-.msendpanel .message .user {
+
+.msendpanel .message .inner {    
+    width: 100%;
+    line-height: 32px;
+    border-bottom: 2px solid #303F9F;
+}
+
+.msendpanel .message .tags {
     display: none;
-    position: absolute;
-    top: 21px;
+    width: 1%;
+    
+}
+.msendpanel .message .tags .tag {
+    padding-right: 2px;
+}
+
+.msendpanel .message .user {    
+    display: none;    
     font-size: 0.8em;
     background-color: #1B5E20;
     line-height: 18px;
     padding: 4px;
     color: #fff;
     cursor: pointer;
-    z-index: 9999;
 }
 .msendpanel .message .time {
     display: none;
-    position: absolute;
-    top: 21px;
     font-size: 0.8em;
     background-color: #283593;
     line-height: 18px;
     padding: 4px;
     color: #fff;
     cursor: pointer;
-    z-index: 9999;
 }
 
 .msendpanel .smile {
@@ -251,7 +269,6 @@ input {
 
 .msendpanel .smile-popup img {
     display: block;
-    /* width: 20px; */
     height: 20px;
     padding: 7px;
     cursor: pointer;
@@ -261,12 +278,14 @@ input {
 .msendpanel .send {
     width: 1%;
     padding-right: 10px;
+    padding-left: 4px;
 }
 .msendpanel .send .mbutton {
     background-color: #F4F4F4;
     color: #333;
 }
 .msendpanel .send .mbutton:active {
+    -webkit-box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
     box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.12);
     background-color: rgba(0, 0, 0, 0.05);
 }
@@ -276,13 +295,13 @@ input {
     height: 36px;
     padding: 0;
     margin: 0;
-    text-indent: 5px;
     outline: 0;
     border-radius: 2px 0px 0px 2px;
     color: #333;
     font-size: 0.9em;
-    border-bottom: 2px solid #303F9F;
+    /* border-bottom: 2px solid #303F9F; */
     background-color: transparent;
+    padding-left: 2px;
 }
 
 /* mChatList */
@@ -333,11 +352,12 @@ input {
 }
 
 .mchatlist .item .ontime {
+    vertical-align: top;
     position: relative;
+    width: 1%;
 }
 
-.mchatlist .item .time {
-    position: absolute;
+.mchatlist .item .time {    
     top: 0px;
     right: 0px;
     font-size: 0.8em;
@@ -356,29 +376,17 @@ input {
 }
 /* mSidePanel */
 
-.msidepanel {
-    position: absolute;
-    z-index: 9999;
-    top: 0;
-    left: 0;
-    display: none;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-.msidepanel .table {
-    width: 100%;
-    height: 100%;
-}
 .msidepanel .panel {
+    display: none;
     vertical-align: top;
     background: #fff;
     width: 270px;
     height: 100%;
+    -webkit-box-shadow: 0 0px 30px 1px #000;
     box-shadow: 0 0px 30px 1px #000;
     position: absolute;
     top: 0;
-    left: 0;
+    left: -300px;
     overflow: hidden;
     z-index: 9999;
 }
@@ -435,7 +443,7 @@ input {
 }
 
 .msidepanel .panel .list .user .command .mbutton-icon {
-    background-size: 14px;
+    background-size: 16px;
 }
 
 .msidepanel .panel .list .user .photo {
@@ -448,6 +456,7 @@ input {
     height: 100%;
     z-index: 9998;
     position: absolute;
+    display: none;
     top: 0;
     left: 0;
 }
@@ -513,6 +522,7 @@ input {
     width: 300px;
     background-color: #fff;
     border-radius: 2px;
+    -webkit-box-shadow: 0 0px 20px 1px #333;
     box-shadow: 0 0px 20px 1px #333;
     z-index: 9999;
 }

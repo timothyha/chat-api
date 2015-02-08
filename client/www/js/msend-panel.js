@@ -11,7 +11,7 @@ function newSendPanel(id) {
     }
 
     self.workplace.addClass("msendpanel");
-
+   
     self.workplace.append(
             '<table cellpadding="0" cellspacing="0">\
                 <tr>\
@@ -19,25 +19,34 @@ function newSendPanel(id) {
                         <div class="inner icon-smile"></div>\
                     </td>\
                     <td class="message">\
-                        <input class="message-input" readonly="true" />\
-                        <div class="user"></div>\
-                        <div class="time"></div>\
+                        <table cellpadding="0" cellspacing="0" class="inner">\
+                            <tr>\
+                                <td class="tags">\
+                                    <table cellpadding="0" cellspacing="0" class="w100">\
+                                        <tr>\
+                                            <td class="tag">\
+                                                <div class="user"></div>\
+                                            </td>\
+                                            <td class="tag">\
+                                                <div class="time"></div>\
+                                            </td>\
+                                        </tr>\
+                                    </table>\
+                                </td>\
+                                <td class="mess-td">\
+                                    <input class="message-input" disabled="disabled" placeholder="Сообщение"/>\
+                                </td>\
+                            </tr>\
+                        </table>\
                     </td>\
                     <td class="send"><div class="mbutton">Отпр.</div></td>\
                 </tr>\
             </table>\
             <div class="smile-popup">\
             </div>\
-            '.format(global.chatRoot));
-
-            //<img src="{0}/chat/i/1.gif" data-code="1" />\
-    
-    self.workplace.find('.message-input').pholder({ 
-        className:'placeholder', 
-        pholdertext:'Сообщение' 
-    });;
+            '.format(global.chatRoot));          
         
-    self.message = self.workplace.find('.message input');
+    self.message = self.workplace.find('.message-input');
     self.button = self.workplace.find('.send .mbutton');
     self.smileButton = self.workplace.find('.smile');
     self.smilePopup = self.workplace.find('.smile-popup');
@@ -45,11 +54,7 @@ function newSendPanel(id) {
     for (var i = 1; i < 91; i++) {
         if ((i === 89) || (i === 98) || (i === 99)) continue;
         var img = $('<img src="{0}/chat/i/{1}.gif" data-code="{1}" />'.format(global.chatRoot, i));
-        binder.tap(img, function(e) {
-            if (self.message.hasClass("placeholder")) {
-                self.message.removeClass("placeholder");
-                self.message.val("");
-            }
+        binder.tap(img, function(e) {            
             self.message.val('{0}(({1}))'.format(self.message.val(),$(e.target).attr('data-code')));
         });
         self.smilePopup.append(img);
@@ -62,28 +67,29 @@ function newSendPanel(id) {
     });
     
     binder.tap(self.workplace.find('.user'), function(e) {
-        e.preventDefault();        
-        self.clearUser();        
+        self.clearUser(); 
+        self.clearFocus();
     });
     
-    binder.tap(self.workplace.find('.time'), function(e) {
-        e.preventDefault();        
+    binder.tap(self.workplace.find('.time'), function(e) {        
         self.clearTime();        
+        self.clearFocus();
+    });
+    
+    binder.tap(self.workplace.find(".mess-td"), function(e) {        
+       self.message.removeAttr("disabled");
+       self.message.focus();
+    });
+    
+    binder.tap(self.message, function(e) {        
+        //self.message.removeAttr("disabled");
     });
     
     binder.keyup(self.message, function(e) {
         if (e.keyCode === binder.ENTER_KEY) {
             self.send();
         }
-    });
-    
-    binder.tap(self.message, function(e) {
-        $(e.target).removeAttr("readonly");
-    });
-    
-    binder.blur(self.message, function(e) {
-        $(e.target).attr("readonly", "true");
-    });
+    });       
     
     binder.tap(self.smileButton, function() {
         // Немного магии. Площадь занимаемая смайликами делется на ширину экрана и добавляется отступ
@@ -101,43 +107,36 @@ function newSendPanel(id) {
     };
     
     self.setUser = function(name) {
-        if (name === undefined) return;
-        var user = self.workplace.find('.user');
-        var inp = self.workplace.find('.message input');
+        if (name === undefined) return;        
+        var user = self.workplace.find('.user');        
+        self.workplace.find('.tags').show();
         user.text(name);
         user.show();
-        inp.css('text-indent', user.outerWidth() + 8);
     };
     
     self.clearUser = function() {
         self.clearTime();
+        self.workplace.find('.tags').hide();
         self.workplace.find('.message .user').hide();
-        var inp = self.workplace.find('.message input');
-        inp.css('text-indent', 0);
         if (self.onClearUser !== undefined) self.onClearUser();
     };
     
     self.setTime = function(stamp) {
         if (stamp === undefined) return;
-        var user = self.workplace.find('.user');
         var time = self.workplace.find('.time');
-        var inp = self.workplace.find('.message input');
         time.text(stamp);
         time.show();
-        time.css('left', user.outerWidth() + 6);
-        inp.css('text-indent', user.outerWidth() + time.outerWidth() + 8);
     };       
     
     self.clearTime = function() {
         self.workplace.find('.message .time').hide();
-        var inp = self.workplace.find('.message input');
-        var user = self.workplace.find('.user');
-        inp.css('text-indent', user.outerWidth() + 8);
+        var inp = self.workplace.find('.message input');                
         if (self.onClearTime !== undefined) self.onClearTime();
     };
     
-    self.clearFocus = function() {
-        self.workplace.find('.message-input').blur();  
+    self.clearFocus = function() {        
+        self.message.attr("disabled", "disabled");
+        self.message.blur();        
     };
         
     return self;

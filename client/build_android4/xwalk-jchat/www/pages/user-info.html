@@ -2,7 +2,7 @@
     .swiper-info {
         width: 100%;        
     }
-    
+
     .swiper-info .inner {
         width: 100%;
         height: 100%;
@@ -92,65 +92,7 @@
 
             page.photo = $('.photo');
             page.fullphoto = $('.fullphoto');
-            page.groups = $('.groups');
-            page.groups.append($('<div class="group">\
-                                <table class="item fill" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/ic_person_24px_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">имя</div>\
-                                            <div class="realname"></div>\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img class="sex-img" src="img/ic_person_24px_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">пол</div>\
-                                            <div class="sex"></div>\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item fill" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/ic_location_city_24px_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">город</div>\
-                                            <div class="town"></div>\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/book_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">вероисповедание</div>\
-                                            <div class="belief"></div>\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                                <table class="item fill" cellpadding="0" cellspacing="0">\
-                                    <tr>\
-                                        <td class="icon-place">\
-                                            <img src="img/ic_comment_24px_grey.svg">\
-                                        </td>\
-                                        <td>\
-                                            <div class="tip">о себе</div>\
-                                            <div class="about"></div>\
-                                        </td>\
-                                    </tr>\
-                                </table>\
-                            </div>'));
-
+            page.groups = $('.groups');            
 
             page.swiper = $('.swiper-info').swiper({
                 mode: 'vertical',
@@ -193,7 +135,7 @@
             var height = $(window).height() - $('.header').height();
             $('.swiper-info').css('height', height);
             page.swiper.reInit();
-            
+
         },
         start: function () {
             chatService.getUserInfo(page.userid, function (res) {
@@ -211,7 +153,7 @@
                 page.groups.find(".realname").text(res.realname === "" ? "не указано" : res.realname);
                 page.groups.find(".about").text(res.about === "" ? "не указано" : res.about);
 
-                page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey.svg" : "img/female_grey.svg");
+                page.groups.find(".sex-img").attr('src', res.sex === "1" ? "img/male_grey124.png" : "img/female_grey124.png");
                 page.swiper.reInit();
             });
 
@@ -243,7 +185,64 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="groups">                
+                    <td class="groups">
+                        <div class="group">
+                            <table class="item fill" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="icon-place">
+                                        <img src="img/person_grey124.png">
+                                    </td>
+                                    <td>
+                                        <div class="tip">имя</div>
+                                        <div class="realname"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="item" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="icon-place">
+                                        <img class="sex-img" src="img/person_grey124.png">
+                                    </td>
+                                    <td>
+                                        <div class="tip">пол</div>
+                                        <div class="sex"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="item fill" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="icon-place">
+                                        <img src="img/city124.png">
+                                    </td>
+                                    <td>
+                                        <div class="tip">город</div>
+                                        <div class="town"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="item" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="icon-place">
+                                        <img src="img/book_grey124.png">
+                                    </td>
+                                    <td>
+                                        <div class="tip">вероисповедание</div>
+                                        <div class="belief"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="item fill" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="icon-place">
+                                        <img src="img/comment124.png">
+                                    </td>
+                                    <td>
+                                        <div class="tip">о себе</div>
+                                        <div class="about"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </td>
                 </tr>
             </table>

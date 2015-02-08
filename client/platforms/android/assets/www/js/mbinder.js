@@ -50,7 +50,7 @@ var binder = {
                 if (binder.validateClick(e)) call(e);
             });
         } else {
-            e.bind('click', function(e) {                                
+            e.bind('click', function(e) {                
                 if (binder.validateClick(e)) call(e);
             });
         }        

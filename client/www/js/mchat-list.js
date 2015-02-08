@@ -46,7 +46,7 @@ function newChatlist(id) {
                                 <tr>\
                                     <td>\
                                     </td>\
-                                    <td class="line">\
+                                    <td class="line" colspan="3">\
                                         <hr>\
                                     </td>\
                                 </tr>\
@@ -78,9 +78,8 @@ function newChatlist(id) {
     self.clearLast = function () {
         var childs = self.messages.children();
         if (childs.length > chatService.messageLimit) {
-            var toRemove = childs.slice(-(childs.length - chatService.messageLimit));
-            for (var i = 0; i < toRemove.length; i++) {
-                toRemove[i].remove();
+            for (var i = chatService.messageLimit; i < childs.length; i++) {                
+                $(childs[i]).remove();
             }
         }
     };

@@ -65,16 +65,20 @@ var chatService = {
                         onData(res);
                     } else {
                         if (onError !== undefined) {
+                            console.log(res.err);
                             onError(res.err);
                         } else {
                             if (chatService.onError !== undefined) {
+                                console.log(res.err);
                                 chatService.onError(res.err);
                             }
                         }
                     }
                 } catch (e) {
-                    if (chatService.onError !== undefined)
+                    if (chatService.onError !== undefined) {  
+                        console.log(e);
                         chatService.onError(chatService.ERROR_INTERNAL);
+                    }
                 }
             },
             error : function(err, t, m) {
@@ -135,13 +139,10 @@ var chatService = {
             laststamp : chatService.lastPublicStamp,
             limit : chatService.messageLimit
         }, function (res) {
-            try {                                
-                /*chatService.publicMessages = res;*/
-                chatService.lastPublicStamp = res[0].stamp;                
-                onData(res);
-            } catch (e) {
-                console.log(e);
-            }
+                                            
+            chatService.publicMessages = res;
+            chatService.lastPublicStamp = res[0].stamp;
+            onData(res);
         }, onError);
     },
     getPrivateMessages: function (onData, onError) {
@@ -150,13 +151,8 @@ var chatService = {
             laststamp : chatService.lastPrivateStamp,
             limit : chatService.messageLimit
         }, function (res) {
-            try {                                
-                /*chatService.publicMessages = res;*/
-                chatService.lastPrivateStamp = res[0].stamp;                
-                onData(res);
-            } catch (e) {
-                console.log(e);
-            }
+            chatService.lastPrivateStamp = res[0].stamp;                
+            onData(res);
         },onError);
     },
     getUserList: function (onData, onError) {

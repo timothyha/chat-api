@@ -154,10 +154,13 @@ function newSidePanel(id) {
         return this;
     };
 
-    self.show = function () {
-        self.workplace.show();
+    self.show = function () {       
         self.resize();
-        self.workplace.find('.panel').animate({"left": '0'}, 300);
+        var panel = self.workplace.find('.panel');
+        //self.workplace.find('.panel').show("slide", { direction: "left" }, 300);
+        self.workplace.find('.overlay').show();
+        panel.show();
+        panel.animate({"left": '0'}, 300);
         self.swiper.reInit();
         return this;
     };
@@ -167,18 +170,21 @@ function newSidePanel(id) {
         panel.animate({"left": -panel.width()}, 300, function () {
             var info = self.workplace.find(".info");
             info.css("height", self.infoHeight);
-            self.infoCollapsed = true;
-            self.workplace.hide();
+            panel.hide();
+            self.workplace.find('.overlay').hide();
+            self.infoCollapsed = true;            
             self.resize();
         });
         return this;
     };
 
     self.resize = function () {
+        var panel = self.workplace.find('.panel');
         var list = self.workplace.find('.swiper-users');
         var info = self.workplace.find('.info');
-        list.css("height", self.workplace.height() - info.outerHeight(true) - 16);
+        list.css("height", panel.height() - info.outerHeight(true) - 16);
     };
+    
     self.resize();
     self.hide();
     return self;
