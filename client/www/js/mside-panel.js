@@ -2,6 +2,7 @@ function newSidePanel(id) {
     var self = {};
     self.onUserInfoTap = undefined;
     self.onUserSelect = undefined;
+    self.onSettingsTap = undefined;
     self.infoHeight = undefined;
     self.infoCollapsed = true;
 
@@ -19,6 +20,7 @@ function newSidePanel(id) {
                                 <div class="info">\
                                     <img class="circle64"></img>\
                                     <div class="buttons">\
+                                        <div class="mbutton-icon icon-settings"></div>\
                                         <div class="mbutton-icon icon-edit"></div>\
                                     </div>\
                                     <ul class="data">\
@@ -47,11 +49,14 @@ function newSidePanel(id) {
         scrollContainer: true,
         mousewheelControl: true
     });
-
+    
+    binder.tap(self.workplace.find(".icon-settings"), function () {
+        if (self.onSettingsTap !== undefined) self.onSettingsTap();
+    });
+    
     var overlay = self.workplace.find(".overlay");
     binder.tap(overlay, function () {
-        self.hide();
-        return this;
+        self.hide();        
     });
 
     binder.tap(self.workplace.find(".more"), function () {

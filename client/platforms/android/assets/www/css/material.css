@@ -89,6 +89,11 @@ input {
     background-repeat: no-repeat;
     background-size: 20px;
 }
+.icon-settings {
+    background-image: url(../img/settings124.png);
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
 .icon-drop-down {
     background-image: url(../img/dropdown124.png);
     background-repeat: no-repeat;

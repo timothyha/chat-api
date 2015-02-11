@@ -9,6 +9,7 @@ module.exports = function (grunt) {
 						'www/js/libs/swiper/swiper.js',
 						'www/js/libs/swiper/scrollbar.js',
                         'www/js/libs/moments/moment.js',
+			'www/js/libs/amaran/amaran.js',
                         'www/js/libs/finch/finch.js',
                         'www/js/mbinder.js',
                         'www/js/mchat-list.js',

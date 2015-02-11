@@ -22,10 +22,8 @@ function newChatlist(id) {
     self.loadIndicator = self.workplace.find('.load');
 
     self.addItem = function (item) {
-        if (item.color === 'LOGIN')
-            return;
-        if (item.color === 'LOGOUT')
-            return;
+        if (item.color === 'LOGIN') return;        
+        if (item.color === 'LOGOUT') return;
         var nick = item.to === "" ? item.from : item.from + " к " + item.to;
         var stampStr = moment(item.stamp * 1000).format("HH:mm:ss");
 

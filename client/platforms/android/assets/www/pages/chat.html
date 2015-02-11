@@ -33,6 +33,7 @@
         privateUnread: 0,
         publicSended: false,
         privateSended: false,
+        isFirst:true,
         init: function () {
             if (!chatService.restoreUser())
                 return;
@@ -47,14 +48,14 @@
                     .addButton({
                         text: "Общий",
                         onTap: function () {
-                            page.sendPanel.clearUser();                            
+                            page.sendPanel.clearUser();
                             page.swiper.swipeTo(0);
                         }
                     })
                     .addButton({
                         text: "Приват",
                         onTap: function () {
-                            page.sendPanel.clearUser();                            
+                            page.sendPanel.clearUser();
                             page.swiper.swipeTo(1);
                             page.privateUnread = 0;
                             page.toggleGroup.clearSticker(1);
@@ -86,7 +87,7 @@
                         type: "control",
                         control: page.toggleGroup
                     });
-            
+
             page.sendPanel = newSendPanel('send-panel');
             page.sendPanel.onSend = function (text) {
                 if (text === "")
@@ -104,7 +105,7 @@
             page.sendPanel.onClearTime = function () {
                 global.messageTime = "";
             };
-            
+
             page.sidePanel = newSidePanel('side-panel').setUserInfo({});
             page.sidePanel.onUserInfoTap = function (item) {
                 pageManager.navigate('user-info/{0}'.format(item));
@@ -113,22 +114,20 @@
             page.sidePanel.onUserSelect = function (login) {
                 global.recepient = login;
                 page.sendPanel.setUser(global.recepient);
-            };                        
-            
+            };
+
             page.publicChatList = newChatlist('public-list');
             page.publicChatList.onMessageTap = function (login) {
-                global.recepient = login;
-                //page.sendPanel.clearFocus();
+                global.recepient = login;                
                 page.sendPanel.clearTime();
                 page.sendPanel.setUser(global.recepient);
             };
             page.publicChatList.onTimeTap = function (time) {
-                global.messageTime = time;
-                //page.sendPanel.clearFocus();
+                global.messageTime = time;                
                 page.sendPanel.setTime(global.messageTime);
             };
 
-            page.privateChatList = newChatlist('private-list');            
+            page.privateChatList = newChatlist('private-list');
             page.privateChatList.onMessageTap = function (login) {
                 global.recepient = login;
                 page.sendPanel.clearTime();
@@ -155,15 +154,15 @@
 
             page.dialog.onCancel = function () {
                 page.exit();
-            };        
+            };
 
             page.swiper = $('.swiper-pages').swiper({
-                onTouchEnd : function(e) {                    
+                onTouchEnd: function (e) {
                     page.toggleGroup.select(e.activeLoopIndex);
                 }
             });
             page.swipers = [];
-            
+
             $('.swiper-pages .scroll-container').each(function () {
                 page.swipers.push($(this).swiper({
                     mode: 'vertical',
@@ -186,7 +185,7 @@
                 top: toolbarHeight,
                 height: height
             });
-            
+
             page.swipers[0].reInit();
             page.swipers[1].reInit();
         },
@@ -195,10 +194,15 @@
             page.publicChatList.setTitle(str);
             page.privateChatList.setTitle(str);
         },
-        fixSmiles: function (mess) {
+        fixMessages: function (mess) {
             var expr = /\(\(\d+\)\)/g;
+            var newMess = [];
+            
             for (var i = 0; i < mess.length; i++) {
-                var str = mess[i].message;
+                var ms = mess[i];
+                if ((ms.color === "LOGIN") || (ms.color === "LOGOUT") || (ms.fromid === null)) continue;
+                
+                var str = ms.message;
                 while (true) {
                     var r = String(expr.exec(str));
                     if ((r === undefined) || (r === null) || (r === "null") || (r === ""))
@@ -206,9 +210,10 @@
                     var num = r.substring(2, r.length - 2);
                     str = str.replace(r, '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num));
                 }
-                mess[i].message = str;
+                ms.message = str;
+                newMess.push(ms);
             }
-            return mess;
+            return newMess;
         },
         timerWork: function () {
             page.setTitleDate();
@@ -223,12 +228,14 @@
                 page.publicChatList.showLoadIndicator();
                 chatService.getPublicMessages(function (res) {
                     page.publicChatList.hideLoadIndicator();
-                    var mess = page.fixSmiles(res.reverse());
+                    page.showNotificationsFromMessages(res);
+                    var mess = page.fixMessages(res.reverse());
+                    console.log();
                     page.publicChatList.addItems(mess);
                     page.publicChatList.clearLast();
                     page.publicSended = false;
-                    page.resize();                    
-                }, function (err) {                    
+                    page.resize();
+                }, function (err) {
                     page.publicChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.publicSended = false;
@@ -259,8 +266,8 @@
                     page.privateChatList.addItems(mess);
                     page.privateChatList.clearLast();
                     page.privateSended = false;
-                    page.resize();                    
-                }, function (err) {                    
+                    page.resize();
+                }, function (err) {
                     page.privateChatList.hideLoadIndicator();
                     if (err === chatService.ERR_MESSAGES_EMPTY) {
                         page.privateSended = false;
@@ -270,11 +277,39 @@
                 });
             }
         },
+        showNotification: function (mess) {
+            $.amaran({
+                content: {
+                    bgcolor: '#27ae60',
+                    color: '#fff',
+                    message: mess
+                },
+                sticky: false,
+                position: 'top right',
+                theme: 'colorful',
+                delay: 10000
+            });
+        },
+        showNotificationsFromMessages: function (mess) {
+            if (page.isFirst) {
+                page.isFirst = false;
+                return;
+            }            
+            for (var i = 0; i < mess.length; i++) {
+                var item = mess[i];
+                if (item.color === 'LOGIN') {                    
+                    page.showNotification("{0} вошел(а) в чат".format(item.message));
+                }
+                if (item.color === 'LOGOUT') {                    
+                    page.showNotification("{0} вышел(а) из чата".format(item.message));
+                }
+            }
+        },
         startDataTimer: function () {
             page.timerWork();
             page.timer = setInterval(function () {
                 if (!page.isStoped) {
-                    page.timerWork();                    
+                    page.timerWork();
                 }
             }, page.TIMER_WORK_INTERVAL);
         },
