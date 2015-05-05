@@ -251,7 +251,7 @@
                 page.privateChatList.showLoadIndicator();
                 chatService.getPrivateMessages(function (res) {
                     page.privateChatList.hideLoadIndicator();
-                    var mess = page.fixSmiles(res.reverse());
+                    var mess = page.fixMessages(res.reverse());
                     if (page.toggleGroup.selectedIndex !== 1) {
                         page.privateUnread += mess.length;
                         page.toggleGroup.setSticker({
