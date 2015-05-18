@@ -173,7 +173,14 @@
                     }
                 }));
             });
-
+            
+            // Диалог предупреждения о вызове URL
+            page.urlDangerDialog = newDialog();
+            page.urlDangerDialog.setTitle("Предупреждение");
+            page.urlDangerDialog.setText("Внимание! Ссылка может навредить вашему компьютеру. Вы согласны продолжить?");
+            page.urlDangerDialog.setOKCaption("ДА");
+            page.urlDangerDialog.setCancelCaption("НЕТ");            
+            
             page.start();                                   // Запускает работу таймера                       
         },
         resize: function () {
@@ -196,20 +203,43 @@
         },
         fixMessages: function (mess) {
             var expr = /\(\(\d+\)\)/g;
+            var urlPattern = /(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))/;
             var newMess = [];
             
             for (var i = 0; i < mess.length; i++) {
                 var ms = mess[i];
                 if ((ms.color === "LOGIN") || (ms.color === "LOGOUT") || (ms.fromid === null)) continue;
-                
+                                                
                 var str = ms.message;
-                while (true) {
-                    var r = String(expr.exec(str));
-                    if ((r === undefined) || (r === null) || (r === "null") || (r === ""))
+                var counter = 0;
+                var repls = {};
+                for (var y=0; y<str.length; y++) {
+                    var r1 = str.match(expr);
+                    var r2 = str.match(urlPattern);
+                    
+                    if (!isEmpty(r1)) {
+                        var smile = r1[0];
+                        var num = smile.substring(2, smile.length - 2);
+                        repls[counter] = '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num);                                                
+                        str = str.replace(smile, "{{" + counter + "}}");                        
+                        counter += 1;
+                    }
+                    if (!isEmpty(r2)) {
+                        var url = r2[0];
+                        repls[counter] = '<a href="#">{0}</a>'.format(url);                        
+                        str = str.replace(url, "{{" + counter + "}}");
+                        counter += 1;
+                    }
+                    
+                    if (isEmpty(r1) && isEmpty(r2)) {
                         break;
-                    var num = r.substring(2, r.length - 2);
-                    str = str.replace(r, '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num));
+                    }
+                }                                
+                for (var k = 0; k < counter; k++) {                    
+                    var ss = repls[k];                    
+                    str = str.replace("{{" + k + "}}", ss);
                 }
+                
                 ms.message = str;
                 newMess.push(ms);
             }

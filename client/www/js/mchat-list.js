@@ -8,6 +8,7 @@ function newChatlist(id) {
 
     self.onMessageTap = undefined;
     self.onTimeTap = undefined;
+    self.onUrlCall = undefined;
 
     self.workplace.addClass("mchatlist");
 

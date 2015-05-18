@@ -12,7 +12,7 @@ if (!String.prototype.format) {
 }
 
 function isEmpty(s) {
-    if ((s === undefined) || (s === null) || (s === "")) return true;
+    if ((s === undefined) || (s === null) || (s === "") || (s === "null")) return true;
     return false;        
 }
 
