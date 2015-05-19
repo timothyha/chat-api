@@ -4,13 +4,14 @@ module.exports = function (grunt) {
         uglify: {
             my_target: {
                 files: {
-                    'www/js/jchat.min.js': [
+                    'www/js/jchat.min.js': [						
                         'www/js/libs/jquery/jquery.js',
 						'www/js/libs/swiper/swiper.js',
 						'www/js/libs/swiper/scrollbar.js',
                         'www/js/libs/moments/moment.js',
-			'www/js/libs/amaran/amaran.js',
+						'www/js/libs/amaran/amaran.js',
                         'www/js/libs/finch/finch.js',
+						'www/js/base64.js',
                         'www/js/mbinder.js',
                         'www/js/mchat-list.js',
                         'www/js/mchat-service.js',                        
