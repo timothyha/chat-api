@@ -1,5 +1,6 @@
-var pageManager = {
+var pageManager = {    
     init : function() {
+        // Диалог предупреждения о вызове URL                    
         Finch.route('', function() {
             pageManager.loadPage('login');
         });
@@ -11,7 +12,7 @@ var pageManager = {
         });
         Finch.route('user-info/:id', function(bindings) {
             pageManager.loadPage('user-info', bindings.id);
-        }); 
+        });        
         Finch.listen();
     },
     navigate : function(url) {

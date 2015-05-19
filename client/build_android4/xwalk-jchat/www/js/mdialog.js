@@ -53,6 +53,7 @@ function newDialog() {
     };       
     
     self.show = function() {
+        self.resize();
         self.inner.show('scale');
         self.overlay.show();
     };
@@ -63,8 +64,8 @@ function newDialog() {
     };
     
     self.resize = function() {
-        self.inner.css('top', ($(window).height() / 2) - self.inner.height() /2);
-        self.inner.css('left', ($(window).width() / 2) - self.inner.width() /2);
+        self.inner.css('top', ($(window).height() / 2) - self.inner.innerHeight() /2);
+        self.inner.css('left', ($(window).width() / 2) - self.inner.innerWidth() /2);
     };   
     
     self.resize();

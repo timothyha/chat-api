@@ -126,6 +126,9 @@
                 global.messageTime = time;                
                 page.sendPanel.setTime(global.messageTime);
             };
+            page.publicChatList.onDangerUrl = function(url) {
+                page.dangerUrlOpen(url);
+            };
 
             page.privateChatList = newChatlist('private-list');
             page.privateChatList.onMessageTap = function (login) {
@@ -136,6 +139,9 @@
             page.privateChatList.onTimeTap = function (time) {
                 global.messageTime = time;
                 page.sendPanel.setTime(global.messageTime);
+            };
+            page.privateChatList.onDangerUrl = function(url) {
+                page.dangerUrlOpen(url);
             };
 
             chatService.onError = function (err) {
@@ -177,11 +183,18 @@
             // Диалог предупреждения о вызове URL
             page.urlDangerDialog = newDialog();
             page.urlDangerDialog.setTitle("Предупреждение");
-            page.urlDangerDialog.setText("Внимание! Ссылка может навредить вашему компьютеру. Вы согласны продолжить?");
+            page.urlDangerDialog.setText("Внимание! Ссылка может навредить вашему устройству. Вы согласны продолжить?");
             page.urlDangerDialog.setOKCaption("ДА");
-            page.urlDangerDialog.setCancelCaption("НЕТ");            
-            
+            page.urlDangerDialog.setCancelCaption("НЕТ");
+            page.urlDangerDialog.onOk = function() {
+                window.open(page.urlDangerDialog.tag);                
+            };
+                                   
             page.start();                                   // Запускает работу таймера                       
+        },
+        dangerUrlOpen: function(url) {
+            page.urlDangerDialog.tag = url;                 // Запоминает URL в диалоге
+            page.urlDangerDialog.show();
         },
         resize: function () {
             var toolbarHeight = page.toolbar.workplace.height();
@@ -200,51 +213,7 @@
             var str = moment().format("LL", "ru");
             page.publicChatList.setTitle(str);
             page.privateChatList.setTitle(str);
-        },
-        fixMessages: function (mess) {
-            var expr = /\(\(\d+\)\)/g;
-            var urlPattern = /(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))/;
-            var newMess = [];
-            
-            for (var i = 0; i < mess.length; i++) {
-                var ms = mess[i];
-                if ((ms.color === "LOGIN") || (ms.color === "LOGOUT") || (ms.fromid === null)) continue;
-                                                
-                var str = ms.message;
-                var counter = 0;
-                var repls = {};
-                for (var y=0; y<str.length; y++) {
-                    var r1 = str.match(expr);
-                    var r2 = str.match(urlPattern);
-                    
-                    if (!isEmpty(r1)) {
-                        var smile = r1[0];
-                        var num = smile.substring(2, smile.length - 2);
-                        repls[counter] = '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num);                                                
-                        str = str.replace(smile, "{{" + counter + "}}");                        
-                        counter += 1;
-                    }
-                    if (!isEmpty(r2)) {
-                        var url = r2[0];
-                        repls[counter] = '<a href="#">{0}</a>'.format(url);                        
-                        str = str.replace(url, "{{" + counter + "}}");
-                        counter += 1;
-                    }
-                    
-                    if (isEmpty(r1) && isEmpty(r2)) {
-                        break;
-                    }
-                }                                
-                for (var k = 0; k < counter; k++) {                    
-                    var ss = repls[k];                    
-                    str = str.replace("{{" + k + "}}", ss);
-                }
-                
-                ms.message = str;
-                newMess.push(ms);
-            }
-            return newMess;
-        },
+        },        
         timerWork: function () {
             page.setTitleDate();
 
@@ -258,10 +227,9 @@
                 page.publicChatList.showLoadIndicator();
                 chatService.getPublicMessages(function (res) {
                     page.publicChatList.hideLoadIndicator();
-                    page.showNotificationsFromMessages(res);
-                    var mess = page.fixMessages(res.reverse());
-                    console.log();
-                    page.publicChatList.addItems(mess);
+                    page.showNotificationsFromMessages(res);                    
+                    var mess = res.reverse();
+                    page.publicChatList.addItems(res);
                     page.publicChatList.clearLast();
                     page.publicSended = false;
                     page.resize();
@@ -281,7 +249,7 @@
                 page.privateChatList.showLoadIndicator();
                 chatService.getPrivateMessages(function (res) {
                     page.privateChatList.hideLoadIndicator();
-                    var mess = page.fixMessages(res.reverse());
+                    var mess = res.reverse();                   
                     if (page.toggleGroup.selectedIndex !== 1) {
                         page.privateUnread += mess.length;
                         page.toggleGroup.setSticker({
