@@ -517,7 +517,7 @@ input {
 }
 
 /* mDialog */
-.mdialog {
+.mdialog {    
 }
 
 .mdialog .inner {
@@ -555,11 +555,11 @@ input {
 
 .mdialog .overlay {
     display: none;
-    background-color: rgba(3, 3, 3, 0.4);
+    position: absolute;
+    /*background-color: rgba(1, 1, 1, 0.4);*/
     width: 100%;
     height: 100%;
-    z-index: 9998;
-    position: absolute;
+    z-index: 9998;    
     top: 0;
     left: 0;
 }

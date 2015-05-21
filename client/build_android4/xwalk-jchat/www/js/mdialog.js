@@ -36,6 +36,11 @@ function newDialog() {
     self.inner = self.workplace.find('.inner');
     self.overlay = self.workplace.find('.overlay');
     
+    binder.tap(self.overlay, function() {
+       if (self.onCancel !== undefined) self.onCancel();
+       self.hide();
+    });
+    
     self.setTitle = function(text) {
         self.workplace.find('.title').text(text);
     };
@@ -54,8 +59,8 @@ function newDialog() {
     
     self.show = function() {
         self.resize();
-        self.inner.show('scale');
         self.overlay.show();
+        self.inner.show('scale');        
     };
     
     self.hide = function() {
@@ -64,8 +69,8 @@ function newDialog() {
     };
     
     self.resize = function() {
-        self.inner.css('top', ($(window).height() / 2) - self.inner.innerHeight() /2);
-        self.inner.css('left', ($(window).width() / 2) - self.inner.innerWidth() /2);
+        self.inner.css('top', ($(window).height() / 2) - self.inner.outerHeight() /2);
+        self.inner.css('left', ($(window).width() / 2) - self.inner.outerWidth() /2);
     };   
     
     self.resize();

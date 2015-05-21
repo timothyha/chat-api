@@ -7,7 +7,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <!--<script type="text/javascript" src="cordova.js"></script> -->
+    <script type="text/javascript" src="cordova.js"></script>    
     <script type="text/javascript" src="js/jchat.min.js"></script>  
     <link rel="stylesheet" type="text/css" href="css/material.css" />    
     <link rel="stylesheet" type="text/css" href="css/swiper.css" />
@@ -25,8 +25,15 @@
             };
         }
         
+        document.addEventListener("deviceready", onDeviceReady, false);
+        
+        function onDeviceReady() {
+            window.open = cordova.InAppBrowser.open;
+        }
+        
         /* Точка входа */
         $(document).ready(function () {
+            //window.open = cordova.InAppBrowser.open;            
             setDateLocale();                        // Устанавливает локаль для даты и времени
             binder.init();                          // Инициализирует объект который привязывает события к DOM элементам: "click", "touchend"    
             pageManager.init();

@@ -187,7 +187,7 @@
             page.urlDangerDialog.setOKCaption("ДА");
             page.urlDangerDialog.setCancelCaption("НЕТ");
             page.urlDangerDialog.onOk = function() {
-                window.open(page.urlDangerDialog.tag);                
+                window.open(encodeURI(page.urlDangerDialog.tag), '_system');                
             };
                                    
             page.start();                                   // Запускает работу таймера                       

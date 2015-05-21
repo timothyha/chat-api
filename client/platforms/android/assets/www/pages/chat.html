@@ -126,6 +126,9 @@
                 global.messageTime = time;                
                 page.sendPanel.setTime(global.messageTime);
             };
+            page.publicChatList.onDangerUrl = function(url) {
+                page.dangerUrlOpen(url);
+            };
 
             page.privateChatList = newChatlist('private-list');
             page.privateChatList.onMessageTap = function (login) {
@@ -136,6 +139,9 @@
             page.privateChatList.onTimeTap = function (time) {
                 global.messageTime = time;
                 page.sendPanel.setTime(global.messageTime);
+            };
+            page.privateChatList.onDangerUrl = function(url) {
+                page.dangerUrlOpen(url);
             };
 
             chatService.onError = function (err) {
@@ -173,8 +179,22 @@
                     }
                 }));
             });
-
+            
+            // Диалог предупреждения о вызове URL
+            page.urlDangerDialog = newDialog();
+            page.urlDangerDialog.setTitle("Предупреждение");
+            page.urlDangerDialog.setText("Внимание! Ссылка может навредить вашему устройству. Вы согласны продолжить?");
+            page.urlDangerDialog.setOKCaption("ДА");
+            page.urlDangerDialog.setCancelCaption("НЕТ");
+            page.urlDangerDialog.onOk = function() {
+                window.open(encodeURI(page.urlDangerDialog.tag), '_system');                
+            };
+                                   
             page.start();                                   // Запускает работу таймера                       
+        },
+        dangerUrlOpen: function(url) {
+            page.urlDangerDialog.tag = url;                 // Запоминает URL в диалоге
+            page.urlDangerDialog.show();
         },
         resize: function () {
             var toolbarHeight = page.toolbar.workplace.height();
@@ -193,28 +213,7 @@
             var str = moment().format("LL", "ru");
             page.publicChatList.setTitle(str);
             page.privateChatList.setTitle(str);
-        },
-        fixMessages: function (mess) {
-            var expr = /\(\(\d+\)\)/g;
-            var newMess = [];
-            
-            for (var i = 0; i < mess.length; i++) {
-                var ms = mess[i];
-                if ((ms.color === "LOGIN") || (ms.color === "LOGOUT") || (ms.fromid === null)) continue;
-                
-                var str = ms.message;
-                while (true) {
-                    var r = String(expr.exec(str));
-                    if ((r === undefined) || (r === null) || (r === "null") || (r === ""))
-                        break;
-                    var num = r.substring(2, r.length - 2);
-                    str = str.replace(r, '<img src="{0}/chat/i/{1}.gif" />'.format(global.chatRoot, num));
-                }
-                ms.message = str;
-                newMess.push(ms);
-            }
-            return newMess;
-        },
+        },        
         timerWork: function () {
             page.setTitleDate();
 
@@ -228,10 +227,9 @@
                 page.publicChatList.showLoadIndicator();
                 chatService.getPublicMessages(function (res) {
                     page.publicChatList.hideLoadIndicator();
-                    page.showNotificationsFromMessages(res);
-                    var mess = page.fixMessages(res.reverse());
-                    console.log();
-                    page.publicChatList.addItems(mess);
+                    page.showNotificationsFromMessages(res);                    
+                    var mess = res.reverse();
+                    page.publicChatList.addItems(res);
                     page.publicChatList.clearLast();
                     page.publicSended = false;
                     page.resize();
@@ -251,7 +249,7 @@
                 page.privateChatList.showLoadIndicator();
                 chatService.getPrivateMessages(function (res) {
                     page.privateChatList.hideLoadIndicator();
-                    var mess = page.fixMessages(res.reverse());
+                    var mess = res.reverse();                   
                     if (page.toggleGroup.selectedIndex !== 1) {
                         page.privateUnread += mess.length;
                         page.toggleGroup.setSticker({
