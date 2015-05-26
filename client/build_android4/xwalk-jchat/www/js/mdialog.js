@@ -57,10 +57,10 @@ function newDialog() {
         self.workplace.find('.cancel').text(text);
     };       
     
-    self.show = function() {
-        self.resize();
+    self.show = function() {       
         self.overlay.show();
-        self.inner.show('scale');        
+        self.inner.show();
+        self.resize();
     };
     
     self.hide = function() {
